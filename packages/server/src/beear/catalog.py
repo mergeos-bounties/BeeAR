@@ -8,10 +8,65 @@ from typing import Any
 
 from beear.config import FRAMES_JSON, GLB_DIR, SVG_DIR
 
+_REQUIRED_FRAME_STRINGS = (
+    "id",
+    "name",
+    "brand",
+    "category",
+    "style",
+    "color",
+    "lens_tint",
+    "svg",
+)
+_REQUIRED_FIT_NUMBERS = ("width_mm", "bridge_mm", "temple_mm")
+
+
+def _is_number(value: Any) -> bool:
+    return isinstance(value, int | float) and not isinstance(value, bool)
+
+
+def _validate_catalog(data: dict[str, Any]) -> None:
+    frames = data.get("frames")
+    if not isinstance(frames, list) or not frames:
+        raise ValueError("frames must be a non-empty list")
+
+    seen_ids: set[str] = set()
+    for index, frame in enumerate(frames):
+        if not isinstance(frame, dict):
+            raise ValueError(f"frames[{index}] must be an object")
+
+        for key in _REQUIRED_FRAME_STRINGS:
+            value = frame.get(key)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(f"frames[{index}].{key} must be a non-empty string")
+
+        frame_id = frame["id"]
+        if frame_id in seen_ids:
+            raise ValueError(f"frames[{index}].id duplicates {frame_id!r}")
+        seen_ids.add(frame_id)
+
+        price = frame.get("price_cents")
+        if not isinstance(price, int) or isinstance(price, bool) or price < 0:
+            raise ValueError(f"frames[{index}].price_cents must be a non-negative integer")
+
+        glb = frame.get("glb")
+        if glb is not None and (not isinstance(glb, str) or not glb.strip()):
+            raise ValueError(f"frames[{index}].glb must be a non-empty string when present")
+
+        fit = frame.get("fit")
+        if not isinstance(fit, dict):
+            raise ValueError(f"frames[{index}].fit must be an object")
+        for key in _REQUIRED_FIT_NUMBERS:
+            value = fit.get(key)
+            minimum = 1 if key == "width_mm" else 0
+            if not _is_number(value) or value < minimum:
+                raise ValueError(f"frames[{index}].fit.{key} must be >= {minimum}")
+
 
 def load_catalog(path: Path | None = None) -> dict[str, Any]:
     p = path or FRAMES_JSON
     data = json.loads(p.read_text(encoding="utf-8"))
+    _validate_catalog(data)
     frames = data.get("frames") or []
     for f in frames:
         svg_name = f.get("svg") or ""
