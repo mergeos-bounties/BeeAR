@@ -289,6 +289,22 @@
         "bridge_mm": 17,
         "temple_mm": 130
       }
+    },
+    {
+      "id": "hex_graphite",
+      "name": "Hex Graphite",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "hex",
+      "color": "#374151",
+      "lens_tint": "rgba(55,65,81,0.3)",
+      "price_cents": 8600,
+      "svg": "hex.svg",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 140
+      }
     }
   ]
 }
