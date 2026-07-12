@@ -257,6 +257,22 @@
         "bridge_mm": 16,
         "temple_mm": 140
       }
+    },
+    {
+      "id": "wayfarer_tortoise",
+      "name": "Wayfarer Tortoise",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#78350F",
+      "lens_tint": "rgba(120,53,15,0.28)",
+      "price_cents": 7900,
+      "svg": "wayfarer.svg",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      }
     }
   ]
 }
