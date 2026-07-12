@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import typer
 from rich import print as rprint
 from rich.console import Console
@@ -99,6 +101,34 @@ def tryon_glb(frame_id: str = typer.Argument(...)) -> None:
     if not f:
         raise typer.Exit(1)
     rprint(frame_glb_info(f))
+
+
+@app.command("wishlist")
+def wishlist_cmd(
+    frame_ids: str = typer.Option("aviator_gold,wayfarer_black", "--frames", "-f"),
+    note: str = typer.Option("demo wishlist", "--note"),
+    out: Path | None = typer.Option(None, "--out", "-o"),
+) -> None:
+    """Create a session wishlist and export JSON (privacy-safe frame ids only)."""
+    import json
+
+    from beear.sessions import add_wishlist, create_session, get_session
+
+    ids = [x.strip() for x in frame_ids.split(",") if x.strip()]
+    session = create_session(frame_ids=ids, note=note)
+    for fid in ids:
+        add_wishlist(session["id"], fid)
+    row = get_session(session["id"]) or session
+    export = {
+        "session_id": row["id"],
+        "wishlist": row.get("wishlist") or [],
+        "note": row.get("note") or "",
+        "privacy": "no face images stored — frame ids only",
+    }
+    path = out or Path("data/out/wishlist_export.json")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(export, indent=2) + "\n", encoding="utf-8")
+    rprint({"export": str(path), **export})
 
 
 @app.command("serve")
