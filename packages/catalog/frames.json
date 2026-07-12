@@ -273,6 +273,22 @@
         "bridge_mm": 18,
         "temple_mm": 145
       }
+    },
+    {
+      "id": "sport_neon",
+      "name": "Sport Neon Lime",
+      "brand": "BeeAR Active",
+      "category": "glasses",
+      "style": "sport",
+      "color": "#65A30D",
+      "lens_tint": "rgba(101,163,13,0.3)",
+      "price_cents": 8200,
+      "svg": "sport.svg",
+      "fit": {
+        "width_mm": 144,
+        "bridge_mm": 17,
+        "temple_mm": 130
+      }
     }
   ]
 }
