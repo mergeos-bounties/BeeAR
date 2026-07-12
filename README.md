@@ -11,52 +11,29 @@
 
 Org: [mergeos-bounties](https://github.com/mergeos-bounties) · MergeOS MRG bounties.
 
-## Screenshots (demo face)
+## Screenshots
 
-Live capture from `beear serve` + **Demo photo** mode (photoreal AI faces, no camera required):
+Real captures from running the product demo (BeeAR).
 
-### Aviator Gold (Demo photo A)
+![Aviator try-on](docs/screenshots/demo-aviator.png)
 
-![BeeAR demo — Aviator Gold on photoreal face](docs/screenshots/demo-aviator.png)
+*Aviator try-on*
 
-### Wayfarer Black
+![Wayfarer try-on](docs/screenshots/demo-wayfarer.png)
 
-![BeeAR demo — Wayfarer Black](docs/screenshots/demo-wayfarer.png)
+*Wayfarer try-on*
 
-### Cat-Eye Rose
+![Live frame catalog](docs/screenshots/demo-catalog.png)
 
-![BeeAR demo — Cat-Eye Rose](docs/screenshots/demo-cateye.png)
+*Live frame catalog*
 
-### Sport wrap + PD 70 mm
+![PD fit estimate](docs/screenshots/demo-fit.png)
 
-![BeeAR demo — Sport PD calibration](docs/screenshots/demo-sport-pd70.png)
+*PD fit estimate*
 
-### Compare A/B
+![Compare frames](docs/screenshots/demo-compare.png)
 
-![BeeAR demo — compare two frames](docs/screenshots/demo-compare.png)
-
-### Demo photo B (Next face)
-
-![BeeAR demo — second photoreal face](docs/screenshots/demo-face-b.png)
-
-### Accessories
-
-![BeeAR demo — accessory](docs/screenshots/demo-accessory.png)
-
-### Vietnamese UI
-
-![BeeAR demo — VI UI](docs/screenshots/demo-vi-ui.png)
-
-Re-capture:
-
-```powershell
-# terminal 1
-cd packages/server
-beear serve --port 8860
-
-# terminal 2
-python scripts/capture_screenshots.py
-```
+*Compare frames*
 
 ## Quick start (offline)
 
