@@ -337,6 +337,22 @@
         "bridge_mm": 18,
         "temple_mm": 145
       }
+    },
+    {
+      "id": "aviator_chrome",
+      "name": "Aviator Chrome",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#CBD5E1",
+      "lens_tint": "rgba(15,23,42,0.35)",
+      "price_cents": 9200,
+      "svg": "aviator.svg",
+      "fit": {
+        "width_mm": 144,
+        "bridge_mm": 18,
+        "temple_mm": 140
+      }
     }
   ]
 }
