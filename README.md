@@ -19,6 +19,7 @@ Product: [mergeos-bounties/BeeAR](https://github.com/mergeos-bounties/BeeAR)
 - [Quick start (server)](#quick-start-server)
 - [CLI reference](#cli-reference)
 - [Catalog & fit](#catalog--fit)
+- [Diagrams](#diagrams)
 - [Architecture](#architecture)
 - [Privacy](#privacy)
 - [Development](#development)
@@ -115,6 +116,18 @@ beear tryon compare aviator_gold wayfarer_black --pd 64
 ```
 
 ---
+
+
+## Diagrams
+
+Interactive Archify diagrams (dark/light theme, export PNG/SVG in the HTML viewer):
+
+| Diagram | Interactive | README embed |
+| --- | --- | --- |
+| **Architecture** | [docs/diagrams/architecture.html](docs/diagrams/architecture.html) | ![Architecture](docs/diagrams/architecture.svg) |
+| **Workflow** | [docs/diagrams/workflow.html](docs/diagrams/workflow.html) | ![Workflow](docs/diagrams/workflow.svg) |
+
+*Generated with [archify](https://github.com/tt-a1i) — open the `.html` files for theme toggle and export.*
 
 ## Architecture
 
