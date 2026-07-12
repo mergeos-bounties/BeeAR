@@ -68,6 +68,24 @@ def catalog_show(frame_id: str = typer.Argument(...)) -> None:
     rprint(f)
 
 
+@catalog_app.command("search")
+def catalog_search(
+    query: str = typer.Argument(...),
+    limit: int = typer.Option(20, "--limit", "-n"),
+) -> None:
+    """Search catalog by id/name/brand/style."""
+    from beear.catalog import search_frames
+
+    hits = search_frames(query, limit=limit)
+    table = Table(title=f"Search “{query}” ({len(hits)})")
+    table.add_column("Id")
+    table.add_column("Name")
+    table.add_column("Style")
+    for f in hits:
+        table.add_row(f["id"], f["name"], str(f.get("style") or ""))
+    console.print(table)
+
+
 @tryon_app.command("fit")
 def tryon_fit(
     frame_id: str = typer.Argument(...),

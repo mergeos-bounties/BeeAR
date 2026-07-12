@@ -44,6 +44,24 @@ def get_frame(frame_id: str) -> dict[str, Any] | None:
     return None
 
 
+def search_frames(query: str, limit: int = 20) -> list[dict[str, Any]]:
+    """Case-insensitive substring search across id, name, brand, style, category."""
+    q = (query or "").strip().lower()
+    if not q:
+        return list_frames()[: max(1, limit)]
+    hits: list[dict[str, Any]] = []
+    for f in list_frames():
+        hay = " ".join(
+            str(f.get(k) or "")
+            for k in ("id", "name", "brand", "style", "category", "color")
+        ).lower()
+        if q in hay:
+            hits.append(f)
+        if len(hits) >= limit:
+            break
+    return hits
+
+
 def svg_path(frame_id: str) -> Path | None:
     f = get_frame(frame_id)
     if not f or not f.get("svg"):
