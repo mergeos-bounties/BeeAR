@@ -13,15 +13,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 
+internal object BeeARConfig {
+    const val DEFAULT_URL = "http://localhost:8860/"
+}
+
 /**
  * BeeAR Android shell — WebView over the BeeAR web try-on UI.
  *
- * Emulator: http://10.0.2.2:8860
- * Device on LAN: http://<pc-ip>:8860
+ * Emulator or USB device: run `adb reverse tcp:8860 tcp:8860`, then use the
+ * loopback URL below so WebView exposes camera capture APIs.
  */
 class MainActivity : ComponentActivity() {
-    // Change for your environment
-    private val beearUrl: String = "http://10.0.2.2:8860"
+    private val beearUrl: String = BeeARConfig.DEFAULT_URL
 
     private lateinit var webView: WebView
     private var pendingWebPermissionRequest: PermissionRequest? = null

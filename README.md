@@ -68,7 +68,7 @@ npm start
 
 ## Android
 
-See [packages/android/README.md](packages/android/README.md) — WebView loads `http://10.0.2.2:8860` (emulator) or your LAN IP.
+See [packages/android/README.md](packages/android/README.md) — WebView loads `http://localhost:8860/` through `adb reverse` for emulator or USB-device testing, keeping camera capture available on a loopback origin.
 
 ## How try-on works
 
