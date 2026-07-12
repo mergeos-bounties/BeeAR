@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "frames": [
+    {
+      "id": "aviator_gold",
+      "name": "Aviator Gold",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#C9A227",
+      "lens_tint": "rgba(40,60,90,0.28)",
+      "price_cents": 8900,
+      "svg": "aviator.svg",
+      "fit": { "width_mm": 140, "bridge_mm": 18, "temple_mm": 140 }
+    },
+    {
+      "id": "wayfarer_black",
+      "name": "Wayfarer Black",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#111111",
+      "lens_tint": "rgba(20,20,20,0.35)",
+      "price_cents": 7900,
+      "svg": "wayfarer.svg",
+      "fit": { "width_mm": 138, "bridge_mm": 20, "temple_mm": 145 }
+    },
+    {
+      "id": "round_tortoise",
+      "name": "Round Tortoise",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#5C3A21",
+      "lens_tint": "rgba(80,50,30,0.22)",
+      "price_cents": 6900,
+      "svg": "round.svg",
+      "fit": { "width_mm": 132, "bridge_mm": 19, "temple_mm": 142 }
+    },
+    {
+      "id": "cat_eye_rose",
+      "name": "Cat-Eye Rose",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "cat_eye",
+      "color": "#B76E79",
+      "lens_tint": "rgba(120,40,60,0.2)",
+      "price_cents": 8500,
+      "svg": "cateye.svg",
+      "fit": { "width_mm": 136, "bridge_mm": 17, "temple_mm": 140 }
+    },
+    {
+      "id": "sport_blue",
+      "name": "Sport Wrap Blue",
+      "brand": "BeeAR Active",
+      "category": "glasses",
+      "style": "sport",
+      "color": "#1D4ED8",
+      "lens_tint": "rgba(20,40,100,0.4)",
+      "price_cents": 9900,
+      "svg": "sport.svg",
+      "fit": { "width_mm": 145, "bridge_mm": 16, "temple_mm": 130 }
+    },
+    {
+      "id": "clip_on_sun",
+      "name": "Clip-On Sun",
+      "brand": "BeeAR Studio",
+      "category": "accessory",
+      "style": "clip_on",
+      "color": "#222222",
+      "lens_tint": "rgba(10,10,10,0.55)",
+      "price_cents": 2900,
+      "svg": "clipon.svg",
+      "fit": { "width_mm": 130, "bridge_mm": 18, "temple_mm": 0 }
+    },
+    {
+      "id": "earring_hoop",
+      "name": "Hoop Earring (L)",
+      "brand": "BeeAR Accessories",
+      "category": "accessory",
+      "style": "earring",
+      "color": "#E8C547",
+      "lens_tint": "transparent",
+      "price_cents": 3500,
+      "svg": "earring.svg",
+      "fit": { "width_mm": 28, "bridge_mm": 0, "temple_mm": 0 }
+    },
+    {
+      "id": "hat_cap",
+      "name": "Cap Peak",
+      "brand": "BeeAR Accessories",
+      "category": "accessory",
+      "style": "hat",
+      "color": "#334155",
+      "lens_tint": "transparent",
+      "price_cents": 4500,
+      "svg": "cap.svg",
+      "fit": { "width_mm": 180, "bridge_mm": 0, "temple_mm": 0 }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "beear-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BeeAR Windows desktop shell (Electron)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}

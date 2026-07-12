@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>BeeAR — Try on glasses</title>
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <div class="brand">
+        <span class="logo">🐝</span>
+        <div>
+          <strong>BeeAR</strong>
+          <div class="tag">Virtual try-on · glasses & accessories</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="btn-cam" class="btn primary">📷 Camera</button>
+        <button id="btn-demo" class="btn">Demo face</button>
+        <button id="btn-snap" class="btn">Snapshot</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="stage">
+        <video id="video" playsinline autoplay muted></video>
+        <canvas id="canvas" width="640" height="480"></canvas>
+        <div id="hint" class="hint">Start camera or use Demo face · pick a frame below</div>
+      </section>
+      <aside class="rail">
+        <div class="rail-head">
+          <h2>Catalog</h2>
+          <select id="filter">
+            <option value="">All</option>
+            <option value="glasses">Glasses</option>
+            <option value="accessory">Accessories</option>
+          </select>
+        </div>
+        <div id="catalog" class="catalog"></div>
+        <div class="meta" id="meta">Select a SKU</div>
+      </aside>
+    </main>
+  </div>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
