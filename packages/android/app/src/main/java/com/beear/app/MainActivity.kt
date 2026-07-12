@@ -24,10 +24,18 @@ class MainActivity : ComponentActivity() {
     private val beearUrl: String = "http://10.0.2.2:8860"
 
     private lateinit var webView: WebView
+    private var pendingWebPermissionRequest: PermissionRequest? = null
 
     private val permissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { _ ->
-            webView.reload()
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            val request = pendingWebPermissionRequest
+            pendingWebPermissionRequest = null
+
+            if (granted && request != null) {
+                grantCameraPermission(request)
+            } else {
+                request?.deny()
+            }
         }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -46,26 +54,41 @@ class MainActivity : ComponentActivity() {
         webView.webChromeClient =
             object : WebChromeClient() {
                 override fun onPermissionRequest(request: PermissionRequest?) {
-                    request?.grant(request.resources)
+                    request?.let(::handleWebPermissionRequest)
                 }
             }
 
-        ensurePermissions()
         webView.loadUrl(beearUrl)
     }
 
-    private fun ensurePermissions() {
-        val need =
-            arrayOf(Manifest.permission.CAMERA, Manifest.permission.INTERNET)
-                .filter {
-                    ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-                }
-        if (need.isNotEmpty()) {
-            permissionLauncher.launch(need.toTypedArray())
+    private fun handleWebPermissionRequest(request: PermissionRequest) {
+        if (PermissionRequest.RESOURCE_VIDEO_CAPTURE !in request.resources) {
+            request.deny()
+            return
         }
+
+        if (hasCameraPermission()) {
+            grantCameraPermission(request)
+            return
+        }
+
+        pendingWebPermissionRequest?.deny()
+        pendingWebPermissionRequest = request
+        permissionLauncher.launch(Manifest.permission.CAMERA)
+    }
+
+    private fun grantCameraPermission(request: PermissionRequest) {
+        val resources = request.resources.filter { it == PermissionRequest.RESOURCE_VIDEO_CAPTURE }
+        request.grant(resources.toTypedArray())
+    }
+
+    private fun hasCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) ==
+            PackageManager.PERMISSION_GRANTED
     }
 
     override fun onDestroy() {
+        pendingWebPermissionRequest?.deny()
         webView.destroy()
         super.onDestroy()
     }

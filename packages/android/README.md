@@ -14,11 +14,13 @@ Edit `app/src/main/java/com/beear/app/MainActivity.kt` (`BEEAR_URL`).
 ## Build
 
 ```bash
-# With Android Studio / Gradle
+# From this directory
 ./gradlew :app:assembleDebug
 ```
 
-This repo ships the **source scaffold** (`MainActivity` + README). Full Gradle wrapper can be added via Android Studio **New Project** import of this package.
+The first build downloads the pinned Android Gradle plugin and Kotlin plugin.
+Set `ANDROID_HOME`, `ANDROID_SDK_ROOT`, or `local.properties` with `sdk.dir=...`
+if Gradle cannot find your Android SDK.
 
 ## Permissions
 
