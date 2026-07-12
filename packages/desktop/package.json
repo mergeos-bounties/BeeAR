@@ -6,9 +6,48 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron ."
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win portable --x64",
+    "dist:win-installer": "electron-builder --win nsis --x64"
+  },
+  "build": {
+    "appId": "dev.mergeos.bounties.beear.desktop",
+    "productName": "BeeAR",
+    "directories": {
+      "output": "out"
+    },
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable-${arch}.${ext}"
+    },
+    "nsis": {
+      "artifactName": "${productName}-${version}-Setup-${arch}.${ext}",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "devDependencies": {
-    "electron": "^31.0.0"
+    "electron": "^31.0.0",
+    "electron-builder": "^26.15.3"
   }
 }
