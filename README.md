@@ -22,6 +22,7 @@ Product: [mergeos-bounties/BeeAR](https://github.com/mergeos-bounties/BeeAR)
 - [Architecture](#architecture)
 - [Privacy](#privacy)
 - [Development](#development)
+- [Android](#android)
 - [MergeOS bounties](#mergeos-bounties)
 - [License](#license)
 
@@ -105,7 +106,7 @@ beear serve --port 8860
 
 ## Catalog & fit
 
-Frames include id, name, category, style, price, geometry hints.  
+Frames include id, name, category, style, price, geometry hints.
 Fit uses pupil distance in mm and a landmark bounding box (demo uses synthetic landmarks when no camera).
 
 ```powershell
@@ -140,8 +141,8 @@ docs/screenshots/
 
 ## Privacy
 
-- Prefer synthetic / consented demo faces in docs and CI.  
-- Do not commit real user camera captures without consent.  
+- Prefer synthetic / consented demo faces in docs and CI.
+- Do not commit real user camera captures without consent.
 - Redact PII in issue evidence.
 
 ---
@@ -157,9 +158,21 @@ beear demo
 
 ---
 
+## Android
+
+See [packages/android/README.md](packages/android/README.md) for the Kotlin WebView client. It loads `http://localhost:8860/` through `adb reverse` for emulator or USB-device testing, keeping camera capture available on a loopback origin.
+
+```bash
+cd packages/android
+./gradlew :app:testDebugUnitTest
+./gradlew :app:assembleDebug
+```
+
+---
+
 ## MergeOS bounties
 
-Frames, MediaPipe landmarks, PD calibration, Android UX.  
+Frames, MediaPipe landmarks, PD calibration, Android UX.
 Star → claim → PR **master** → MRG **25–200**. Evidence: web/desktop screenshots or emulator shots.
 
 ---
