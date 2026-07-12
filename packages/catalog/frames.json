@@ -157,6 +157,18 @@
       "price_cents": 4200,
       "svg": "necklace.svg",
       "fit": { "width_mm": 40, "bridge_mm": 0, "temple_mm": 0 }
+    },
+    {
+      "id": "pilot_teal",
+      "name": "Pilot Teal",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#0F766E",
+      "lens_tint": "rgba(15,118,110,0.32)",
+      "price_cents": 9100,
+      "svg": "aviator.svg",
+      "fit": { "width_mm": 142, "bridge_mm": 18, "temple_mm": 142 }
     }
   ]
 }
