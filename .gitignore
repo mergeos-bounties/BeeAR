@@ -14,6 +14,8 @@ node_modules/
 .DS_Store
 .idea/
 .vscode/
+.gradle/
+local.properties
 *.apk
 *.aab
 packages/desktop/out/

@@ -1,136 +1,241 @@
 # BeeAR
 
-**BeeAR** is a **virtual try-on** stack for **glasses and accessories** — open the camera (or demo face), pick a frame, and preview fit in real time.
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![Server](https://img.shields.io/badge/beear-0.2.0-0E8A16.svg)](packages/server/pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![MergeOS](https://img.shields.io/badge/MergeOS-bounties-5319E7.svg)](https://github.com/mergeos-bounties)
 
-| Package | Role |
+**BeeAR** is a **virtual try-on** stack for **glasses and accessories** â€” frame catalog, pupil-distance (PD) fit estimates, multi-frame compare, plus web / desktop / Android clients.
+
+Product: [mergeos-bounties/BeeAR](https://github.com/mergeos-bounties/BeeAR)
+
+---
+
+## Table of contents
+
+- [Monorepo packages](#monorepo-packages)
+- [Libraries (web + Android)](#libraries-web--android)
+- [Highlights](#highlights)
+- [Screenshots](#screenshots)
+- [Quick start (server)](#quick-start-server)
+- [CLI reference](#cli-reference)
+- [Catalog & fit](#catalog--fit)
+- [Diagrams](#diagrams)
+- [Architecture](#architecture)
+- [Privacy](#privacy)
+- [Development](#development)
+- [Android](#android)
+- [MergeOS bounties](#mergeos-bounties)
+- [License](#license)
+
+---
+
+## Monorepo packages
+
+| Package | Path | Role |
+| --- | --- | --- |
+| **@beear/tryon** | `packages/tryon-js` | **Shared JS try-on lib** (fit, overlay) for web + Android WebView |
+| **BeeAR Server** | `packages/server` | Catalog API, try-on helpers, FastAPI, CLI (`beear`) |
+| **BeeAR Web** | `packages/web` | Thin browser host over `@beear/tryon` |
+| **BeeAR Desktop** | `packages/desktop` | Electron shell wrapping the web app |
+| **beear-webview** | `packages/android/beear-webview` | **Android library (AAR)** — reusable WebView try-on |
+| **BeeAR Android app** | `packages/android/app` | Demo host embedding the AAR |
+
+Primary offline path: **server** (`beear demo`).
+
+---
+
+## Highlights
+
+| Capability | Description |
 | --- | --- |
-| **BeeAR Web** | Browser try-on (canvas + face landmarks, MediaPipe optional) |
-| **BeeAR Server** | Catalog API, sessions, health (Python FastAPI) |
-| **BeeAR Desktop** | Windows shell (Electron) wrapping the web app |
-| **BeeAR Android** | Kotlin WebView client for on-device try-on |
+| **Frame catalog** | Aviator, wayfarer, cat-eye, sport, accessories… |
+| **PD fit** | Estimate fit from pupil distance (mm) + landmarks box |
+| **Compare** | Side-by-side frame metrics |
+| **Offline demo** | Catalog + fit + compare without a camera |
+| **Clients** | Web host, desktop, Android app over shared libs |
+| **JS lib** | `@beear/tryon` for canvas fit/overlay |
+| **Android lib** | `:beear-webview` AAR for any host app |
 
-Org: [mergeos-bounties](https://github.com/mergeos-bounties) · MergeOS MRG bounties.
+---
 
-## Screenshots (demo face)
+## Screenshots
 
-Live capture from `beear serve` + **Demo photo** mode (photoreal AI faces, no camera required):
+| Try-on demos | |
+| :---: | :---: |
+| ![Aviator](docs/screenshots/demo-aviator.png) | ![Wayfarer](docs/screenshots/demo-wayfarer.png) |
+| *Aviator Gold* | *Wayfarer Black* |
+| ![Cat-eye](docs/screenshots/demo-cateye.png) | ![Sport PD](docs/screenshots/demo-sport-pd70.png) |
+| *Cat-eye Rose* | *Sport · PD 70* |
+| ![Compare](docs/screenshots/demo-compare.png) | ![Accessory](docs/screenshots/demo-accessory.png) |
+| *Compare frames* | *Accessory* |
 
-### Aviator Gold (Demo photo A)
+| Server / metrics | |
+| :---: | :---: |
+| ![Catalog](docs/screenshots/demo-catalog.png) | ![Fit](docs/screenshots/demo-fit.png) |
+| *Live catalog list* | *PD fit + landmarks schematic* |
+| ![Metrics](docs/screenshots/demo-compare-metrics.png) | ![VI UI](docs/screenshots/demo-vi-ui.png) |
+| *Compare metrics* | *VI UI sample* |
 
-![BeeAR demo — Aviator Gold on photoreal face](docs/screenshots/demo-aviator.png)
+---
 
-### Wayfarer Black
-
-![BeeAR demo — Wayfarer Black](docs/screenshots/demo-wayfarer.png)
-
-### Cat-Eye Rose
-
-![BeeAR demo — Cat-Eye Rose](docs/screenshots/demo-cateye.png)
-
-### Sport wrap + PD 70 mm
-
-![BeeAR demo — Sport PD calibration](docs/screenshots/demo-sport-pd70.png)
-
-### Compare A/B
-
-![BeeAR demo — compare two frames](docs/screenshots/demo-compare.png)
-
-### Demo photo B (Next face)
-
-![BeeAR demo — second photoreal face](docs/screenshots/demo-face-b.png)
-
-### Accessories
-
-![BeeAR demo — accessory](docs/screenshots/demo-accessory.png)
-
-### Vietnamese UI
-
-![BeeAR demo — VI UI](docs/screenshots/demo-vi-ui.png)
-
-Re-capture:
+## Quick start (server)
 
 ```powershell
-# terminal 1
-cd packages/server
-beear serve --port 8860
-
-# terminal 2
-python scripts/capture_screenshots.py
-```
-
-## Quick start (offline)
-
-```powershell
-cd D:\ThanhTrucSolutions\BeeAR\packages\server
+cd packages\server
 python -m venv .venv
 .\.venv\Scripts\activate
 pip install -e ".[dev]"
 
+beear version
 beear demo
+beear catalog list
+beear tryon fit <frame_id> --pd 64
 beear serve --port 8860
 ```
 
-Open **http://127.0.0.1:8860** — web try-on UI.
+---
 
-### CLI
+## CLI reference
 
-```powershell
-beear catalog list
-beear catalog show aviator_gold
-beear version
-```
+| Command | Purpose |
+| --- | --- |
+| `beear version` | Package version |
+| `beear demo` | Catalog + PD fit + compare smoke |
+| `beear catalog list [-c category]` | List frames |
+| `beear catalog show <id>` | Frame detail |
+| `beear tryon fit <id> --pd 64` | Fit estimate |
+| `beear tryon compare <a> <b>` | Compare two frames |
+| `beear serve` | FastAPI server |
 
-## Desktop (Windows)
+---
 
-```powershell
-cd packages\desktop
-npm install
-npm start
-# builds against local server at 8860 (start server first)
-```
+## Catalog & fit
 
-## Android
-
-See [packages/android/README.md](packages/android/README.md) — WebView loads `http://10.0.2.2:8860` (emulator) or your LAN IP.
-
-## How try-on works
-
-1. Camera stream (or **Demo photo** — photoreal AI-generated faces offline) — consent banner first
-2. Demo mode uses `packages/web/assets/demo-faces/*.jpg` with calibrated eye landmarks (**Next face** switches models)
-3. Live camera: **MediaPipe Face Mesh** when CDN loads; geometric fallback otherwise
-4. **PD (mm)** slider calibrates scale; **Compare** mode splits A/B frames
-5. Snapshot → download + local gallery; optional wishlist session API
+Frames include id, name, category, style, price, geometry hints.
+Fit uses pupil distance in mm and a landmark bounding box (demo uses synthetic landmarks when no camera).
 
 ```powershell
-beear tryon fit aviator_gold --pd 66
+beear catalog list -c glasses
 beear tryon compare aviator_gold wayfarer_black --pd 64
 ```
 
-## Layout
+---
 
+
+## Diagrams
+
+System architecture and workflow — shown full-width below.
+Open the HTML files for **dark/light theme toggle** and export (PNG/SVG).
+
+### Architecture
+
+[Open interactive diagram](docs/diagrams/architecture.html)
+
+<p align="center">
+  <img src="docs/diagrams/architecture.svg" alt="Architecture diagram" width="100%" />
+</p>
+
+### Workflow
+
+[Open interactive diagram](docs/diagrams/workflow.html)
+
+<p align="center">
+  <img src="docs/diagrams/workflow.svg" alt="Workflow diagram" width="100%" />
+</p>
+
+*Generated with [archify](https://github.com/tt-a1i).*
+
+
+## Libraries (web + Android)
+
+BeeAR try-on is designed as **reusable libraries**:
+
+| Lib | Consumers |
+| --- | --- |
+| **`@beear/tryon`** (`packages/tryon-js`) | Web host, Android WebView, desktop |
+| **`com.beear.webview`** (`:beear-webview` AAR) | Any Android app embedding try-on |
+
+```bash
+# JS lib
+cd packages/tryon-js && npm test && npm run build
+
+# Android AAR
+cd packages/android && ./gradlew :beear-webview:assembleRelease
+# optional offline assets into the AAR:
+node packages/android/scripts/sync-web-assets.mjs
 ```
-packages/
-  server/     # Python CLI + API + static web mount
-  web/        # Try-on UI (also served by server)
-  desktop/    # Electron Windows shell
-  android/    # Kotlin WebView
-  catalog/    # Frame SKUs (JSON + SVG assets)
+
+Host apps depend on `:beear-webview` and call `BeeARWebView.attach(activity, BeeARConfig.loopback())`.
+See [packages/android/README.md](packages/android/README.md) and [packages/tryon-js/README.md](packages/tryon-js/README.md).
+
+## Architecture
+
+```text
+  Web / Desktop / Android
+            â”‚
+            â–¼
+     BeeAR Server (FastAPI)
+       catalog · sessions · tryon
+            â”‚
+     landmark / PD fit engine
+```
+
+```text
+packages/server/src/beear/
+  cli.py
+  catalog.py
+  tryon.py
+  api.py
 docs/screenshots/
-docs/BOUNTY.md
-docs/PRIVACY.md
-scripts/capture_screenshots.py
 ```
+
+---
+
+## Privacy
+
+- Prefer synthetic / consented demo faces in docs and CI.
+- Do not commit real user camera captures without consent.
+- Redact PII in issue evidence.
+
+---
+
+## Development
+
+```powershell
+cd packages\server
+pytest -q
+ruff check src tests
+beear demo
+```
+
+---
+
+## Android
+
+See [packages/android/README.md](packages/android/README.md) for the Kotlin WebView client. It loads `http://localhost:8860/` through `adb reverse` for emulator or USB-device testing, keeping camera capture available on a loopback origin.
+
+```bash
+cd packages/android
+./gradlew :app:testDebugUnitTest
+./gradlew :app:assembleDebug
+```
+
+---
 
 ## MergeOS bounties
 
-1. Star this repo + [mergeos](https://github.com/mergeos-bounties/mergeos)
-2. Claim a `bounty` issue
-3. Claim on MergeOS [issue #1](https://github.com/mergeos-bounties/mergeos/issues/1)
-4. PR to **BeeAR** with tests / screenshots
-5. Credit MRG 25 / 50 / 100 / 200
+Frames, MediaPipe landmarks, PD calibration, Android UX.
+Star â†’ claim â†’ PR **master** â†’ MRG **25â€“200**. Evidence: web/desktop screenshots or emulator shots.
 
-See [docs/BOUNTY.md](docs/BOUNTY.md).
+---
+
+## Tiáº¿ng Viá»‡t
+
+**BeeAR** thá»­ kÃ­nh/phá»¥ kiá»‡n áº£o (catalog + fit PD). Offline: `cd packages/server && beear demo`.
+
+---
 
 ## License
 
-MIT
+MIT · MergeOS / ThanhTrucSolutions

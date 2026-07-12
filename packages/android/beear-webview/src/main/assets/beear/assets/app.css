@@ -1,0 +1,106 @@
+:root {
+  --bg: #0b1020;
+  --panel: #121a2f;
+  --line: #243049;
+  --text: #e8eefc;
+  --muted: #8b9bb8;
+  --accent: #f5c518;
+  --accent2: #5b8cff;
+  --font: "Segoe UI", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
+#app { min-height: 100%; display: flex; flex-direction: column; }
+.top {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--line); background: #0e1528;
+}
+.brand { display: flex; gap: 10px; align-items: center; }
+.logo { font-size: 28px; }
+.tag { color: var(--muted); font-size: 12px; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn {
+  background: var(--panel); color: var(--text); border: 1px solid var(--line);
+  border-radius: 10px; padding: 8px 12px; cursor: pointer; font-weight: 600;
+}
+.btn.primary { background: #2a2110; border-color: #6b5420; color: var(--accent); }
+.btn.active { outline: 2px solid var(--accent2); }
+.layout {
+  flex: 1; display: grid; grid-template-columns: 1fr 320px; min-height: 0;
+}
+.stage {
+  position: relative; background: #060910; display: grid; place-items: center;
+  min-height: 420px; overflow: hidden;
+}
+#video { display: none; }
+#canvas {
+  width: min(100%, 720px); height: auto; max-height: calc(100vh - 120px);
+  background: radial-gradient(circle at 50% 40%, #1a2744, #070b14 70%);
+  border-radius: 12px; border: 1px solid var(--line);
+}
+.hint {
+  position: absolute; left: 16px; bottom: 12px; color: var(--muted);
+  font-size: 12px; background: #0008; padding: 6px 10px; border-radius: 8px;
+}
+.rail {
+  border-left: 1px solid var(--line); background: var(--panel);
+  display: flex; flex-direction: column; min-height: 0;
+}
+.rail-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px; border-bottom: 1px solid var(--line);
+}
+.rail-head h2 { margin: 0; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+#filter {
+  background: #0b1222; color: var(--text); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 8px;
+}
+.catalog { flex: 1; overflow: auto; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.sku {
+  border: 1px solid var(--line); border-radius: 12px; padding: 10px;
+  background: #0d1528; cursor: pointer; display: grid; grid-template-columns: 64px 1fr; gap: 10px;
+}
+.sku:hover, .sku.on { border-color: var(--accent2); }
+.sku img, .sku .ph {
+  width: 64px; height: 40px; object-fit: contain; background: #fff1; border-radius: 6px;
+}
+.sku h3 { margin: 0; font-size: 13px; }
+.sku p { margin: 2px 0 0; color: var(--muted); font-size: 11px; }
+.meta {
+  border-top: 1px solid var(--line); padding: 10px 12px; font-size: 12px; color: var(--muted);
+  min-height: 56px;
+}
+.sku.on-b { border-color: var(--accent); box-shadow: 0 0 0 1px #f5c51855; }
+.pd-panel {
+  padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 12px;
+}
+.pd-panel input[type=range] { width: 100%; }
+.small { font-size: 11px; }
+.track-badge {
+  position: absolute; right: 12px; top: 12px; font-size: 11px;
+  background: #000a; color: var(--accent2); padding: 4px 8px; border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.consent {
+  position: fixed; inset: 0; background: #000a; z-index: 40;
+  display: grid; place-items: center; padding: 16px;
+}
+.consent.hidden { display: none; }
+.consent-box {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px; max-width: 420px; width: 100%;
+}
+.consent-box h3 { margin: 0 0 8px; }
+.consent-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.gallery {
+  border-top: 1px solid var(--line); max-height: 160px; overflow: auto;
+  padding: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.gallery.hidden { display: none; }
+.shot { position: relative; }
+.shot img { width: 100%; border-radius: 6px; border: 1px solid var(--line); display: block; }
+.btn.tiny { position: absolute; top: 2px; right: 2px; padding: 0 6px; font-size: 12px; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .rail { border-left: none; border-top: 1px solid var(--line); max-height: 42vh; }
+}

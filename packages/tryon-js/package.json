@@ -1,0 +1,36 @@
+{
+  "name": "@beear/tryon",
+  "version": "0.1.0",
+  "description": "BeeAR virtual try-on core library (fit, landmarks, canvas overlay) for Web and Android WebView",
+  "type": "module",
+  "main": "dist/beear-tryon.js",
+  "module": "src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "default": "./dist/beear-tryon.js"
+    }
+  },
+  "files": [
+    "src",
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build-iife.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "keywords": [
+    "beear",
+    "try-on",
+    "glasses",
+    "webview",
+    "canvas"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mergeos-bounties/BeeAR.git",
+    "directory": "packages/tryon-js"
+  }
+}

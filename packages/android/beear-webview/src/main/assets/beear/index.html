@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>BeeAR — Try on glasses</title>
-  <link rel="stylesheet" href="/assets/app.css" />
+  <link rel="stylesheet" href="assets/app.css" />
 </head>
 <body>
   <div id="consent" class="consent hidden">
@@ -14,7 +14,7 @@
       <div class="consent-actions">
         <button id="consent-ok" class="btn primary" type="button">Allow & start</button>
         <button id="consent-demo" class="btn" type="button">Use demo face</button>
-        <a href="/assets/../" id="privacy-link" class="link" style="display:none"></a>
+        <a href="assets/../" id="privacy-link" class="link" style="display:none"></a>
       </div>
       <p class="muted small"><a href="https://github.com/mergeos-bounties/BeeAR/blob/master/docs/PRIVACY.md" target="_blank" rel="noopener">Privacy note</a></p>
     </div>
@@ -70,18 +70,9 @@
   </div>
 
   <!-- @beear/tryon core lib (shared web + Android WebView) -->
-  <script src="/assets/beear-tryon.js"></script>
+  <script src="assets/beear-tryon.js"></script>
   <!-- Optional MediaPipe Face Mesh (fails soft if offline/CDN blocked) -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
-  <!-- Optional Three.js GLB renderer (app falls back to canvas shapes if blocked) -->
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
-      }
-    }
-  </script>
-  <script src="/assets/app.js"></script>
+  <script data-src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+  <script src="assets/app.js"></script>
 </body>
 </html>
