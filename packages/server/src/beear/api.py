@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from beear import __version__
 from beear.catalog import get_frame, list_frames, load_catalog
-from beear.config import SVG_DIR, WEB_ROOT
+from beear.config import GLB_DIR, SVG_DIR, WEB_ROOT
 from beear import sessions as sess
 from beear.tryon import compare_frames, estimate_fit, landmark_box
 
@@ -155,6 +155,9 @@ def api_wishlist_add(session_id: str, body: WishlistAdd) -> dict:
 
 if SVG_DIR.is_dir():
     app.mount("/catalog/svg", StaticFiles(directory=str(SVG_DIR)), name="svg")
+
+if GLB_DIR.is_dir():
+    app.mount("/catalog/glb", StaticFiles(directory=str(GLB_DIR)), name="glb")
 
 if WEB_ROOT.is_dir():
 

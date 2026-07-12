@@ -15,6 +15,14 @@ def test_catalog_has_glasses_and_accessories():
     assert get_frame("missing") is None
 
 
+def test_catalog_exposes_local_glb_asset_for_three_renderer():
+    frame = get_frame("aviator_gold")
+    assert frame
+    assert frame["glb"].endswith(".glb")
+    assert frame["has_glb"] is True
+    assert frame["glb_url"] == f"/catalog/glb/{frame['glb']}"
+
+
 def test_list_filter():
     glasses = list_frames(category="glasses")
     assert all(f["category"] == "glasses" for f in glasses)
