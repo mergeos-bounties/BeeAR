@@ -90,6 +90,17 @@ def tryon_compare(
     rprint(compare_frames(a, b, pd_mm=pd_mm))
 
 
+@tryon_app.command("glb")
+def tryon_glb(frame_id: str = typer.Argument(...)) -> None:
+    """Show GLB 3D asset metadata for a frame (if catalog lists a mesh)."""
+    from beear.tryon import frame_glb_info
+
+    f = get_frame(frame_id)
+    if not f:
+        raise typer.Exit(1)
+    rprint(frame_glb_info(f))
+
+
 @app.command("serve")
 def serve_cmd(
     host: str = typer.Option("127.0.0.1", "--host"),

@@ -71,4 +71,26 @@ def compare_frames(
         "a": a,
         "b": b,
         "width_delta_px": round(a["overlay_width_px"] - b["overlay_width_px"], 1),
+        "glb": {
+            "a": frame_glb_info(frame_a),
+            "b": frame_glb_info(frame_b),
+        },
+    }
+
+
+def frame_glb_info(frame: dict[str, Any]) -> dict[str, Any]:
+    """Describe optional GLB mesh for 3D try-on hosts (Electron / WebGL)."""
+    glb = frame.get("glb")
+    fit = frame.get("fit") or {}
+    return {
+        "frame_id": frame.get("id"),
+        "has_glb": bool(glb),
+        "glb": glb,
+        "asset_hint": f"packages/catalog/glb/{glb}" if glb else None,
+        "viewer": {
+            "scale_mm": float(fit.get("width_mm") or 140),
+            "bridge_mm": float(fit.get("bridge_mm") or 18),
+            "recommended_camera": "front-isometric",
+        },
+        "render_mode": "glb" if glb else "svg2d",
     }
