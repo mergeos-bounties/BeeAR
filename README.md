@@ -48,10 +48,15 @@ See [packages/android/README.md](packages/android/README.md) — WebView loads `
 
 ## How try-on works
 
-1. Camera stream (or **Demo face** offline image)
-2. Face landmarks (browser MediaPipe Face Mesh when available; geometric fallback otherwise)
-3. Selected SKU mesh/SVG scaled to inter-pupil distance
-4. Live overlay + optional snapshot download
+1. Camera stream (or **Demo face** offline image) — camera consent banner first
+2. Face landmarks: **MediaPipe Face Mesh** when CDN loads; **geometric** fallback offline
+3. **PD (mm)** slider calibrates scale; **Compare** mode splits A/B frames
+4. Snapshot → download + local gallery; optional wishlist session API
+
+```powershell
+beear tryon fit aviator_gold --pd 66
+beear tryon compare aviator_gold wayfarer_black --pd 64
+```
 
 ## Layout
 

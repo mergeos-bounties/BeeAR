@@ -7,19 +7,35 @@
   <link rel="stylesheet" href="/assets/app.css" />
 </head>
 <body>
+  <div id="consent" class="consent hidden">
+    <div class="consent-box">
+      <h3 id="consent-title">Camera consent</h3>
+      <p id="consent-body">BeeAR uses the camera only in your browser for try-on. Video is not uploaded to the server. See Privacy.</p>
+      <div class="consent-actions">
+        <button id="consent-ok" class="btn primary" type="button">Allow & start</button>
+        <button id="consent-demo" class="btn" type="button">Use demo face</button>
+        <a href="/assets/../" id="privacy-link" class="link" style="display:none"></a>
+      </div>
+      <p class="muted small"><a href="https://github.com/mergeos-bounties/BeeAR/blob/master/docs/PRIVACY.md" target="_blank" rel="noopener">Privacy note</a></p>
+    </div>
+  </div>
+
   <div id="app">
     <header class="top">
       <div class="brand">
         <span class="logo">🐝</span>
         <div>
           <strong>BeeAR</strong>
-          <div class="tag">Virtual try-on · glasses & accessories</div>
+          <div class="tag" id="tagline">Virtual try-on · glasses & accessories</div>
         </div>
       </div>
       <div class="actions">
-        <button id="btn-cam" class="btn primary">📷 Camera</button>
-        <button id="btn-demo" class="btn">Demo face</button>
-        <button id="btn-snap" class="btn">Snapshot</button>
+        <button id="btn-lang" class="btn" type="button">VI</button>
+        <button id="btn-cam" class="btn primary" type="button">📷 Camera</button>
+        <button id="btn-demo" class="btn" type="button">Demo face</button>
+        <button id="btn-compare" class="btn" type="button">Compare</button>
+        <button id="btn-snap" class="btn" type="button">Snapshot</button>
+        <button id="btn-gallery" class="btn" type="button">Gallery</button>
       </div>
     </header>
 
@@ -27,22 +43,33 @@
       <section class="stage">
         <video id="video" playsinline autoplay muted></video>
         <canvas id="canvas" width="640" height="480"></canvas>
-        <div id="hint" class="hint">Start camera or use Demo face · pick a frame below</div>
+        <div id="hint" class="hint">Start camera or use Demo face · pick a frame</div>
+        <div id="track-badge" class="track-badge">tracking: geometric</div>
       </section>
       <aside class="rail">
         <div class="rail-head">
-          <h2>Catalog</h2>
+          <h2 id="lbl-catalog">Catalog</h2>
           <select id="filter">
             <option value="">All</option>
             <option value="glasses">Glasses</option>
             <option value="accessory">Accessories</option>
           </select>
         </div>
+        <div class="pd-panel">
+          <label id="lbl-pd">PD (mm) <span id="pd-val">64</span>
+            <input id="pd" type="range" min="54" max="74" step="1" value="64" />
+          </label>
+          <p class="muted small" id="pd-hint">Calibrate pupil distance for better fit scale</p>
+        </div>
         <div id="catalog" class="catalog"></div>
         <div class="meta" id="meta">Select a SKU</div>
+        <div id="gallery" class="gallery hidden"></div>
       </aside>
     </main>
   </div>
+
+  <!-- Optional MediaPipe Face Mesh (fails soft if offline/CDN blocked) -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
   <script src="/assets/app.js"></script>
 </body>
 </html>

@@ -1,29 +1,42 @@
 from beear.catalog import get_frame, list_frames, load_catalog
-from beear.tryon import estimate_fit, landmark_box
+from beear.tryon import compare_frames, estimate_fit, landmark_box
 
 
 def test_catalog_has_glasses_and_accessories():
     data = load_catalog()
     frames = data["frames"]
-    assert len(frames) >= 6
+    assert len(frames) >= 12
     cats = {f["category"] for f in frames}
     assert "glasses" in cats
     assert "accessory" in cats
     assert get_frame("aviator_gold") is not None
+    assert get_frame("rectangle_silver") is not None
+    assert get_frame("necklace_pendant") is not None
     assert get_frame("missing") is None
 
 
 def test_list_filter():
     glasses = list_frames(category="glasses")
     assert all(f["category"] == "glasses" for f in glasses)
-    assert len(glasses) >= 4
+    assert len(glasses) >= 8
 
 
-def test_fit_and_landmarks():
+def test_fit_pd_and_landmarks():
     f = get_frame("wayfarer_black")
     assert f
-    fit = estimate_fit(f, pupil_distance_px=100)
-    assert fit["ok"]
-    assert fit["overlay_width_px"] > 0
+    fit64 = estimate_fit(f, pupil_distance_px=100, pd_mm=64)
+    fit70 = estimate_fit(f, pupil_distance_px=100, pd_mm=70)
+    assert fit64["ok"] and fit70["ok"]
+    # larger PD mm → smaller overlay for same pupil px
+    assert fit70["overlay_width_px"] < fit64["overlay_width_px"]
     box = landmark_box()
     assert box["pupil_distance_px"] > 0
+
+
+def test_compare_frames():
+    a = get_frame("aviator_gold")
+    b = get_frame("sport_blue")
+    cmp = compare_frames(a, b, pupil_distance_px=120, pd_mm=64)
+    assert cmp["ok"]
+    assert cmp["a"]["frame_id"] == "aviator_gold"
+    assert cmp["b"]["frame_id"] == "sport_blue"

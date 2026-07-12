@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80" fill="none">
+  <path d="M20 28 H90 V58 H20 Z" stroke="#1C1917" stroke-width="3" fill="rgba(30,30,30,0.12)"/>
+  <path d="M110 28 H180 V58 H110 Z" stroke="#1C1917" stroke-width="3" fill="rgba(30,30,30,0.12)"/>
+  <path d="M20 28 H90" stroke="#1C1917" stroke-width="8"/>
+  <path d="M110 28 H180" stroke="#1C1917" stroke-width="8"/>
+  <path d="M90 40 H110" stroke="#1C1917" stroke-width="3"/>
+</svg>

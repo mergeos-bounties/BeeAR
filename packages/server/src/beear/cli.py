@@ -7,11 +7,13 @@ from rich.table import Table
 
 from beear import __version__
 from beear.catalog import get_frame, list_frames
-from beear.tryon import estimate_fit, landmark_box
+from beear.tryon import compare_frames, estimate_fit, landmark_box
 
 app = typer.Typer(help="BeeAR — virtual try-on CLI", no_args_is_help=True)
 catalog_app = typer.Typer(help="Frame catalog")
+tryon_app = typer.Typer(help="Try-on helpers")
 app.add_typer(catalog_app, name="catalog")
+app.add_typer(tryon_app, name="tryon")
 console = Console()
 
 
@@ -25,10 +27,14 @@ def demo_cmd() -> None:
     frames = list_frames()
     rprint({"frames": len(frames), "ids": [f["id"] for f in frames]})
     sample = frames[0]
-    fit = estimate_fit(sample, pupil_distance_px=118)
+    fit = estimate_fit(sample, pupil_distance_px=118, pd_mm=64)
+    fit_wide = estimate_fit(sample, pupil_distance_px=118, pd_mm=70)
     box = landmark_box()
-    rprint({"sample": sample["id"], "fit": fit, "landmarks": box})
-    rprint("BeeAR demo complete (offline catalog + fit).")
+    other = frames[1] if len(frames) > 1 else sample
+    cmp = compare_frames(sample, other, pupil_distance_px=118, pd_mm=64)
+    rprint({"sample": sample["id"], "fit_pd64": fit, "fit_pd70": fit_wide, "landmarks": box})
+    rprint({"compare": cmp})
+    rprint("BeeAR demo complete (catalog + PD fit + compare).")
 
 
 @catalog_app.command("list")
@@ -58,6 +64,30 @@ def catalog_show(frame_id: str = typer.Argument(...)) -> None:
     if not f:
         raise typer.Exit(code=1)
     rprint(f)
+
+
+@tryon_app.command("fit")
+def tryon_fit(
+    frame_id: str = typer.Argument(...),
+    pd_mm: float = typer.Option(64.0, "--pd"),
+    pupil_px: float = typer.Option(120.0, "--pupil-px"),
+) -> None:
+    f = get_frame(frame_id)
+    if not f:
+        raise typer.Exit(1)
+    rprint(estimate_fit(f, pupil_distance_px=pupil_px, pd_mm=pd_mm))
+
+
+@tryon_app.command("compare")
+def tryon_compare(
+    frame_a: str = typer.Argument(...),
+    frame_b: str = typer.Argument(...),
+    pd_mm: float = typer.Option(64.0, "--pd"),
+) -> None:
+    a, b = get_frame(frame_a), get_frame(frame_b)
+    if not a or not b:
+        raise typer.Exit(1)
+    rprint(compare_frames(a, b, pd_mm=pd_mm))
 
 
 @app.command("serve")

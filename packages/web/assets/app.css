@@ -70,6 +70,36 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
   border-top: 1px solid var(--line); padding: 10px 12px; font-size: 12px; color: var(--muted);
   min-height: 56px;
 }
+.sku.on-b { border-color: var(--accent); box-shadow: 0 0 0 1px #f5c51855; }
+.pd-panel {
+  padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 12px;
+}
+.pd-panel input[type=range] { width: 100%; }
+.small { font-size: 11px; }
+.track-badge {
+  position: absolute; right: 12px; top: 12px; font-size: 11px;
+  background: #000a; color: var(--accent2); padding: 4px 8px; border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.consent {
+  position: fixed; inset: 0; background: #000a; z-index: 40;
+  display: grid; place-items: center; padding: 16px;
+}
+.consent.hidden { display: none; }
+.consent-box {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px; max-width: 420px; width: 100%;
+}
+.consent-box h3 { margin: 0 0 8px; }
+.consent-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.gallery {
+  border-top: 1px solid var(--line); max-height: 160px; overflow: auto;
+  padding: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.gallery.hidden { display: none; }
+.shot { position: relative; }
+.shot img { width: 100%; border-radius: 6px; border: 1px solid var(--line); display: block; }
+.btn.tiny { position: absolute; top: 2px; right: 2px; padding: 0 6px; font-size: 12px; }
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
   .rail { border-left: none; border-top: 1px solid var(--line); max-height: 42vh; }

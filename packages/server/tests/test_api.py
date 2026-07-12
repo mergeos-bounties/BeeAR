@@ -13,7 +13,8 @@ def test_health():
     assert r.status_code == 200
     body = r.json()
     assert body["ok"] is True
-    assert body["frames"] >= 6
+    assert body["frames"] >= 12
+    assert "pd_calibration" in body["features"]
 
 
 def test_catalog_and_fit():
@@ -26,10 +27,11 @@ def test_catalog_and_fit():
     assert r.status_code == 200
     r = client.post(
         "/api/tryon/fit",
-        json={"frame_id": fid, "pupil_distance_px": 110, "face_width_px": 200},
+        json={"frame_id": fid, "pupil_distance_px": 110, "face_width_px": 200, "pd_mm": 66},
     )
     assert r.status_code == 200
     assert r.json()["ok"] is True
+    assert r.json()["pd_mm"] == 66
 
 
 def test_landmarks():
@@ -39,3 +41,21 @@ def test_landmarks():
     )
     assert r.status_code == 200
     assert "mid" in r.json()
+
+
+def test_compare_and_sessions():
+    r = client.post(
+        "/api/tryon/compare",
+        json={"frame_a": "aviator_gold", "frame_b": "wayfarer_black", "pd_mm": 64},
+    )
+    assert r.status_code == 200
+    assert r.json()["ok"] is True
+
+    r = client.post("/api/sessions", json={"frame_ids": ["aviator_gold"], "note": "test"})
+    assert r.status_code == 200
+    sid = r.json()["id"]
+    r = client.post(f"/api/sessions/{sid}/wishlist", json={"frame_id": "sport_blue"})
+    assert r.status_code == 200
+    assert "sport_blue" in r.json()["wishlist"]
+    r = client.get(f"/api/sessions/{sid}")
+    assert r.status_code == 200
