@@ -305,6 +305,22 @@
         "bridge_mm": 18,
         "temple_mm": 140
       }
+    },
+    {
+      "id": "browline_navy",
+      "name": "Browline Navy",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#1E3A8A",
+      "lens_tint": "rgba(30,58,138,0.25)",
+      "price_cents": 8700,
+      "svg": "browline.svg",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      }
     }
   ]
 }
