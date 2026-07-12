@@ -1,12 +1,13 @@
 # BeeAR
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![Server](https://img.shields.io/badge/beear-0.3.0-0E8A16.svg)](packages/server/pyproject.toml)
+[![Server](https://img.shields.io/badge/beear-0.4.0-0E8A16.svg)](packages/server/pyproject.toml)
+[![3D Person](https://img.shields.io/badge/3D-person%20%2B%20GLB-5B8CFF.svg)](packages/web/studio3d.html)
 [![Libs](https://img.shields.io/badge/libs-v0.3.0-0E8A16.svg)](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.3.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![MergeOS](https://img.shields.io/badge/MergeOS-bounties-5319E7.svg)](https://github.com/mergeos-bounties)
 
-**BeeAR** is a **virtual try-on** stack for **glasses and accessories** — frame catalog, pupil-distance (PD) fit estimates, multi-frame compare, plus web / desktop / Android clients built on shared libraries.
+**BeeAR** is a **virtual try-on** stack for **glasses and accessories** — frame catalog, **full 3D person + glasses GLB** studio, pupil-distance (PD) fit, multi-frame compare, plus web / desktop / Android clients on shared libraries.
 
 **Product:** [mergeos-bounties/BeeAR](https://github.com/mergeos-bounties/BeeAR)
 
@@ -14,20 +15,77 @@
 
 ## Table of contents
 
+- [3D person try-on (new)](#3d-person-try-on-new)
+- [Demo video](#demo-video)
 - [Monorepo packages](#monorepo-packages)
 - [Libraries (web + Android)](#libraries-web--android)
 - [Highlights](#highlights)
 - [Screenshots](#screenshots)
 - [Quick start (server)](#quick-start-server)
 - [CLI reference](#cli-reference)
-- [Catalog & fit](#catalog--fit)
+- [Catalog, fit & 3D assets](#catalog-fit--3d-assets)
 - [Diagrams](#diagrams)
 - [Repository layout](#repository-layout)
 - [Privacy](#privacy)
 - [Development](#development)
 - [Android](#android)
 - [MergeOS bounties](#mergeos-bounties)
+- [Tiếng Việt](#tiếng-việt)
 - [License](#license)
+
+---
+
+## 3D person try-on (new)
+
+BeeAR now ships a **real 3D person bust** (`person_bust.glb`) and **multiple glasses GLB meshes**. Try them together in the browser WebGL studio — orbit the person, switch frames, auto-rotate, snapshot.
+
+| Asset | Path |
+| --- | --- |
+| **Person** | `packages/catalog/glb/person_bust.glb` |
+| **Glasses GLBs** | aviator, wayfarer, round, cat-eye, sport, rectangle, hex, clubmaster |
+| **Studio UI** | `packages/web/studio3d.html` → served at **`/studio3d.html`** |
+| **2D + camera** | `/` (canvas try-on; GLB overlay when WebGL available) |
+
+```powershell
+cd packages\server
+pip install -e ".[dev]"
+beear serve --port 8860
+# open:
+#   http://127.0.0.1:8860/studio3d.html   ← 3D person + glasses
+#   http://127.0.0.1:8860/                 ← camera / demo photo
+```
+
+Regenerate meshes (offline, no network):
+
+```powershell
+python packages\catalog\scripts\generate_3d_assets.py
+```
+
+<p align="center">
+  <img src="docs/screenshots/demo-3d-person.png" alt="BeeAR 3D person try-on" width="100%" />
+</p>
+<p align="center"><em>3D person bust + Aviator Gold GLB (offline mesh render used for docs)</em></p>
+
+---
+
+## Demo video
+
+Full rotation of the **3D person** with **glasses GLB** try-on:
+
+https://github.com/mergeos-bounties/BeeAR/raw/master/docs/videos/beear-3d-tryon.mp4
+
+<p align="center">
+  <a href="docs/videos/beear-3d-tryon.mp4">
+    <img src="docs/screenshots/demo-3d-studio.png" alt="BeeAR 3D try-on video poster" width="100%" />
+  </a>
+</p>
+<p align="center"><em>Click the poster or open <a href="docs/videos/beear-3d-tryon.mp4"><code>docs/videos/beear-3d-tryon.mp4</code></a></em></p>
+
+Rebuild the video after asset changes:
+
+```powershell
+python scripts\render_3d_demo_video.py
+```
 
 ---
 
@@ -37,12 +95,13 @@
 | --- | --- | --- |
 | **@beear/tryon** | `packages/tryon-js` | Shared JS try-on lib (fit, overlay) for web + Android WebView |
 | **BeeAR Server** | `packages/server` | Catalog API, try-on helpers, FastAPI, CLI (`beear`) |
-| **BeeAR Web** | `packages/web` | Thin browser host over `@beear/tryon` |
+| **BeeAR Web** | `packages/web` | Browser host + **3D Studio** |
 | **BeeAR Desktop** | `packages/desktop` | Electron shell wrapping the web app |
 | **beear-webview** | `packages/android/beear-webview` | **Android library (AAR)** — reusable WebView try-on |
 | **BeeAR Android app** | `packages/android/app` | Demo host embedding the AAR |
+| **Catalog** | `packages/catalog` | SVG + **GLB** frames + person models |
 
-Primary offline path: **server** (`beear demo`).
+Primary offline path: **server** (`beear demo` · `beear serve`).
 
 ---
 
@@ -75,7 +134,6 @@ npm install https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.
 ```kotlin
 // app/libs/beear-webview-0.3.0.aar
 implementation(files("libs/beear-webview-0.3.0.aar"))
-// + androidx.activity / core / fragment / appcompat
 
 val view = BeeARWebView(this)
 view.attach(this, BeeARConfig.loopback()) // or BeeARConfig.offlineAssets()
@@ -85,14 +143,11 @@ view.loadTryOn()
 ### Build from source
 
 ```bash
-# JS lib
 cd packages/tryon-js && npm test && npm run build
 
-# Android AAR (sync offline UI into assets first)
 node packages/android/scripts/sync-web-assets.mjs
 cd packages/android && ./gradlew :beear-webview:assembleRelease
 
-# Full release package → dist/release/ (+ optional GitHub Release)
 node scripts/release-libs.mjs
 node scripts/release-libs.mjs --publish
 ```
@@ -105,33 +160,36 @@ Docs: [packages/tryon-js/README.md](packages/tryon-js/README.md) · [packages/an
 
 | Capability | Description |
 | --- | --- |
-| **Frame catalog** | Aviator, wayfarer, cat-eye, sport, accessories… |
-| **PD fit** | Estimate fit from pupil distance (mm) + landmarks box |
+| **3D person** | Low-poly `person_bust.glb` with face anchor for glasses |
+| **GLB glasses** | Multiple styles (aviator, wayfarer, round, cat-eye, sport, …) |
+| **3D Studio** | Orbit / zoom / auto-rotate try-on at `/studio3d.html` |
+| **Frame catalog** | Glasses + accessories with SVG + GLB |
+| **PD fit** | Pupil distance (mm) + landmark box |
 | **Compare** | Side-by-side frame metrics |
 | **Offline demo** | Catalog + fit + compare without a camera |
-| **Clients** | Web host, desktop, Android app over shared libs |
-| **JS lib** | `@beear/tryon` for canvas fit/overlay |
-| **Android lib** | `:beear-webview` AAR for any host app |
+| **Clients** | Web, desktop, Android over shared libs |
 
 ---
 
 ## Screenshots
 
-| Try-on demos | |
+### 3D studio
+
+| | |
+| :---: | :---: |
+| ![3D person](docs/screenshots/demo-3d-person.png) | ![3D studio angle](docs/screenshots/demo-3d-studio.png) |
+| *Person + aviator GLB* | *Alternate orbit* |
+
+### 2D / camera try-on
+
+| | |
 | :---: | :---: |
 | ![Aviator](docs/screenshots/demo-aviator.png) | ![Wayfarer](docs/screenshots/demo-wayfarer.png) |
-| *Aviator Gold* | *Wayfarer Black* |
+| *Aviator on demo face* | *Wayfarer Black* |
 | ![Cat-eye](docs/screenshots/demo-cateye.png) | ![Sport PD](docs/screenshots/demo-sport-pd70.png) |
 | *Cat-eye Rose* | *Sport · PD 70* |
-| ![Compare](docs/screenshots/demo-compare.png) | ![Accessory](docs/screenshots/demo-accessory.png) |
-| *Compare frames* | *Accessory* |
-
-| Server / metrics | |
-| :---: | :---: |
-| ![Catalog](docs/screenshots/demo-catalog.png) | ![Fit](docs/screenshots/demo-fit.png) |
-| *Live catalog list* | *PD fit + landmarks schematic* |
-| ![Metrics](docs/screenshots/demo-compare-metrics.png) | ![VI UI](docs/screenshots/demo-vi-ui.png) |
-| *Compare metrics* | *VI UI sample* |
+| ![Compare](docs/screenshots/demo-compare.png) | ![VI UI](docs/screenshots/demo-vi-ui.png) |
+| *Compare frames* | *VI UI* |
 
 ---
 
@@ -146,9 +204,14 @@ pip install -e ".[dev]"
 beear version
 beear demo
 beear catalog list
-beear tryon fit <frame_id> --pd 64
+beear tryon fit aviator_gold --pd 64
 beear serve --port 8860
 ```
+
+Then open:
+
+- **3D person try-on:** http://127.0.0.1:8860/studio3d.html  
+- **Camera / demo photo:** http://127.0.0.1:8860/  
 
 ---
 
@@ -156,24 +219,28 @@ beear serve --port 8860
 
 | Command | Purpose |
 | --- | --- |
-| `beear version` | Package version |
-| `beear demo` | Catalog + PD fit + compare smoke |
+| `beear version` | Package version (**0.4.0**) |
+| `beear demo` | Catalog + PD fit + compare + **3D person/GLB** smoke |
 | `beear catalog list [-c category]` | List frames |
 | `beear catalog show <id>` | Frame detail |
+| `beear catalog search <q>` | Search frames |
 | `beear tryon fit <id> --pd 64` | Fit estimate |
 | `beear tryon compare <a> <b>` | Compare two frames |
-| `beear serve` | FastAPI server |
+| `beear serve` | FastAPI + web + **studio3d** |
 
 ---
 
-## Catalog & fit
+## Catalog, fit & 3D assets
 
-Frames include id, name, category, style, price, geometry hints.  
-Fit uses pupil distance in mm and a landmark bounding box (demo uses synthetic landmarks when no camera).
+- Frames: id, name, category, style, price, SVG, optional **GLB**.  
+- Person models: listed under `person_models` in `packages/catalog/frames.json`.  
+- Fit uses PD (mm) and landmark box (synthetic when offline).  
+- API: `GET /api/catalog`, `GET /api/catalog/meta`, `GET /catalog/glb/{file}`.
 
 ```powershell
 beear catalog list -c glasses
 beear tryon compare aviator_gold wayfarer_black --pd 64
+python packages\catalog\scripts\generate_3d_assets.py
 ```
 
 ---
@@ -205,24 +272,23 @@ System architecture and workflow — full width. Open the HTML files for **dark/
 ## Repository layout
 
 ```text
-  Web / Desktop / Android
-            │
-            ▼
-     BeeAR Server (FastAPI)
-       catalog · sessions · tryon
-            │
-     landmark / PD fit engine
-
 packages/
-  tryon-js/          # @beear/tryon
-  server/src/beear/  # cli, catalog, tryon, api
-  web/               # browser host
-  desktop/           # Electron shell
-  android/
-    beear-webview/   # AAR library
-    app/             # demo host
-docs/screenshots/
-docs/diagrams/
+  catalog/
+    glb/              # person_bust + glasses meshes
+    svg/              # 2D frame icons
+    frames.json       # catalog + person_models
+    scripts/generate_3d_assets.py
+  server/src/beear/   # CLI, API, catalog, tryon
+  web/
+    index.html        # camera / demo face try-on
+    studio3d.html     # 3D person + GLB studio
+    assets/
+  tryon-js/ desktop/ android/
+docs/
+  videos/beear-3d-tryon.mp4
+  screenshots/
+  diagrams/
+scripts/render_3d_demo_video.py
 ```
 
 ---
@@ -231,7 +297,8 @@ docs/diagrams/
 
 - Prefer synthetic / consented demo faces in docs and CI.
 - Do not commit real user camera captures without consent.
-- Redact PII in issue evidence.
+- Camera video stays in the browser; it is not uploaded by the default server.
+- See [docs/PRIVACY.md](docs/PRIVACY.md).
 
 ---
 
@@ -242,35 +309,36 @@ cd packages\server
 pytest -q
 ruff check src tests
 beear demo
+
+# assets + docs media
+python ..\..\packages\catalog\scripts\generate_3d_assets.py
+python ..\..\scripts\render_3d_demo_video.py
 ```
 
 ---
 
 ## Android
 
-See [packages/android/README.md](packages/android/README.md) for the Kotlin WebView client. It loads `http://localhost:8860/` through `adb reverse` for emulator or USB-device testing, keeping camera capture available on a loopback origin.
-
-```bash
-cd packages/android
-./gradlew :app:testDebugUnitTest
-./gradlew :app:assembleDebug
-```
+Demo app and **AAR library** live under `packages/android/`.  
+See [packages/android/README.md](packages/android/README.md) for Gradle sync, camera consent, and WebView loopback.
 
 ---
 
 ## MergeOS bounties
 
-Frames, MediaPipe landmarks, PD calibration, Android UX.  
-Star → claim → PR **master** → MRG **25–200**. Evidence: web/desktop screenshots or emulator shots.
+Star → claim a bounty issue → PR to **master** → MRG **25–200**.  
+See [mergeos](https://github.com/mergeos-bounties/mergeos) and [docs/BOUNTY.md](docs/BOUNTY.md).
 
 ---
 
 ## Tiếng Việt
 
-**BeeAR** thử kính / phụ kiện ảo (catalog + fit PD). Offline: `cd packages/server && beear demo`.
+**BeeAR** thử kính ảo: danh mục frame, **người 3D + kính GLB** (`/studio3d.html`), chỉnh PD, so sánh 2 mẫu, web/desktop/Android.  
+Chạy offline: `beear demo` · `beear serve` · mở studio 3D tại `/studio3d.html`.  
+Video demo: [docs/videos/beear-3d-tryon.mp4](docs/videos/beear-3d-tryon.mp4).
 
 ---
 
 ## License
 
-MIT · MergeOS / ThanhTrucSolutions
+[MIT](LICENSE)

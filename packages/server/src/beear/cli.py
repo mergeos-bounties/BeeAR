@@ -26,8 +26,24 @@ def version_cmd() -> None:
 
 @app.command("demo")
 def demo_cmd() -> None:
+    from beear.catalog import list_person_models, load_catalog
+
+    cat = load_catalog()
     frames = list_frames()
-    rprint({"frames": len(frames), "ids": [f["id"] for f in frames]})
+    people = list_person_models()
+    glb_frames = [f for f in frames if f.get("has_glb")]
+    rprint(
+        {
+            "frames": len(frames),
+            "glb_frames": len(glb_frames),
+            "person_models": [
+                {"id": p.get("id"), "has_glb": p.get("has_glb"), "glb": p.get("glb")}
+                for p in people
+            ],
+            "studio3d": "/studio3d.html",
+            "ids": [f["id"] for f in frames[:12]],
+        }
+    )
     sample = frames[0]
     fit = estimate_fit(sample, pupil_distance_px=118, pd_mm=64)
     fit_wide = estimate_fit(sample, pupil_distance_px=118, pd_mm=70)
@@ -36,7 +52,14 @@ def demo_cmd() -> None:
     cmp = compare_frames(sample, other, pupil_distance_px=118, pd_mm=64)
     rprint({"sample": sample["id"], "fit_pd64": fit, "fit_pd70": fit_wide, "landmarks": box})
     rprint({"compare": cmp})
-    rprint("BeeAR demo complete (catalog + PD fit + compare).")
+    rprint(
+        {
+            "catalog_version": cat.get("version"),
+            "glb_count": cat.get("glb_count"),
+            "person_count": cat.get("person_count"),
+        }
+    )
+    rprint("BeeAR demo complete (catalog + PD fit + compare + 3D person/GLB).")
 
 
 @catalog_app.command("list")

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from beear import __version__
-from beear.catalog import get_frame, list_frames, load_catalog
+from beear.catalog import get_frame, list_frames, list_person_models, load_catalog
 from beear.config import GLB_DIR, SVG_DIR, WEB_ROOT
 from beear import sessions as sess
 from beear.tryon import compare_frames, estimate_fit, landmark_box
@@ -68,15 +68,41 @@ def health() -> dict:
         "service": "beear",
         "version": __version__,
         "frames": len(cat.get("frames") or []),
-        "features": ["pd_calibration", "compare", "sessions", "wishlist"],
+        "glb_frames": cat.get("glb_count", 0),
+        "person_models": cat.get("person_count", 0),
+        "features": [
+            "pd_calibration",
+            "compare",
+            "sessions",
+            "wishlist",
+            "glb3d",
+            "person_3d",
+            "studio3d",
+        ],
     }
 
 
 @app.get("/api/catalog")
 def api_catalog(category: str | None = None, style: str | None = None) -> dict:
+    cat = load_catalog()
     return {
-        "version": load_catalog().get("version", 1),
+        "version": cat.get("version", 1),
         "frames": list_frames(category=category, style=style),
+        "person_models": cat.get("person_models") or [],
+        "glb_count": cat.get("glb_count", 0),
+    }
+
+
+@app.get("/api/catalog/meta")
+def api_catalog_meta() -> dict:
+    """Catalog metadata for 3D studio (person models + glb stats)."""
+    cat = load_catalog()
+    return {
+        "version": cat.get("version", 1),
+        "person_models": list_person_models(),
+        "glb_count": cat.get("glb_count", 0),
+        "person_count": cat.get("person_count", 0),
+        "studio_url": "/studio3d.html",
     }
 
 
@@ -164,5 +190,10 @@ if WEB_ROOT.is_dir():
     @app.get("/")
     def index() -> FileResponse:
         return FileResponse(WEB_ROOT / "index.html")
+
+    @app.get("/studio3d.html")
+    def studio3d() -> FileResponse:
+        """Full 3D person + glasses GLB try-on studio."""
+        return FileResponse(WEB_ROOT / "studio3d.html")
 
     app.mount("/assets", StaticFiles(directory=str(WEB_ROOT / "assets")), name="assets")

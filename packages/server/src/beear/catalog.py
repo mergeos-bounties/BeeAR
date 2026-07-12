@@ -22,7 +22,21 @@ def load_catalog(path: Path | None = None) -> dict[str, Any]:
         glb_path = GLB_DIR / glb_name
         f["has_glb"] = glb_path.is_file()
         f["glb_url"] = f"/catalog/glb/{glb_name}" if glb_name else None
+    # Enrich person models (3D studio bust / full body later)
+    people = data.get("person_models") or []
+    for person in people:
+        glb_name = person.get("glb") or ""
+        glb_path = GLB_DIR / glb_name
+        person["has_glb"] = glb_path.is_file()
+        person["glb_url"] = f"/catalog/glb/{glb_name}" if glb_name else None
+    data["person_models"] = people
+    data["glb_count"] = sum(1 for f in frames if f.get("has_glb"))
+    data["person_count"] = sum(1 for p in people if p.get("has_glb"))
     return data
+
+
+def list_person_models() -> list[dict[str, Any]]:
+    return list(load_catalog().get("person_models") or [])
 
 
 def list_frames(

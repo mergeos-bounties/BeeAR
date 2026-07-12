@@ -15,13 +15,19 @@ def test_health():
     assert body["ok"] is True
     assert body["frames"] >= 12
     assert "pd_calibration" in body["features"]
+    assert "person_3d" in body["features"]
+    assert "studio3d" in body["features"]
+    assert body.get("person_models", 0) >= 1
+    assert body.get("glb_frames", 0) >= 8
 
 
 def test_catalog_and_fit():
     r = client.get("/api/catalog")
     assert r.status_code == 200
-    frames = r.json()["frames"]
+    payload = r.json()
+    frames = payload["frames"]
     assert frames
+    assert payload.get("person_models")
     fid = frames[0]["id"]
     r = client.get(f"/api/catalog/{fid}")
     assert r.status_code == 200
@@ -32,6 +38,17 @@ def test_catalog_and_fit():
     assert r.status_code == 200
     assert r.json()["ok"] is True
     assert r.json()["pd_mm"] == 66
+
+
+def test_catalog_meta_and_studio3d_route():
+    r = client.get("/api/catalog/meta")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["person_count"] >= 1
+    assert body["studio_url"] == "/studio3d.html"
+    r = client.get("/studio3d.html")
+    assert r.status_code == 200
+    assert b"studio3d" in r.content.lower() or b"3D" in r.content
 
 
 def test_landmarks():
