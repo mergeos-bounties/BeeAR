@@ -28,6 +28,19 @@ let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
 let meshBusy = false;
 let sessionId = null;
+const threeState = {
+  ready: false,
+  failed: false,
+  initPromise: null,
+  layer: null,
+  renderer: null,
+  scene: null,
+  camera: null,
+  loader: null,
+  THREE: null,
+  models: {},
+  loading: {},
+};
 
 let face = { left: [0.38, 0.42], right: [0.62, 0.42], t: 0, source: "geometric" };
 
@@ -150,6 +163,168 @@ function loadDemoImages() {
   });
 }
 
+function canCreateWebGlContext() {
+  if (!window.WebGLRenderingContext) return false;
+  try {
+    const probe = document.createElement("canvas");
+    const gl = probe.getContext("webgl") || probe.getContext("experimental-webgl");
+    if (!gl) return false;
+    const loseContext = gl.getExtension("WEBGL_lose_context");
+    if (loseContext) loseContext.loseContext();
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function initThreeRenderer() {
+  if (threeState.ready) return Promise.resolve(true);
+  if (threeState.failed) return Promise.resolve(false);
+  if (threeState.initPromise) return threeState.initPromise;
+  if (!canCreateWebGlContext()) {
+    threeState.failed = true;
+    return Promise.resolve(false);
+  }
+
+  threeState.initPromise = Promise.all([
+    import("three"),
+    import("three/addons/loaders/GLTFLoader.js"),
+  ])
+    .then(([THREE, gltfModule]) => {
+      if (!window.WebGLRenderingContext) throw new Error("WebGL unavailable");
+      const layer = document.createElement("canvas");
+      layer.id = "three-layer";
+      layer.width = canvas.width;
+      layer.height = canvas.height;
+      layer.hidden = true;
+      canvas.parentElement.appendChild(layer);
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: layer,
+        alpha: true,
+        antialias: true,
+        powerPreference: "low-power",
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setClearColor(0x000000, 0);
+      renderer.autoClear = true;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(
+        -canvas.width / 2,
+        canvas.width / 2,
+        canvas.height / 2,
+        -canvas.height / 2,
+        -1000,
+        1000,
+      );
+      scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+      const light = new THREE.DirectionalLight(0xffffff, 0.7);
+      light.position.set(0, 1, 2);
+      scene.add(light);
+
+      threeState.ready = true;
+      threeState.layer = layer;
+      threeState.renderer = renderer;
+      threeState.scene = scene;
+      threeState.camera = camera;
+      threeState.loader = new gltfModule.GLTFLoader();
+      threeState.THREE = THREE;
+      syncThreeRenderer();
+      return true;
+    })
+    .catch(() => {
+      threeState.failed = true;
+      return false;
+    });
+
+  return threeState.initPromise;
+}
+
+function syncThreeRenderer() {
+  if (!threeState.ready) return;
+  const { camera, renderer } = threeState;
+  renderer.setSize(canvas.width, canvas.height, false);
+  camera.left = -canvas.width / 2;
+  camera.right = canvas.width / 2;
+  camera.top = canvas.height / 2;
+  camera.bottom = -canvas.height / 2;
+  camera.updateProjectionMatrix();
+}
+
+function prepareGlbModel(scene) {
+  const THREE = threeState.THREE;
+  const box = new THREE.Box3().setFromObject(scene);
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  scene.position.x -= center.x;
+  scene.position.y -= center.y;
+  scene.position.z -= center.z;
+  scene.traverse((obj) => {
+    if (obj.isMesh) {
+      obj.frustumCulled = false;
+    }
+  });
+
+  const group = new THREE.Group();
+  group.add(scene);
+  group.visible = false;
+  group.userData.size = size;
+  threeState.scene.add(group);
+  return group;
+}
+
+function requestGlbModel(frame) {
+  if (!frame?.glb_url || threeState.models[frame.id] || threeState.loading[frame.id]) return;
+  threeState.loading[frame.id] = true;
+  initThreeRenderer().then((ok) => {
+    if (!ok) {
+      threeState.loading[frame.id] = false;
+      return;
+    }
+    threeState.loader.load(
+      frame.glb_url,
+      (gltf) => {
+        threeState.models[frame.id] = prepareGlbModel(gltf.scene);
+        threeState.loading[frame.id] = false;
+      },
+      undefined,
+      () => {
+        threeState.loading[frame.id] = false;
+      },
+    );
+  });
+}
+
+function clearThreeFrame() {
+  if (!threeState.ready) return;
+  Object.values(threeState.models).forEach((model) => {
+    model.visible = false;
+  });
+  threeState.layer.hidden = true;
+  threeState.renderer.clear();
+}
+
+function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
+  if (!frame?.glb_url || compareMode) return false;
+  const model = threeState.models[frame.id];
+  if (!threeState.ready || !model) {
+    requestGlbModel(frame);
+    return false;
+  }
+
+  syncThreeRenderer();
+  const size = model.userData.size || { x: 1, y: 1 };
+  const scale = Math.min(overlayW / Math.max(size.x, 0.01), overlayH / Math.max(size.y, 0.01)) * 0.96;
+  model.position.set(centerX - canvas.width / 2, canvas.height / 2 - centerY, 0);
+  model.rotation.set(0, 0, -angle);
+  model.scale.setScalar(scale);
+  model.visible = true;
+  threeState.layer.hidden = false;
+  threeState.renderer.render(threeState.scene, threeState.camera);
+  return true;
+}
+
 /** Draw image cover-fit into canvas; return draw rect for landmark mapping */
 function drawImageCover(img, w, h) {
   const ir = img.width / img.height;
@@ -209,11 +384,12 @@ function renderCatalog() {
     if (selected && selected.id === f.id) cls += " on";
     if (compareMode && selectedB && selectedB.id === f.id) cls += " on-b";
     el.className = cls;
+    const modelTag = f.glb_url ? " · 3D" : "";
     el.innerHTML = `
       <img src="${f.svg_url || ""}" alt="" onerror="this.className='ph';this.removeAttribute('src')" />
       <div>
         <h3>${f.name}</h3>
-        <p>${f.brand} · ${f.style} · $${((f.price_cents || 0) / 100).toFixed(2)}</p>
+        <p>${f.brand} · ${f.style}${modelTag} · $${((f.price_cents || 0) / 100).toFixed(2)}</p>
       </div>`;
     el.onclick = () => {
       if (compareMode && selected && selected.id !== f.id) selectFrame(f.id, "B");
@@ -236,6 +412,7 @@ async function selectFrame(id, slot = "A") {
       svgCache[id] = null;
     }
   }
+  if (f.glb_url) requestGlbModel(f);
   const sid = await ensureSession();
   if (sid && slot === "A") {
     try {
@@ -253,6 +430,7 @@ function updateMeta() {
     return;
   }
   let text = `${selected.name} · ${selected.fit?.width_mm || "?"}mm · PD ${pdMm}mm`;
+  if (selected.glb_url) text += " · GLB";
   if (compareMode && selectedB) text += `  |  B: ${selectedB.name}`;
   metaEl.textContent = text;
 }
@@ -297,9 +475,29 @@ function drawDemoFace(w, h) {
   }
 }
 
-/** Delegate overlay drawing to @beear/tryon lib */
+function glbOverlayCenter(frame, metrics) {
+  const cat = frame.category;
+  const yOff =
+    cat === "accessory" && frame.style === "hat"
+      ? -metrics.pdPx * 0.9
+      : cat === "accessory" && frame.style === "necklace"
+        ? metrics.pdPx * 1.35
+        : metrics.pdPx * 0.02;
+  return { x: metrics.midX, y: metrics.midY + yOff };
+}
+
+function drawGlbOverlay(frame) {
+  if (!frame?.glb_url || compareMode || !TryOn) return false;
+  const metrics = TryOn.faceMetricsFromLandmarks(face, canvas.width, canvas.height);
+  const { overlayW, overlayH } = TryOn.overlaySize(frame, metrics.pdPx, pdMm);
+  const center = glbOverlayCenter(frame, metrics);
+  return drawThreeFrame(frame, center.x, center.y, metrics.angle, overlayW, overlayH);
+}
+
+/** Delegate 2D overlay drawing to @beear/tryon lib, with optional GLB overlay first. */
 function drawGlasses() {
   if (!TryOn) return;
+  if (selected?.glb_url && drawGlbOverlay(selected)) return;
   TryOn.drawGlassesOverlay(ctx, face, selected, selectedB, compareMode, pdMm);
 }
 
@@ -321,6 +519,7 @@ function loop() {
   const w = canvas.width,
     h = canvas.height;
   ctx.clearRect(0, 0, w, h);
+  clearThreeFrame();
   if (mode === "camera" && video.readyState >= 2) {
     ctx.drawImage(video, 0, 0, w, h);
     if (tracking !== "mediapipe") {

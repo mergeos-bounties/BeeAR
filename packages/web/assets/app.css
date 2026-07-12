@@ -38,6 +38,12 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
   background: radial-gradient(circle at 50% 40%, #1a2744, #070b14 70%);
   border-radius: 12px; border: 1px solid var(--line);
 }
+#three-layer {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(100%, 720px); height: auto; max-height: calc(100vh - 120px);
+  aspect-ratio: 4 / 3; pointer-events: none; border-radius: 12px;
+  border: 1px solid transparent;
+}
 .hint {
   position: absolute; left: 16px; bottom: 12px; color: var(--muted);
   font-size: 12px; background: #0008; padding: 6px 10px; border-radius: 8px;

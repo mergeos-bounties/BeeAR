@@ -73,6 +73,15 @@
   <script src="/assets/beear-tryon.js"></script>
   <!-- Optional MediaPipe Face Mesh (fails soft if offline/CDN blocked) -->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js" crossorigin="anonymous"></script>
+  <!-- Optional Three.js GLB renderer (app falls back to canvas shapes if blocked) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
+      }
+    }
+  </script>
   <script src="/assets/app.js"></script>
 </body>
 </html>

@@ -125,7 +125,7 @@ beear tryon compare aviator_gold wayfarer_black --pd 64
 
 ## Diagrams
 
-System architecture and workflow — shown full-width below.  
+System architecture and workflow — shown full-width below.
 Open the HTML files for **dark/light theme toggle** and export (PNG/SVG).
 
 ### Architecture
@@ -239,4 +239,3 @@ Star â†’ claim â†’ PR **master** â†’ MRG **25â€“200**. Evide
 ## License
 
 MIT · MergeOS / ThanhTrucSolutions
-

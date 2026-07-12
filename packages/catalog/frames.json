@@ -11,6 +11,7 @@
       "lens_tint": "rgba(40,60,90,0.28)",
       "price_cents": 8900,
       "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
       "fit": { "width_mm": 140, "bridge_mm": 18, "temple_mm": 140 }
     },
     {

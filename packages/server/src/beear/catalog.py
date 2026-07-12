@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from beear.config import FRAMES_JSON, SVG_DIR
+from beear.config import FRAMES_JSON, GLB_DIR, SVG_DIR
 
 
 def load_catalog(path: Path | None = None) -> dict[str, Any]:
@@ -18,6 +18,10 @@ def load_catalog(path: Path | None = None) -> dict[str, Any]:
         svg_path = SVG_DIR / svg_name
         f["has_svg"] = svg_path.is_file()
         f["svg_url"] = f"/catalog/svg/{svg_name}" if svg_name else None
+        glb_name = f.get("glb") or ""
+        glb_path = GLB_DIR / glb_name
+        f["has_glb"] = glb_path.is_file()
+        f["glb_url"] = f"/catalog/glb/{glb_name}" if glb_name else None
     return data
 
 
