@@ -339,7 +339,11 @@ async function loadCatalog() {
   }
   renderPersonSelect();
   renderCatalog();
-  const first = state.frames.find((f) => f.glb_url || f.glb) || state.frames[0];
+  const first =
+    state.frames.find((f) => f.featured && (f.glb_url || f.glb)) ||
+    state.frames.find((f) => (f.id || "").includes("meshy") && (f.glb_url || f.glb)) ||
+    state.frames.find((f) => f.glb_url || f.glb) ||
+    state.frames[0];
   if (first) selectFrame(first.id);
 }
 

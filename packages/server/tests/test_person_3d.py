@@ -49,8 +49,21 @@ def test_many_glasses_have_glb():
         "round-tortoise.glb",
         "cateye-rose.glb",
         "sport-blue.glb",
+        "glasses_meshy_studio.glb",
     ):
         assert (GLB_DIR / name).is_file()
+
+
+def test_meshy_studio_glasses_sku():
+    frame = get_frame("meshy_studio_frames")
+    assert frame is not None
+    assert frame["glb"] == "glasses_meshy_studio.glb"
+    assert frame["has_glb"] is True
+    assert frame["glb_url"] == "/catalog/glb/glasses_meshy_studio.glb"
+    assert frame.get("featured") is True
+    path = GLB_DIR / "glasses_meshy_studio.glb"
+    assert path.stat().st_size > 1_000_000
+    assert path.read_bytes()[:4] == b"glTF"
 
 
 def test_studio3d_page_present():

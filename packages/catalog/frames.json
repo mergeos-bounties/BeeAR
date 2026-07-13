@@ -1,6 +1,27 @@
 {
-  "version": 4,
+  "version": 5,
   "frames": [
+    {
+      "id": "meshy_studio_frames",
+      "name": "Meshy Studio Frames",
+      "brand": "BeeAR x Meshy",
+      "category": "glasses",
+      "style": "studio",
+      "color": "#C0C0C0",
+      "lens_tint": "rgba(40,50,70,0.28)",
+      "price_cents": 12900,
+      "svg": "aviator.svg",
+      "glb": "glasses_meshy_studio.glb",
+      "render_mode": "glb3d",
+      "featured": true,
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "description": "Photoreal glasses mesh from Meshy for 3D person try-on",
+      "source": "meshy-019f58d0-7132-7acb-90fa-ae4b8bb7e3f6.glb"
+    },
     {
       "id": "aviator_gold",
       "name": "Aviator Gold",

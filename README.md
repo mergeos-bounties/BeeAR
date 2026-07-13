@@ -1,7 +1,7 @@
 # BeeAR
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![Server](https://img.shields.io/badge/beear-0.4.2-0E8A16.svg)](packages/server/pyproject.toml)
+[![Server](https://img.shields.io/badge/beear-0.4.3-0E8A16.svg)](packages/server/pyproject.toml)
 [![3D Person](https://img.shields.io/badge/3D-person%20%2B%20GLB-5B8CFF.svg)](packages/web/studio3d.html)
 [![Libs](https://img.shields.io/badge/libs-v0.3.0-0E8A16.svg)](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.3.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -44,7 +44,7 @@ BeeAR ships **full-body Meshy characters** (female + male) plus a low-poly bust,
 | **Female character** | `packages/catalog/glb/person_female.glb` (Meshy) |
 | **Male character** | `packages/catalog/glb/person_male.glb` (Meshy) |
 | **Studio bust (fallback)** | `packages/catalog/glb/person_bust.glb` |
-| **Glasses GLBs** | aviator, wayfarer, round, cat-eye, sport, rectangle, hex, clubmaster |
+| **Glasses GLBs** | **Meshy studio frames** + aviator, wayfarer, round, cat-eye, sport, … |
 | **Studio UI** | `packages/web/studio3d.html` → **`/studio3d.html`** (person dropdown + frames) |
 | **2D + camera** | `/` (canvas try-on; GLB overlay when WebGL available) |
 
