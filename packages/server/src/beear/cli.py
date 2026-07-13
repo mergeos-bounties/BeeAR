@@ -122,6 +122,27 @@ def catalog_styles() -> None:
     console.print(table)
 
 
+@catalog_app.command("price-stats")
+def catalog_price_stats() -> None:
+    """Min / max / avg price_cents across catalog frames."""
+    frames = list_frames()
+    prices = [int(f.get("price_cents") or 0) for f in frames if f.get("price_cents")]
+    if not prices:
+        rprint({"ok": False, "error": "no priced frames"})
+        return
+    rprint(
+        {
+            "n": len(prices),
+            "min_cents": min(prices),
+            "max_cents": max(prices),
+            "avg_cents": round(sum(prices) / len(prices)),
+            "min_usd": round(min(prices) / 100, 2),
+            "max_usd": round(max(prices) / 100, 2),
+            "avg_usd": round((sum(prices) / len(prices)) / 100, 2),
+        }
+    )
+
+
 @catalog_app.command("list")
 def catalog_list(
     category: str | None = typer.Option(None, "--category", "-c"),

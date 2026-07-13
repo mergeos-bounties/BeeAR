@@ -1,5 +1,5 @@
 {
-  "version": 11,
+  "version": 12,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -577,6 +577,25 @@
       },
       "render_mode": "glb3d",
       "description": "Navy wayfarer colorway reusing wayfarer mesh"
+    },
+    {
+      "id": "clubmaster_smoke",
+      "name": "Clubmaster Smoke",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "clubmaster",
+      "color": "#4B5563",
+      "lens_tint": "rgba(40,45,55,0.3)",
+      "price_cents": 8800,
+      "svg": "clubmaster.svg",
+      "glb": "clubmaster-amber.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 19,
+        "temple_mm": 145
+      },
+      "render_mode": "glb3d",
+      "description": "Smoke grey clubmaster colorway"
     }
   ],
   "person_models": [
