@@ -30,7 +30,6 @@
 - [Development](#development)
 - [Android](#android)
 - [MergeOS bounties](#mergeos-bounties)
-- [Tiếng Việt](#tiếng-việt)
 - [License](#license)
 
 ---
@@ -330,14 +329,6 @@ See [packages/android/README.md](packages/android/README.md) for Gradle sync, ca
 
 Star → claim a bounty issue → PR to **master** → MRG **25–200**.  
 See [mergeos](https://github.com/mergeos-bounties/mergeos) and [docs/BOUNTY.md](docs/BOUNTY.md).
-
----
-
-## Tiếng Việt
-
-**BeeAR** thử kính ảo: danh mục frame, **người 3D + kính GLB** (`/studio3d.html`), chỉnh PD, so sánh 2 mẫu, web/desktop/Android.  
-Chạy offline: `beear demo` · `beear serve` · mở studio 3D tại `/studio3d.html`.  
-Video demo: [docs/videos/beear-3d-tryon.mp4](docs/videos/beear-3d-tryon.mp4).
 
 ---
 
