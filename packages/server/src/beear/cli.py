@@ -8,7 +8,7 @@ from rich.console import Console
 from rich.table import Table
 
 from beear import __version__
-from beear.catalog import get_frame, list_frames
+from beear.catalog import get_frame, list_frames, search_frames
 from beear.tryon import compare_frames, estimate_fit, landmark_box
 
 app = typer.Typer(help="BeeAR — virtual try-on CLI", no_args_is_help=True)
@@ -61,6 +61,30 @@ def demo_cmd() -> None:
     )
     rprint("BeeAR demo complete (catalog + PD fit + compare + 3D person/GLB).")
 
+
+
+
+@catalog_app.command("search")
+def search_cmd(
+    query: str = typer.Argument(..., help="Substring over id/name/brand/style"),
+    limit: int = typer.Option(10, "--limit", "-n"),
+) -> None:
+    """Search catalog frames offline (id, name, brand, style, category)."""
+    hits = search_frames(query, limit=limit)
+    table = Table(title=f"Search: {query}")
+    table.add_column("id")
+    table.add_column("name")
+    table.add_column("style")
+    table.add_column("glb")
+    for f in hits:
+        table.add_row(
+            str(f.get("id") or ""),
+            str(f.get("name") or ""),
+            str(f.get("style") or ""),
+            "yes" if f.get("has_glb") else "no",
+        )
+    rprint(table)
+    rprint({"count": len(hits), "query": query})
 
 @catalog_app.command("list")
 def catalog_list(
@@ -186,3 +210,4 @@ def serve_cmd(
 
 if __name__ == "__main__":
     app()
+
