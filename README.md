@@ -1,7 +1,7 @@
 # BeeAR
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![Server](https://img.shields.io/badge/beear-0.4.7-0E8A16.svg)](packages/server/pyproject.toml)
+[![Server](https://img.shields.io/badge/beear-0.4.8-0E8A16.svg)](packages/server/pyproject.toml)
 [![3D Person](https://img.shields.io/badge/3D-person%20%2B%20GLB-5B8CFF.svg)](packages/web/studio3d.html)
 [![Libs](https://img.shields.io/badge/libs-v0.3.0-0E8A16.svg)](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.3.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)

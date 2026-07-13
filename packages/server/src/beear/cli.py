@@ -64,6 +64,28 @@ def demo_cmd() -> None:
 
 
 
+
+
+@catalog_app.command("count")
+def count_cmd() -> None:
+    """Show frame / GLB / person counts from the offline catalog."""
+    from beear.catalog import list_person_models, load_catalog
+
+    cat = load_catalog()
+    frames = list_frames()
+    people = list_person_models()
+    glb = sum(1 for f in frames if f.get("has_glb"))
+    featured = sum(1 for f in frames if f.get("featured"))
+    rprint(
+        {
+            "frames": len(frames),
+            "glb_frames": glb,
+            "featured": featured,
+            "persons": len(people),
+            "catalog_version": cat.get("version"),
+        }
+    )
+
 @catalog_app.command("search")
 def search_cmd(
     query: str = typer.Argument(..., help="Substring over id/name/brand/style"),
