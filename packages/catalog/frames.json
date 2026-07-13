@@ -388,6 +388,23 @@
       },
       "glb": "aviator-gold.glb",
       "render_mode": "glb3d"
+    },
+    {
+      "id": "round_crystal",
+      "name": "Round Crystal Clear",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#E2E8F0",
+      "lens_tint": "rgba(226,232,240,0.18)",
+      "price_cents": 7200,
+      "svg": "round.svg",
+      "glb": "round-tortoise.glb",
+      "fit": {
+        "width_mm": 132,
+        "bridge_mm": 20,
+        "temple_mm": 140
+      }
     }
   ],
   "person_models": [
