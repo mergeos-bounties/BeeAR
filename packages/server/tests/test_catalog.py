@@ -1,5 +1,20 @@
+import json
+
+import pytest
+
 from beear.catalog import get_frame, list_frames, load_catalog
 from beear.tryon import compare_frames, estimate_fit, landmark_box
+
+
+def test_load_catalog_rejects_frames_missing_required_fields(tmp_path):
+    catalog_path = tmp_path / "frames.json"
+    catalog_path.write_text(
+        json.dumps({"version": 1, "frames": [{"name": "Missing ID"}]}),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match=r"frames\[0\]\.id"):
+        load_catalog(catalog_path)
 
 
 def test_catalog_has_glasses_and_accessories():
