@@ -9,7 +9,7 @@ Two modules:
 
 The try-on **rendering core** is the shared JS lib **`@beear/tryon`** (`packages/tryon-js`), bundled offline inside the AAR or loaded from the BeeAR server.
 
-**Library version:** `0.3.0` · **Release:** [libs-v0.3.0](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.3.0)
+**Library version:** `0.4.0` · **Release:** [libs-v0.4.0](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.4.0)
 
 ---
 
@@ -17,13 +17,13 @@ The try-on **rendering core** is the shared JS lib **`@beear/tryon`** (`packages
 
 ### Option A — GitHub Release file
 
-1. Download [`beear-webview-0.3.0.aar`](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.3.0/beear-webview-0.3.0.aar)
+1. Download [`beear-webview-0.4.0.aar`](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-webview-0.4.0.aar)
 2. Place it under `app/libs/`
 3. In `app/build.gradle.kts`:
 
 ```kotlin
 dependencies {
-    implementation(files("libs/beear-webview-0.3.0.aar"))
+    implementation(files("libs/beear-webview-0.4.0.aar"))
     implementation("androidx.activity:activity-ktx:1.9.3")
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.fragment:fragment-ktx:1.8.5")
@@ -99,7 +99,7 @@ cd packages/android
 
 # full lib release (web + Android) from repo root:
 node scripts/release-libs.mjs
-node scripts/release-libs.mjs --publish   # GitHub Release libs-v0.3.0
+node scripts/release-libs.mjs --publish   # GitHub Release libs-v0.4.0
 ```
 
 ## Permissions (host app)

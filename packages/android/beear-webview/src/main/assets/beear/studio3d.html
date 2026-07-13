@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BeeAR — 3D Person Try-On</title>
+  <link rel="stylesheet" href="/assets/studio3d.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="top">
+      <div class="brand">
+        <span class="logo">🐝</span>
+        <div>
+          <strong>BeeAR 3D Studio</strong>
+          <div class="tag">Real 3D characters · glasses GLB try-on</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="/">← 2D / Camera</a>
+        <button id="btn-auto" class="btn primary" type="button">Auto-rotate</button>
+        <button id="btn-snap" class="btn" type="button">Snapshot</button>
+      </div>
+    </header>
+    <main class="layout">
+      <section class="stage">
+        <canvas id="view" width="960" height="640"></canvas>
+        <div id="hint" class="hint">Drag to orbit · scroll to zoom · pick person + frames</div>
+        <div id="badge" class="badge">Meshy characters · GLB glasses</div>
+      </section>
+      <aside class="rail">
+        <div class="rail-head">
+          <h2>Person</h2>
+        </div>
+        <div class="pd-panel">
+          <label>Character
+            <select id="person-select">
+              <option value="">Loading…</option>
+            </select>
+          </label>
+        </div>
+        <div class="rail-head">
+          <h2>Frames (3D)</h2>
+          <select id="filter">
+            <option value="glasses">Glasses</option>
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="pd-panel">
+          <label>Fit scale <span id="scale-val">1.00</span>
+            <input id="scale" type="range" min="0.5" max="1.6" step="0.01" value="1" />
+          </label>
+          <label>Y offset <span id="y-val">0.00</span>
+            <input id="yoff" type="range" min="-0.25" max="0.25" step="0.005" value="0" />
+          </label>
+          <label>Z (depth) <span id="z-val">0.00</span>
+            <input id="zoff" type="range" min="-0.2" max="0.25" step="0.005" value="0" />
+          </label>
+        </div>
+        <div id="catalog" class="catalog"></div>
+        <div class="meta" id="meta">Loading 3D person…</div>
+      </aside>
+    </main>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.166.1/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="/assets/studio3d.js"></script>
+</body>
+</html>

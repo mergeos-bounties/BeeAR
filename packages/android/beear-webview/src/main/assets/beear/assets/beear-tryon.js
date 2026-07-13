@@ -1,4 +1,4 @@
-/* @beear/tryon v0.3.0 — IIFE for web + Android WebView
+/* @beear/tryon v0.4.0 — IIFE for web + Android WebView
  * https://github.com/mergeos-bounties/BeeAR
  * License: MIT
  */
@@ -380,7 +380,7 @@ function drawGlassesOverlay(ctx, face, selectedA, selectedB, compareMode, pdMm) 
 
 
   var api = {
-    VERSION: "0.3.0",
+    VERSION: "0.4.0",
     DEFAULT_PD_MM: DEFAULT_PD_MM,
     estimateFit: estimateFit,
     overlaySize: overlaySize,

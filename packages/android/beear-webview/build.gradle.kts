@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-val libVersion = "0.3.0"
+val libVersion = "0.4.0"
 val libGroup = "com.beear"
 val libArtifact = "beear-webview"
 
@@ -78,6 +78,15 @@ afterEvaluate {
             maven {
                 name = "LocalRelease"
                 url = uri(rootProject.layout.buildDirectory.dir("repo"))
+            }
+            // GitHub Packages (Maven) — set GITHUB_ACTOR + GITHUB_TOKEN to publish
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/mergeos-bounties/BeeAR")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR") ?: "token"
+                    password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_TOKEN") ?: ""
+                }
             }
         }
     }

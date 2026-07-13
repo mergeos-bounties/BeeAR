@@ -21,12 +21,15 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-const version = "0.3.0";
-const tag = `libs-v${version}`;
-const outDir = path.join(root, "dist", "release");
 const tryonJs = path.join(root, "packages", "tryon-js");
 const android = path.join(root, "packages", "android");
+const pkgJson = JSON.parse(fs.readFileSync(path.join(tryonJs, "package.json"), "utf8"));
+const version = pkgJson.version || "0.4.0";
+const tag = `libs-v${version}`;
+const outDir = path.join(root, "dist", "release");
 const publish = process.argv.includes("--publish");
+const publishNpm = process.argv.includes("--npm");
+const publishMaven = process.argv.includes("--maven");
 
 function run(cmd, opts = {}) {
   console.log(">", cmd);
@@ -233,4 +236,91 @@ if (publish) {
     );
   }
   console.log("Published:", `https://github.com/mergeos-bounties/BeeAR/releases/tag/${tag}`);
+}
+
+// --- npm publish (@beear/tryon) ---
+// Requires NPM_TOKEN (npmjs.org) or GITHUB_TOKEN for GitHub Packages (see --npm-github).
+if (publishNpm) {
+  console.log("\n=== npm publish @beear/tryon ===");
+  const token = process.env.NPM_TOKEN || process.env.NODE_AUTH_TOKEN || "";
+  if (!token) {
+    console.error("NPM_TOKEN / NODE_AUTH_TOKEN not set — skip npmjs.org publish.");
+    console.error("Use: $env:NPM_TOKEN='…'; node scripts/release-libs.mjs --npm");
+  } else {
+    const npmrc = path.join(tryonJs, ".npmrc");
+    fs.writeFileSync(
+      npmrc,
+      `//registry.npmjs.org/:_authToken=${token}\nalways-auth=true\n`,
+      "utf8",
+    );
+    try {
+      run(`${npmBin} publish --access public`, { cwd: tryonJs });
+      console.log("npmjs.org: https://www.npmjs.com/package/@beear/tryon");
+    } finally {
+      try {
+        fs.unlinkSync(npmrc);
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+}
+
+if (process.argv.includes("--npm-github")) {
+  console.log("\n=== GitHub Packages npm (@mergeos-bounties/tryon) ===");
+  const ghToken =
+    process.env.GITHUB_TOKEN ||
+    process.env.GH_TOKEN ||
+    execSync("gh auth token", { encoding: "utf8" }).trim();
+  const actor = process.env.GITHUB_ACTOR || "TUPM96";
+  // GitHub requires package scope == org/user name
+  const orig = JSON.parse(fs.readFileSync(path.join(tryonJs, "package.json"), "utf8"));
+  const ghPkg = {
+    ...orig,
+    name: "@mergeos-bounties/tryon",
+    publishConfig: { registry: "https://npm.pkg.github.com" },
+  };
+  const bak = path.join(tryonJs, "package.json.bak-publish");
+  fs.copyFileSync(path.join(tryonJs, "package.json"), bak);
+  fs.writeFileSync(path.join(tryonJs, "package.json"), JSON.stringify(ghPkg, null, 2) + "\n");
+  const npmrc = path.join(tryonJs, ".npmrc");
+  fs.writeFileSync(
+    npmrc,
+    `@mergeos-bounties:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${ghToken}\nalways-auth=true\n`,
+    "utf8",
+  );
+  try {
+    run(`${npmBin} publish --access public`, {
+      cwd: tryonJs,
+      env: { GITHUB_TOKEN: ghToken, NODE_AUTH_TOKEN: ghToken },
+    });
+    console.log("GitHub Packages: https://github.com/orgs/mergeos-bounties/packages");
+  } catch (err) {
+    console.error("GitHub Packages npm publish failed:", err.message || err);
+  } finally {
+    fs.copyFileSync(bak, path.join(tryonJs, "package.json"));
+    fs.unlinkSync(bak);
+    try {
+      fs.unlinkSync(npmrc);
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+if (publishMaven) {
+  console.log("\n=== Maven GitHub Packages (com.beear:beear-webview) ===");
+  const ghToken =
+    process.env.GITHUB_TOKEN ||
+    process.env.GH_TOKEN ||
+    execSync("gh auth token", { encoding: "utf8" }).trim();
+  const actor = process.env.GITHUB_ACTOR || execSync("gh api user -q .login", { encoding: "utf8" }).trim();
+  run(
+    `${gradlew} :beear-webview:publishReleasePublicationToGitHubPackagesRepository --quiet`,
+    {
+      cwd: android,
+      env: { GITHUB_TOKEN: ghToken, GITHUB_ACTOR: actor, GH_TOKEN: ghToken },
+    },
+  );
+  console.log("Maven: https://github.com/mergeos-bounties/BeeAR/packages");
 }

@@ -12,7 +12,7 @@ export {
 export { paintFrameShape, roundRect } from "./paint.js";
 export { drawFrameAt, drawGlassesOverlay } from "./overlay.js";
 
-export const VERSION = "0.3.0";
+export const VERSION = "0.4.0";
 
 /** Suggested WebView / host config keys (Android JS bridge may mirror these). */
 export const WebViewHints = {

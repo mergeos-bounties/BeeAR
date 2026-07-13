@@ -3,7 +3,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![Server](https://img.shields.io/badge/beear-0.4.8-0E8A16.svg)](packages/server/pyproject.toml)
 [![3D Person](https://img.shields.io/badge/3D-person%20%2B%20GLB-5B8CFF.svg)](packages/web/studio3d.html)
-[![Libs](https://img.shields.io/badge/libs-v0.3.0-0E8A16.svg)](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.3.0)
+[![Libs](https://img.shields.io/badge/libs-v0.4.0-0E8A16.svg)](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.4.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![MergeOS](https://img.shields.io/badge/MergeOS-bounties-5319E7.svg)](https://github.com/mergeos-bounties)
 
@@ -110,31 +110,33 @@ Primary offline path: **server** (`beear demo` · `beear serve`).
 
 BeeAR try-on ships as **reusable libraries** — download prebuilt artifacts from GitHub Releases:
 
-**[libs-v0.3.0](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.3.0)**
+**[libs-v0.4.0](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.4.0)**
 
 | Lib | Artifact | Consumers |
 | --- | --- | --- |
-| **`@beear/tryon`** | [`beear-tryon-0.3.0.js`](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.3.0/beear-tryon-0.3.0.js) · [npm tgz](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.3.0/beear-tryon-0.3.0.tgz) | Web host, Android WebView, desktop |
-| **`com.beear:beear-webview`** | [`beear-webview-0.3.0.aar`](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.3.0/beear-webview-0.3.0.aar) | Any Android app embedding try-on |
+| **`@beear/tryon` (npm)** | [`beear-tryon-0.4.0.js`](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-tryon-0.4.0.js) · [npm tgz](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-tryon-0.4.0.tgz) | Web host, Android WebView, desktop |
+| **`com.beear:beear-webview` (AAR)** | [`beear-webview-0.4.0.aar`](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-webview-0.4.0.aar) · [POM](https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-webview-0.4.0.pom) | Any Android app embedding try-on |
 
 ### Web install
 
 ```html
-<script src="https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.3.0/beear-tryon-0.3.0.js"></script>
+<script src="https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-tryon-0.4.0.js"></script>
 <script>
-  console.log(BeeARTryOn.VERSION); // 0.3.0
+  console.log(BeeARTryOn.VERSION); // 0.4.0
 </script>
 ```
 
 ```bash
-npm install https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.3.0/beear-tryon-0.3.0.tgz
+# npm install from GitHub Release tarball (no npmjs login required)
+npm install https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-tryon-0.4.0.tgz
+# after public registry publish:  npm install @beear/tryon
 ```
 
-### Android install
+### Android install (AAR library)
 
 ```kotlin
-// app/libs/beear-webview-0.3.0.aar
-implementation(files("libs/beear-webview-0.3.0.aar"))
+// app/libs/beear-webview-0.4.0.aar
+implementation(files("libs/beear-webview-0.4.0.aar"))
 
 val view = BeeARWebView(this)
 view.attach(this, BeeARConfig.loopback()) // or BeeARConfig.offlineAssets()
@@ -151,6 +153,8 @@ cd packages/android && ./gradlew :beear-webview:assembleRelease
 
 node scripts/release-libs.mjs
 node scripts/release-libs.mjs --publish
+# optional:  --npm  (needs NPM_TOKEN for registry.npmjs.org)
+# optional:  --npm-github --maven  (needs GITHUB_TOKEN with write:packages)
 ```
 
 Docs: [packages/tryon-js/README.md](packages/tryon-js/README.md) · [packages/android/README.md](packages/android/README.md)
