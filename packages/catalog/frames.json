@@ -1,5 +1,5 @@
 {
-  "version": 10,
+  "version": 11,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -558,6 +558,25 @@
       },
       "render_mode": "glb3d",
       "description": "Rose-gold aviator colorway reusing aviator mesh assets"
+    },
+    {
+      "id": "wayfarer_navy",
+      "name": "Wayfarer Navy",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#1E3A5F",
+      "lens_tint": "rgba(20,40,70,0.35)",
+      "price_cents": 8200,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-black.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 20,
+        "temple_mm": 145
+      },
+      "render_mode": "glb3d",
+      "description": "Navy wayfarer colorway reusing wayfarer mesh"
     }
   ],
   "person_models": [
