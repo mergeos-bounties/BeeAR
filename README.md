@@ -1,7 +1,7 @@
 # BeeAR
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![Server](https://img.shields.io/badge/beear-0.4.3-0E8A16.svg)](packages/server/pyproject.toml)
+[![Server](https://img.shields.io/badge/beear-0.4.4-0E8A16.svg)](packages/server/pyproject.toml)
 [![3D Person](https://img.shields.io/badge/3D-person%20%2B%20GLB-5B8CFF.svg)](packages/web/studio3d.html)
 [![Libs](https://img.shields.io/badge/libs-v0.3.0-0E8A16.svg)](https://github.com/mergeos-bounties/BeeAR/releases/tag/libs-v0.3.0)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -37,7 +37,7 @@
 
 ## 3D person try-on (new)
 
-BeeAR ships **full-body Meshy characters** (female + male) plus a low-poly bust, and **multiple glasses GLB meshes**. In the WebGL studio you can switch person, orbit, fit scale, auto-rotate, and snapshot.
+BeeAR ships **full-body Meshy characters** (female + male) plus a low-poly bust, and **multiple glasses GLB meshes**. In the WebGL studio you can switch person, orbit, fit scale, auto-rotate, and snapshot. **v0.4.4** fixes 3D AR parenting (glasses stay locked on the face when the person reloads), face-anchor fit for Meshy bodies, and composites camera/demo GLB overlays onto the main canvas so snapshots match what you see.
 
 | Asset | Path |
 | --- | --- |

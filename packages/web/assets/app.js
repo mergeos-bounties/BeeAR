@@ -199,15 +199,21 @@ function initThreeRenderer() {
       layer.hidden = true;
       canvas.parentElement.appendChild(layer);
 
+      layer.style.display = "none";
+      layer.hidden = true;
       const renderer = new THREE.WebGLRenderer({
         canvas: layer,
         alpha: true,
         antialias: true,
         powerPreference: "low-power",
+        preserveDrawingBuffer: true,
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setPixelRatio(1);
       renderer.setClearColor(0x000000, 0);
       renderer.autoClear = true;
+      if (renderer.outputColorSpace !== undefined) {
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+      }
 
       const scene = new THREE.Scene();
       const camera = new THREE.OrthographicCamera(
@@ -254,15 +260,33 @@ function syncThreeRenderer() {
 
 function prepareGlbModel(scene) {
   const THREE = threeState.THREE;
-  const box = new THREE.Box3().setFromObject(scene);
+  scene.updateMatrixWorld(true);
+  let box = new THREE.Box3().setFromObject(scene);
   const center = box.getCenter(new THREE.Vector3());
-  const size = box.getSize(new THREE.Vector3());
   scene.position.x -= center.x;
   scene.position.y -= center.y;
   scene.position.z -= center.z;
+  scene.updateMatrixWorld(true);
+  box = new THREE.Box3().setFromObject(scene);
+  let size = box.getSize(new THREE.Vector3());
+  // If mesh is deeper than wide, rotate so left-right is X (frame width)
+  let baseYaw = 0;
+  if (size.z > size.x * 1.15) {
+    scene.rotation.y += Math.PI / 2;
+    scene.updateMatrixWorld(true);
+    box = new THREE.Box3().setFromObject(scene);
+    size = box.getSize(new THREE.Vector3());
+  }
   scene.traverse((obj) => {
     if (obj.isMesh) {
       obj.frustumCulled = false;
+      if (obj.material) {
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        mats.forEach((m) => {
+          m.side = THREE.DoubleSide;
+          m.needsUpdate = true;
+        });
+      }
     }
   });
 
@@ -270,6 +294,7 @@ function prepareGlbModel(scene) {
   group.add(scene);
   group.visible = false;
   group.userData.size = size;
+  group.userData.baseYaw = baseYaw;
   threeState.scene.add(group);
   return group;
 }
@@ -301,10 +326,14 @@ function clearThreeFrame() {
   Object.values(threeState.models).forEach((model) => {
     model.visible = false;
   });
-  threeState.layer.hidden = true;
-  threeState.renderer.clear();
+  if (threeState.layer) threeState.layer.hidden = true;
+  if (threeState.renderer) threeState.renderer.clear();
 }
 
+/**
+ * Render GLB into offscreen WebGL layer, then composite onto main 2D canvas
+ * so face + glasses stay pixel-aligned (true AR overlay) and snapshots include GLB.
+ */
 function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   if (!frame?.glb_url || compareMode) return false;
   const model = threeState.models[frame.id];
@@ -314,14 +343,40 @@ function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   }
 
   syncThreeRenderer();
-  const size = model.userData.size || { x: 1, y: 1 };
-  const scale = Math.min(overlayW / Math.max(size.x, 0.01), overlayH / Math.max(size.y, 0.01)) * 0.96;
-  model.position.set(centerX - canvas.width / 2, canvas.height / 2 - centerY, 0);
-  model.rotation.set(0, 0, -angle);
-  model.scale.setScalar(scale);
+  Object.values(threeState.models).forEach((m) => {
+    m.visible = false;
+  });
+
+  const size = model.userData.size || { x: 1, y: 1, z: 1 };
+  // Fit primarily by frame width (IPD-scaled overlayW); cap height so thick meshes don't explode
+  const scaleW = overlayW / Math.max(size.x, 0.01);
+  const scaleH = (overlayH * 1.35) / Math.max(size.y, 0.01);
+  const scale = Math.min(scaleW, scaleH) * 0.98;
+  const ar = frame.ar_fit || {};
+  const yBias = Number(ar.y) || 0;
+  const scaleBias = Number(ar.scale) || 1;
+
+  model.position.set(
+    centerX - canvas.width / 2,
+    canvas.height / 2 - centerY + yBias,
+    0,
+  );
+  // Front-facing glasses in orthographic AR (Z out of screen)
+  model.rotation.set(Number(ar.pitch) || 0.08, Number(ar.yaw) || 0, -angle);
+  model.scale.setScalar(scale * scaleBias);
   model.visible = true;
-  threeState.layer.hidden = false;
+
+  // Offscreen buffer only — never show separate CSS layer (avoids misalignment)
+  threeState.layer.hidden = true;
+  threeState.layer.style.display = "none";
+  threeState.renderer.setClearColor(0x000000, 0);
+  threeState.renderer.clear();
   threeState.renderer.render(threeState.scene, threeState.camera);
+  try {
+    ctx.drawImage(threeState.layer, 0, 0, canvas.width, canvas.height);
+  } catch (_) {
+    return false;
+  }
   return true;
 }
 

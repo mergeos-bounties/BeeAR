@@ -19,6 +19,17 @@
         "bridge_mm": 18,
         "temple_mm": 145
       },
+      "studio_fit": {
+        "scale": 1.08,
+        "y": -0.012,
+        "z": 0.028
+      },
+      "ar_fit": {
+        "scale": 1.05,
+        "y": 0,
+        "pitch": 0.06,
+        "yaw": 0
+      },
       "description": "Photoreal glasses mesh from Meshy for 3D person try-on",
       "source": "meshy-019f58d0-7132-7acb-90fa-ae4b8bb7e3f6.glb"
     },
@@ -442,6 +453,7 @@
         "z": 0.0
       },
       "anchor_mode": "bbox_head",
+      "eye_height_ratio": 0.875,
       "scale": 1.0,
       "description": "Full-body female character GLB (Meshy) for realistic 3D try-on",
       "source": "meshy-019f58c5-3a3f-7dc1-832c-f38169ef5d0f.glb"
@@ -459,6 +471,7 @@
         "z": 0.0
       },
       "anchor_mode": "bbox_head",
+      "eye_height_ratio": 0.88,
       "scale": 1.0,
       "description": "Full-body male character GLB (Meshy) for realistic 3D try-on",
       "source": "meshy-019f58c8-0585-7e2b-aa0c-387fbe438e0b.glb"

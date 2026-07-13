@@ -61,6 +61,8 @@ def test_meshy_studio_glasses_sku():
     assert frame["has_glb"] is True
     assert frame["glb_url"] == "/catalog/glb/glasses_meshy_studio.glb"
     assert frame.get("featured") is True
+    assert frame.get("studio_fit") and "scale" in frame["studio_fit"]
+    assert frame.get("ar_fit") and "scale" in frame["ar_fit"]
     path = GLB_DIR / "glasses_meshy_studio.glb"
     assert path.stat().st_size > 1_000_000
     assert path.read_bytes()[:4] == b"glTF"
@@ -76,6 +78,18 @@ def test_studio3d_page_present():
     text = page.read_text(encoding="utf-8")
     assert "3D Person" in text or "3D Studio" in text
     assert "studio3d.js" in text
+    js_text = js.read_text(encoding="utf-8")
+    # Glasses root must survive person reloads (AR parenting bugfix)
+    assert "ensureGlassesRoot" in js_text
+    assert "never remove glassesRoot" in js_text or "glassesRoot" in js_text
+    assert "eye_height_ratio" in js_text or "0.875" in js_text
+
+
+def test_person_models_have_eye_anchor_meta():
+    people = list_person_models()
+    female = next(p for p in people if p["id"] == "person_female")
+    assert female.get("anchor_mode") == "bbox_head"
+    assert 0.8 <= float(female.get("eye_height_ratio", 0.875)) <= 0.95
 
 
 @pytest.mark.parametrize(
