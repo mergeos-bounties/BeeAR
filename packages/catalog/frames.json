@@ -1,5 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -520,6 +520,25 @@
         "temple_mm": 142
       },
       "description": "Matte slate square frames for everyday office AR try-on"
+    },
+    {
+      "id": "aviator_smoke",
+      "name": "Aviator Smoke",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#64748B",
+      "lens_tint": "rgba(100,116,139,0.28)",
+      "price_cents": 7800,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
+      "featured": false,
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "description": "Smoke-tint aviators for outdoor AR demos"
     }
   ],
   "person_models": [
