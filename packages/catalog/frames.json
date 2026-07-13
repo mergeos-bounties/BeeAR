@@ -1,6 +1,38 @@
 {
-  "version": 6,
+  "version": 7,
   "frames": [
+    {
+      "id": "meshy_ellipse_frames",
+      "name": "Meshy Ellipse Frames",
+      "brand": "BeeAR x Meshy",
+      "category": "glasses",
+      "style": "round",
+      "color": "#3D2B1F",
+      "lens_tint": "rgba(35,45,60,0.3)",
+      "price_cents": 12400,
+      "svg": "round.svg",
+      "glb": "glasses_meshy_ellipse.glb",
+      "render_mode": "glb3d",
+      "featured": true,
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.07,
+        "y": -0.01,
+        "z": 0.03
+      },
+      "ar_fit": {
+        "scale": 1.04,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "description": "Photoreal ellipse / oval glasses from Meshy for 3D person try-on",
+      "source": "meshy-019f58dd-2391-7d99-9d3f-b9d47939e6f7.glb"
+    },
     {
       "id": "meshy_square_frames",
       "name": "Meshy Square Frames",
@@ -13,7 +45,7 @@
       "svg": "rectangle.svg",
       "glb": "glasses_meshy_square.glb",
       "render_mode": "glb3d",
-      "featured": true,
+      "featured": false,
       "fit": {
         "width_mm": 140,
         "bridge_mm": 18,

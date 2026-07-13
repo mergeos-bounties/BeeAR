@@ -51,6 +51,7 @@ def test_many_glasses_have_glb():
         "sport-blue.glb",
         "glasses_meshy_studio.glb",
         "glasses_meshy_square.glb",
+        "glasses_meshy_ellipse.glb",
     ):
         assert (GLB_DIR / name).is_file()
 
@@ -74,11 +75,25 @@ def test_meshy_square_glasses_sku():
     assert frame["glb"] == "glasses_meshy_square.glb"
     assert frame["has_glb"] is True
     assert frame["glb_url"] == "/catalog/glb/glasses_meshy_square.glb"
-    assert frame.get("featured") is True
     assert frame.get("style") == "rectangle"
     assert frame.get("source", "").startswith("meshy-019f58d8")
     assert frame.get("studio_fit") and "scale" in frame["studio_fit"]
     path = GLB_DIR / "glasses_meshy_square.glb"
+    assert path.stat().st_size > 1_000_000
+    assert path.read_bytes()[:4] == b"glTF"
+
+
+def test_meshy_ellipse_glasses_sku():
+    frame = get_frame("meshy_ellipse_frames")
+    assert frame is not None
+    assert frame["glb"] == "glasses_meshy_ellipse.glb"
+    assert frame["has_glb"] is True
+    assert frame["glb_url"] == "/catalog/glb/glasses_meshy_ellipse.glb"
+    assert frame.get("featured") is True
+    assert frame.get("style") == "round"
+    assert frame.get("source", "").startswith("meshy-019f58dd")
+    assert frame.get("studio_fit") and "scale" in frame["studio_fit"]
+    path = GLB_DIR / "glasses_meshy_ellipse.glb"
     assert path.stat().st_size > 1_000_000
     assert path.read_bytes()[:4] == b"glTF"
 
