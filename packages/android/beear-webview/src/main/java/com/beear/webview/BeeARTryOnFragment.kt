@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
  *
  * ```kotlin
  * supportFragmentManager.beginTransaction()
- *   .replace(R.id.container, BeeARTryOnFragment.newInstance(BeeARConfig.loopback()))
- *   .commit()
+ *    .replace(R.id.container, BeeARTryOnFragment.newInstance(BeeARConfig.loopback()))
+ *    .commit()
  * ```
  */
 class BeeARTryOnFragment : Fragment() {
@@ -24,7 +24,13 @@ class BeeARTryOnFragment : Fragment() {
         super.onCreate(savedInstanceState)
         val url = arguments?.getString(ARG_URL) ?: BeeARConfig.DEFAULT_URL
         val camera = arguments?.getBoolean(ARG_CAMERA, true) ?: true
-        config = BeeARConfig(baseUrl = url, enableCamera = camera)
+        val debugLandmarks = arguments?.getBoolean(ARG_DEBUG_LANDMARKS, false) ?: false
+        
+        config = BeeARConfig(
+            baseUrl = url, 
+            enableCamera = camera, 
+            debugLandmarks = debugLandmarks
+        )
     }
 
     override fun onCreateView(
@@ -53,6 +59,7 @@ class BeeARTryOnFragment : Fragment() {
     companion object {
         private const val ARG_URL = "url"
         private const val ARG_CAMERA = "camera"
+        private const val ARG_DEBUG_LANDMARKS = "debug_landmarks"
 
         fun newInstance(config: BeeARConfig = BeeARConfig()): BeeARTryOnFragment {
             return BeeARTryOnFragment().apply {
@@ -60,6 +67,7 @@ class BeeARTryOnFragment : Fragment() {
                     Bundle().apply {
                         putString(ARG_URL, config.baseUrl)
                         putBoolean(ARG_CAMERA, config.enableCamera)
+                        putBoolean(ARG_DEBUG_LANDMARKS, config.debugLandmarks)
                     }
             }
         }
