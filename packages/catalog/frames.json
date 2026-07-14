@@ -1,5 +1,5 @@
 {
-  "version": 14,
+  "version": 15,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -634,6 +634,25 @@
       },
       "render_mode": "glb3d",
       "description": "Amber round acetate colorway"
+    },
+    {
+      "id": "cat_eye_violet",
+      "name": "Cat-Eye Violet",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "cat-eye",
+      "color": "#8B5CF6",
+      "lens_tint": "rgba(139,92,246,0.22)",
+      "price_cents": 11200,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "render_mode": "glb3d",
+      "description": "Violet cat-eye demo frame"
     }
   ],
   "person_models": [
