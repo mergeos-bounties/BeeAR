@@ -1,5 +1,5 @@
 {
-  "version": 13,
+  "version": 14,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -615,6 +615,25 @@
       },
       "render_mode": "glb3d",
       "description": "Rose-gold aviator colorway for try-on demos"
+    },
+    {
+      "id": "round_amber",
+      "name": "Round Amber",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#F59E0B",
+      "lens_tint": "rgba(245,158,11,0.25)",
+      "price_cents": 9900,
+      "svg": "round.svg",
+      "glb": "round-tortoise.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 140
+      },
+      "render_mode": "glb3d",
+      "description": "Amber round acetate colorway"
     }
   ],
   "person_models": [
