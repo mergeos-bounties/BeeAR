@@ -111,6 +111,37 @@ function resize() {
 }
 window.addEventListener("resize", resize);
 
+function isStaticDemo() {
+  return !!(globalThis.BeeARStatic && globalThis.BeeARStatic.detectStatic());
+}
+
+function absUrl(u) {
+  if (!u) return u;
+  try {
+    return new URL(u, location.href).href;
+  } catch (_) {
+    return u;
+  }
+}
+
+function setStageLoad(msg) {
+  const el = document.getElementById("stage-load");
+  const tx = document.getElementById("stage-load-text");
+  if (!el) return;
+  if (msg == null) {
+    el.classList.add("hidden");
+    return;
+  }
+  if (tx) tx.textContent = msg;
+  el.classList.remove("hidden");
+}
+
+function isHeavyAsset(meta) {
+  if (!meta) return false;
+  if (meta.heavy === true) return true;
+  return /meshy|person_female|person_male/i.test(String(meta.glb || meta.glb_url || meta.id || ""));
+}
+
 async function api(path) {
   const S = globalThis.BeeARStatic;
   if (S && S.detectStatic()) {
@@ -246,8 +277,14 @@ function loadPerson(personMeta) {
   const meta = personMeta || state.activePerson;
   if (!meta) return Promise.resolve(false);
   state.activePerson = meta;
-  const url = meta.glb_url || `/catalog/glb/${meta.glb}`;
+  const url = absUrl(meta.glb_url || `./catalog/glb/${meta.glb}`);
+  const heavy = isHeavyAsset(meta);
   metaEl.textContent = `Loading ${meta.name}…`;
+  setStageLoad(
+    heavy
+      ? `Loading ${meta.name}… (~14MB full-body — first load is slow on Pages)`
+      : `Loading ${meta.name}…`,
+  );
 
   const mount = (source) => {
     clearPerson();
@@ -262,6 +299,7 @@ function loadPerson(personMeta) {
     state.person = inst;
     placePerson(inst, meta);
     metaEl.textContent = `${meta.name} ready · pick glasses`;
+    setStageLoad(null);
     if (state.selected) loadGlasses(state.selected);
   };
 
@@ -279,10 +317,16 @@ function loadPerson(personMeta) {
         mount(model);
         resolve(true);
       },
-      undefined,
+      (ev) => {
+        if (!ev?.total) return;
+        const pct = Math.min(99, Math.round((100 * ev.loaded) / ev.total));
+        setStageLoad(`Loading ${meta.name}… ${pct}%`);
+        metaEl.textContent = `Loading ${meta.name}… ${pct}%`;
+      },
       (err) => {
         console.error(err);
-        metaEl.textContent = `Failed to load person: ${meta.glb}`;
+        metaEl.textContent = `Failed to load person: ${meta.glb} (${url})`;
+        setStageLoad(`Failed: ${meta.glb}`);
         resolve(false);
       },
     );
@@ -294,14 +338,16 @@ function loadGlasses(frame) {
     metaEl.textContent = `${frame?.name || "Frame"} has no GLB`;
     return;
   }
-  const url = frame.glb_url || `/catalog/glb/${frame.glb}`;
+  const url = absUrl(frame.glb_url || `./catalog/glb/${frame.glb}`);
   if (state.glassesCache[frame.id]) {
     attachGlasses(state.glassesCache[frame.id], frame);
     return;
   }
   if (state.loading[frame.id]) return;
   state.loading[frame.id] = true;
+  const heavy = isHeavyAsset(frame);
   metaEl.textContent = `Loading glasses ${frame.name}…`;
+  if (heavy) setStageLoad(`Loading glasses ${frame.name}… (~11MB HD mesh)`);
   loader.load(
     url,
     (gltf) => {
@@ -310,12 +356,18 @@ function loadGlasses(frame) {
       state.glassesCache[frame.id] = model;
       state.loading[frame.id] = false;
       attachGlasses(model, frame);
+      if (heavy) setStageLoad(null);
     },
-    undefined,
+    (ev) => {
+      if (!heavy || !ev?.total) return;
+      const pct = Math.min(99, Math.round((100 * ev.loaded) / ev.total));
+      setStageLoad(`Loading glasses ${frame.name}… ${pct}%`);
+    },
     (err) => {
       console.error(err);
       state.loading[frame.id] = false;
       metaEl.textContent = `GLB failed: ${frame.glb || frame.id}`;
+      if (heavy) setStageLoad(`GLB failed: ${frame.glb || frame.id}`);
     },
   );
 }
@@ -423,6 +475,7 @@ function selectFrame(id) {
 }
 
 async function loadCatalog() {
+  setStageLoad("Loading catalog…");
   const data = await api("/api/catalog");
   state.frames = (data.frames || []).filter((f) => f.glb_url || f.glb || f.has_glb);
   if (!state.frames.length) state.frames = data.frames || [];
@@ -434,9 +487,11 @@ async function loadCatalog() {
   }
   renderPersonSelect();
   renderCatalog();
+  // Prefer light featured frames on Pages; Meshy HD is opt-in (~11MB)
   const first =
+    state.frames.find((f) => f.featured && (f.glb_url || f.glb) && !isHeavyAsset(f)) ||
+    state.frames.find((f) => (f.glb_url || f.glb) && !isHeavyAsset(f)) ||
     state.frames.find((f) => f.featured && (f.glb_url || f.glb)) ||
-    state.frames.find((f) => (f.id || "").includes("meshy") && (f.glb_url || f.glb)) ||
     state.frames.find((f) => f.glb_url || f.glb) ||
     state.frames[0];
   if (first) selectFrame(first.id);
@@ -492,19 +547,26 @@ async function main() {
   ensureGlassesRoot();
   btnAuto.classList.add("active");
   btnAuto.textContent = "Auto-rotate ON";
+  setStageLoad("Starting 3D studio…");
   await loadCatalog();
+  // Default bust (tiny GLB) for fast Pages first paint; full-body Meshy still in dropdown
   const def =
     state.personModels.find((p) => p.default) ||
+    state.personModels.find((p) => p.id === "person_bust") ||
+    state.personModels.find((p) => !isHeavyAsset(p)) ||
     state.personModels.find((p) => p.id === "person_female") ||
     state.personModels[0];
   if (def) {
     personSelect.value = def.id;
     await loadPerson(def);
+  } else {
+    setStageLoad(null);
   }
   requestAnimationFrame(tick);
 }
 
 main().catch((e) => {
   metaEl.textContent = String(e);
+  setStageLoad(String(e?.message || e));
   console.error(e);
 });

@@ -29,8 +29,12 @@
     <main class="layout">
       <section class="stage">
         <canvas id="view" width="960" height="640"></canvas>
+        <div id="stage-load" class="stage-load" aria-live="polite">
+          <div class="stage-load-spin"></div>
+          <span id="stage-load-text">Loading 3D studio…</span>
+        </div>
         <div id="hint" class="hint">Drag to orbit · scroll to zoom · pick person + frames</div>
-        <div id="badge" class="badge">Meshy characters · GLB glasses</div>
+        <div id="badge" class="badge">3D try-on · GLB glasses</div>
       </section>
       <aside class="rail">
         <div class="rail-head">

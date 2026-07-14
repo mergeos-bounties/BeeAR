@@ -28,9 +28,53 @@ let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
 let meshBusy = false;
 
-// Privacy & Bounty State Constraints
-let photoConsent = localStorage.getItem("beear_photo_consent") === "true"; 
+// Privacy & Bounty State Constraints (localStorage can throw in private mode)
+let photoConsent = false;
+try {
+  photoConsent = localStorage.getItem("beear_photo_consent") === "true";
+} catch (_) {
+  photoConsent = false;
+}
 let sessionId = null;
+
+function isStaticDemo() {
+  return !!(globalThis.BeeARStatic && globalThis.BeeARStatic.detectStatic());
+}
+
+function absUrl(u) {
+  if (!u) return u;
+  try {
+    return new URL(u, location.href).href;
+  } catch (_) {
+    return u;
+  }
+}
+
+function setStageLoad(msg) {
+  const el = document.getElementById("stage-load");
+  const tx = document.getElementById("stage-load-text");
+  if (!el) return;
+  if (msg == null) {
+    el.classList.add("hidden");
+    return;
+  }
+  if (tx) tx.textContent = msg;
+  el.classList.remove("hidden");
+}
+
+/** Prefer light featured SKUs on GitHub Pages (Meshy GLBs are ~11MB each). */
+function pickDefaultFrame(list) {
+  if (!list?.length) return null;
+  const heavy = (f) =>
+    f.heavy === true || /meshy/i.test(String(f.glb || f.glb_url || f.id || ""));
+  const featured = list.find((f) => f.featured && !heavy(f));
+  if (featured) return featured;
+  if (isStaticDemo()) {
+    const light = list.find((f) => (f.glb_url || f.glb) && !heavy(f));
+    if (light) return light;
+  }
+  return list.find((f) => f.featured) || list[0];
+}
 
 const threeState = {
   ready: false,
@@ -148,9 +192,11 @@ function applyLang() {
   document.getElementById("consent-ok").textContent = t("consentOk");
   document.getElementById("consent-demo").textContent = t("consentDemo");
   
-  // Update cloud toggle and checkbox translation labels
-  document.getElementById("btn-cloud").textContent = photoConsent ? t("cloudServer") : t("cloudLocal");
-  document.getElementById("lbl-photo-consent").textContent = t("photoConsentLabel");
+  // Update cloud toggle and checkbox translation labels (optional DOM from consent PR)
+  const btnCloud = document.getElementById("btn-cloud");
+  if (btnCloud) btnCloud.textContent = photoConsent ? t("cloudServer") : t("cloudLocal");
+  const lblPhoto = document.getElementById("lbl-photo-consent");
+  if (lblPhoto) lblPhoto.textContent = t("photoConsentLabel");
 
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
   else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
@@ -315,20 +361,34 @@ function prepareGlbModel(scene) {
 function requestGlbModel(frame) {
   if (!frame?.glb_url || threeState.models[frame.id] || threeState.loading[frame.id]) return;
   threeState.loading[frame.id] = true;
+  const heavy = frame.heavy || /meshy/i.test(String(frame.glb || frame.glb_url || ""));
+  if (heavy) setStageLoad(`Loading 3D mesh (${frame.name})… large file`);
   initThreeRenderer().then((ok) => {
     if (!ok) {
       threeState.loading[frame.id] = false;
+      if (heavy) setStageLoad(null);
       return;
     }
+    const url = absUrl(frame.glb_url);
     threeState.loader.load(
-      frame.glb_url,
+      url,
       (gltf) => {
         threeState.models[frame.id] = prepareGlbModel(gltf.scene);
         threeState.loading[frame.id] = false;
+        if (heavy) setStageLoad(null);
+        if (hintEl && heavy) {
+          hintEl.textContent = (hintEl.textContent || "") + " · 3D mesh ready";
+        }
       },
-      undefined,
-      () => {
+      (ev) => {
+        if (!heavy || !ev?.total) return;
+        const pct = Math.min(99, Math.round((100 * ev.loaded) / ev.total));
+        setStageLoad(`Loading 3D mesh ${pct}%…`);
+      },
+      (err) => {
+        console.warn("GLB load failed", frame.id, err);
         threeState.loading[frame.id] = false;
+        if (heavy) setStageLoad(null);
       },
     );
   });
@@ -439,10 +499,19 @@ async function ensureSession() {
 
 async function loadCatalog(category = "") {
   const q = category ? `?category=${encodeURIComponent(category)}` : "";
-  const data = await api("/api/catalog" + q);
-  frames = data.frames || [];
-  renderCatalog();
-  if (!selected && frames[0]) selectFrame(frames[0].id, "A");
+  setStageLoad("Loading catalog…");
+  try {
+    const data = await api("/api/catalog" + q);
+    frames = data.frames || [];
+    renderCatalog();
+    if (!selected) {
+      const first = pickDefaultFrame(frames);
+      if (first) selectFrame(first.id, "A");
+    }
+  } finally {
+    // Keep overlay only if a heavy GLB is still downloading
+    if (!Object.values(threeState.loading).some(Boolean)) setStageLoad(null);
+  }
 }
 
 function renderCatalog() {
@@ -789,18 +858,18 @@ document.getElementById("btn-lang").onclick = () => {
 };
 
 // Interactive Contextual Toggle Button Logic
-document.getElementById("btn-cloud").onclick = () => {
-  photoConsent = !photoConsent;
-  localStorage.setItem("beear_photo_consent", photoConsent);
-  
-  // If revoking permissions, instantly clear existing backend identifier links
-  if (!photoConsent) {
-    sessionId = null;
-  }
-  
-  applyLang();
-  updateMeta();
-};
+const btnCloudEl = document.getElementById("btn-cloud");
+if (btnCloudEl) {
+  btnCloudEl.onclick = () => {
+    photoConsent = !photoConsent;
+    try {
+      localStorage.setItem("beear_photo_consent", photoConsent);
+    } catch (_) {}
+    if (!photoConsent) sessionId = null;
+    applyLang();
+    updateMeta();
+  };
+}
 
 document.getElementById("btn-compare").onclick = () => {
   compareMode = !compareMode;
@@ -830,15 +899,26 @@ document.getElementById("consent-ok").onclick = () => {
 
 document.getElementById("consent-demo").onclick = startDemo;
 
+setStageLoad("Starting BeeAR demo…");
 applyLang();
-Promise.all([loadDemoImages(), loadCatalog().catch((e) => {
-  hintEl.textContent = "API error: " + e.message + " — is beear serve running?";
-})])
+Promise.all([
+  loadDemoImages(),
+  loadCatalog().catch((e) => {
+    const msg = isStaticDemo()
+      ? "Catalog error: " + e.message
+      : "API error: " + e.message + " — is beear serve running?";
+    hintEl.textContent = msg;
+    setStageLoad(msg);
+  }),
+])
   .then(() => {
     startDemo();
     loop();
+    if (!Object.values(threeState.loading).some(Boolean)) setStageLoad(null);
   })
-  .catch(() => {
+  .catch((e) => {
+    console.error(e);
     startDemo();
     loop();
+    setStageLoad(null);
   });

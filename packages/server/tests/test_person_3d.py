@@ -89,13 +89,19 @@ def test_meshy_ellipse_glasses_sku():
     assert frame["glb"] == "glasses_meshy_ellipse.glb"
     assert frame["has_glb"] is True
     assert frame["glb_url"] == "/catalog/glb/glasses_meshy_ellipse.glb"
-    assert frame.get("featured") is True
+    # HD Meshy meshes stay in catalog but are not the Pages first-paint default
+    assert frame.get("featured") is not True
+    assert frame.get("heavy") is True
     assert frame.get("style") == "round"
     assert frame.get("source", "").startswith("meshy-019f58dd")
     assert frame.get("studio_fit") and "scale" in frame["studio_fit"]
     path = GLB_DIR / "glasses_meshy_ellipse.glb"
     assert path.stat().st_size > 1_000_000
     assert path.read_bytes()[:4] == b"glTF"
+    light = get_frame("aviator_gold")
+    assert light is not None
+    assert light.get("featured") is True
+    assert light.get("glb") == "aviator-gold.glb"
 
 
 def test_studio3d_page_present():

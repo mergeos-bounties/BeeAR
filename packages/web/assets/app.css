@@ -87,6 +87,19 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
   background: #000a; color: var(--accent2); padding: 4px 8px; border-radius: 999px;
   border: 1px solid var(--line);
 }
+.stage-load {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+  background: #060910cc; color: var(--text); font-size: 14px; font-weight: 600;
+  z-index: 5; pointer-events: none; transition: opacity 0.25s ease;
+}
+.stage-load.hidden { opacity: 0; visibility: hidden; }
+.stage-load-spin {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 3px solid #243049; border-top-color: var(--accent2);
+  animation: beear-spin 0.8s linear infinite;
+}
+@keyframes beear-spin { to { transform: rotate(360deg); } }
 .consent {
   position: fixed; inset: 0; background: #000a; z-index: 40;
   display: grid; place-items: center; padding: 16px;

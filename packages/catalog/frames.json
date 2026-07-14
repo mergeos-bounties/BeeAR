@@ -13,7 +13,8 @@
       "svg": "round.svg",
       "glb": "glasses_meshy_ellipse.glb",
       "render_mode": "glb3d",
-      "featured": true,
+      "featured": false,
+      "heavy": true,
       "fit": {
         "width_mm": 138,
         "bridge_mm": 18,
@@ -46,6 +47,7 @@
       "glb": "glasses_meshy_square.glb",
       "render_mode": "glb3d",
       "featured": false,
+      "heavy": true,
       "fit": {
         "width_mm": 140,
         "bridge_mm": 18,
@@ -78,6 +80,7 @@
       "glb": "glasses_meshy_studio.glb",
       "render_mode": "glb3d",
       "featured": false,
+      "heavy": true,
       "fit": {
         "width_mm": 142,
         "bridge_mm": 18,
@@ -108,12 +111,25 @@
       "price_cents": 8900,
       "svg": "aviator.svg",
       "glb": "aviator-gold.glb",
+      "featured": true,
       "fit": {
         "width_mm": 140,
         "bridge_mm": 18,
         "temple_mm": 140
       },
-      "render_mode": "glb3d"
+      "studio_fit": {
+        "scale": 1.05,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Classic gold aviator — light GLB for instant demo (GitHub Pages)"
     },
     {
       "id": "wayfarer_black",
@@ -662,7 +678,8 @@
       "glb": "person_female.glb",
       "kind": "full_body",
       "gender": "female",
-      "default": true,
+      "default": false,
+      "heavy": true,
       "anchor": {
         "x": 0,
         "y": 0,
@@ -681,6 +698,7 @@
       "kind": "full_body",
       "gender": "male",
       "default": false,
+      "heavy": true,
       "anchor": {
         "x": 0,
         "y": 0,
@@ -698,7 +716,7 @@
       "glb": "person_bust.glb",
       "kind": "bust",
       "gender": "neutral",
-      "default": false,
+      "default": true,
       "anchor": {
         "x": 0,
         "y": 1.55,
