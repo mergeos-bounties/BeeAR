@@ -27,7 +27,11 @@ let lang = "en";
 let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
 let meshBusy = false;
+
+// Privacy & Bounty State Constraints
+let photoConsent = localStorage.getItem("beear_photo_consent") === "true"; 
 let sessionId = null;
+
 const threeState = {
   ready: false,
   failed: false,
@@ -50,7 +54,6 @@ const DEMO_FACES = [
     id: "face-01",
     label: "Demo A",
     src: "/assets/demo-faces/face-01.jpg",
-    // calibrated for front portrait (pupil centers, image 0–1)
     left: [0.385, 0.428],
     right: [0.615, 0.428],
   },
@@ -90,6 +93,9 @@ const I18N = {
     trackGeo: "tracking: geometric",
     trackMp: "tracking: mediapipe",
     trackDemo: "tracking: demo photo",
+    cloudLocal: "🔒 Local Only",
+    cloudServer: "☁️ Cloud Enabled",
+    photoConsentLabel: "Allow face photo server upload & cloud features",
   },
   vi: {
     tagline: "Thử kính & phụ kiện ảo",
@@ -114,6 +120,9 @@ const I18N = {
     trackGeo: "tracking: hình học",
     trackMp: "tracking: mediapipe",
     trackDemo: "tracking: ảnh demo",
+    cloudLocal: "🔒 Chỉ lưu cục bộ",
+    cloudServer: "☁️ Đã bật Cloud",
+    photoConsentLabel: "Cho phép tải ảnh mặt lên server & dùng tính năng đám mây",
   },
 };
 
@@ -138,6 +147,11 @@ function applyLang() {
   document.getElementById("consent-body").textContent = t("consentBody");
   document.getElementById("consent-ok").textContent = t("consentOk");
   document.getElementById("consent-demo").textContent = t("consentDemo");
+  
+  // Update cloud toggle and checkbox translation labels
+  document.getElementById("btn-cloud").textContent = photoConsent ? t("cloudServer") : t("cloudLocal");
+  document.getElementById("lbl-photo-consent").textContent = t("photoConsentLabel");
+
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
   else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
   if (!selected) metaEl.textContent = t("select");
@@ -269,7 +283,6 @@ function prepareGlbModel(scene) {
   scene.updateMatrixWorld(true);
   box = new THREE.Box3().setFromObject(scene);
   let size = box.getSize(new THREE.Vector3());
-  // If mesh is deeper than wide, rotate so left-right is X (frame width)
   let baseYaw = 0;
   if (size.z > size.x * 1.15) {
     scene.rotation.y += Math.PI / 2;
@@ -330,10 +343,6 @@ function clearThreeFrame() {
   if (threeState.renderer) threeState.renderer.clear();
 }
 
-/**
- * Render GLB into offscreen WebGL layer, then composite onto main 2D canvas
- * so face + glasses stay pixel-aligned (true AR overlay) and snapshots include GLB.
- */
 function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   if (!frame?.glb_url || compareMode) return false;
   const model = threeState.models[frame.id];
@@ -348,7 +357,6 @@ function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   });
 
   const size = model.userData.size || { x: 1, y: 1, z: 1 };
-  // Fit primarily by frame width (IPD-scaled overlayW); cap height so thick meshes don't explode
   const scaleW = overlayW / Math.max(size.x, 0.01);
   const scaleH = (overlayH * 1.35) / Math.max(size.y, 0.01);
   const scale = Math.min(scaleW, scaleH) * 0.98;
@@ -361,12 +369,10 @@ function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
     canvas.height / 2 - centerY + yBias,
     0,
   );
-  // Front-facing glasses in orthographic AR (Z out of screen)
   model.rotation.set(Number(ar.pitch) || 0.08, Number(ar.yaw) || 0, -angle);
   model.scale.setScalar(scale * scaleBias);
   model.visible = true;
 
-  // Offscreen buffer only — never show separate CSS layer (avoids misalignment)
   threeState.layer.hidden = true;
   threeState.layer.style.display = "none";
   threeState.renderer.setClearColor(0x000000, 0);
@@ -380,7 +386,6 @@ function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   return true;
 }
 
-/** Draw image cover-fit into canvas; return draw rect for landmark mapping */
 function drawImageCover(img, w, h) {
   const ir = img.width / img.height;
   const cr = w / h;
@@ -410,7 +415,12 @@ async function api(path, opts) {
 }
 
 async function ensureSession() {
-  if (sessionId) return sessionId;
+  // If consent is false, intercept and issue a strict mock fallback session ID
+  if (!photoConsent) {
+    sessionId = "local-session";
+    return sessionId;
+  }
+  if (sessionId && sessionId !== "local-session") return sessionId;
   try {
     const s = await api("/api/sessions", {
       method: "POST",
@@ -468,8 +478,10 @@ async function selectFrame(id, slot = "A") {
     }
   }
   if (f.glb_url) requestGlbModel(f);
+  
   const sid = await ensureSession();
-  if (sid && slot === "A") {
+  // Ensure network sync logic runs ONLY if we have a valid server session
+  if (sid && sid !== "local-session" && slot === "A") {
     try {
       await api(`/api/sessions/${sid}/wishlist`, {
         method: "POST",
@@ -498,7 +510,6 @@ function drawDemoFace(w, h) {
 
   if (img && img.complete && img.naturalWidth) {
     const { dx, dy, dw, dh } = drawImageCover(img, w, h);
-    // Map image-normalized eye landmarks → canvas-normalized
     const lx = dx + def.left[0] * dw;
     const ly = dy + def.left[1] * dh;
     const rx = dx + def.right[0] * dw;
@@ -509,7 +520,6 @@ function drawDemoFace(w, h) {
     return;
   }
 
-  // Fallback cartoon only if photos failed to load
   const cx = w / 2,
     cy = h * 0.48;
   const rx = w * 0.22,
@@ -549,7 +559,6 @@ function drawGlbOverlay(frame) {
   return drawThreeFrame(frame, center.x, center.y, metrics.angle, overlayW, overlayH);
 }
 
-/** Delegate 2D overlay drawing to @beear/tryon lib, with optional GLB overlay first. */
 function drawGlasses() {
   if (!TryOn) return;
   if (selected?.glb_url && drawGlbOverlay(selected)) return;
@@ -619,7 +628,6 @@ function initMediaPipe() {
     faceMesh.onResults((results) => {
       const lm = results.multiFaceLandmarks && results.multiFaceLandmarks[0];
       if (!lm) return;
-      // outer eye corners
       face.left = [lm[33].x, lm[33].y];
       face.right = [lm[263].x, lm[263].y];
       face.source = "mediapipe";
@@ -637,6 +645,9 @@ function initMediaPipe() {
 }
 
 async function startCamera() {
+  // Sync the inline UI modal checkbox state with current runtime preference
+  const cb = document.getElementById("photo-consent-cb");
+  if (cb) cb.checked = photoConsent;
   consentEl.classList.remove("hidden");
 }
 
@@ -703,7 +714,7 @@ function saveGallery(items) {
   localStorage.setItem(galleryKey(), JSON.stringify(items.slice(0, 24)));
 }
 
-function snapshot() {
+async function snapshot() {
   const data = canvas.toDataURL("image/png");
   const item = {
     id: Date.now(),
@@ -712,9 +723,27 @@ function snapshot() {
     pdMm,
     data,
   };
+  
+  // Local-only save pathway runs regardless of sync permission
   const items = loadGallery();
   items.unshift(item);
   saveGallery(items);
+  
+  // Cloud processing backup path triggered strictly when permission is granted
+  if (photoConsent) {
+    const sid = await ensureSession();
+    if (sid && sid !== "local-session") {
+      try {
+        await api(`/api/sessions/${sid}/snapshot`, {
+          method: "POST",
+          body: JSON.stringify({ image: data }),
+        });
+      } catch (err) {
+        console.warn("Cloud infrastructure sync error / omitted pathway:", err);
+      }
+    }
+  }
+
   const a = document.createElement("a");
   a.download = `beear-${selected?.id || "shot"}-${item.id}.png`;
   a.href = data;
@@ -743,7 +772,7 @@ function renderGallery() {
   });
 }
 
-// UI wiring
+// UI element event binding configuration
 document.getElementById("btn-cam").onclick = startCamera;
 document.getElementById("btn-demo").onclick = startDemo;
 const btnDemoNext = document.getElementById("btn-demo-next");
@@ -754,6 +783,21 @@ document.getElementById("btn-lang").onclick = () => {
   applyLang();
   updateMeta();
 };
+
+// Interactive Contextual Toggle Button Logic
+document.getElementById("btn-cloud").onclick = () => {
+  photoConsent = !photoConsent;
+  localStorage.setItem("beear_photo_consent", photoConsent);
+  
+  // If revoking permissions, instantly clear existing backend identifier links
+  if (!photoConsent) {
+    sessionId = null;
+  }
+  
+  applyLang();
+  updateMeta();
+};
+
 document.getElementById("btn-compare").onclick = () => {
   compareMode = !compareMode;
   document.getElementById("btn-compare").classList.toggle("active", compareMode);
@@ -770,7 +814,16 @@ document.getElementById("pd").oninput = (e) => {
   document.getElementById("pd-val").textContent = String(pdMm);
   updateMeta();
 };
-document.getElementById("consent-ok").onclick = startCameraAfterConsent;
+
+// Update interaction execution pipeline on primary modal acknowledgement
+document.getElementById("consent-ok").onclick = () => {
+  const cb = document.getElementById("photo-consent-cb");
+  photoConsent = cb ? cb.checked : false;
+  localStorage.setItem("beear_photo_consent", photoConsent);
+  applyLang();
+  startCameraAfterConsent();
+};
+
 document.getElementById("consent-demo").onclick = startDemo;
 
 applyLang();
