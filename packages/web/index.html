@@ -11,6 +11,15 @@
     <div class="consent-box">
       <h3 id="consent-title">Camera consent</h3>
       <p id="consent-body">BeeAR uses the camera only in your browser for try-on. Video is not uploaded to the server. See Privacy.</p>
+      
+      <!-- Privacy Toggle for Face Photo Server Upload -->
+      <div class="consent-row" style="margin: 16px 0; text-align: left; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px;">
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem;">
+          <input type="checkbox" id="photo-consent-cb" style="width: 16px; height: 16px; cursor: pointer;" />
+          <span id="lbl-photo-consent" style="font-weight: 500;">Allow face photo server upload & cloud features</span>
+        </label>
+      </div>
+
       <div class="consent-actions">
         <button id="consent-ok" class="btn primary" type="button">Allow & start</button>
         <button id="consent-demo" class="btn" type="button">Use demo face</button>
@@ -32,6 +41,8 @@
       <div class="actions">
         <button id="btn-lang" class="btn" type="button">VI</button>
         <a id="btn-3d" class="btn primary" href="/studio3d.html">🧑 3D Person</a>
+        <!-- Live Privacy Status Toggle -->
+        <button id="btn-cloud" class="btn" type="button">🔒 Local Only</button>
         <button id="btn-cam" class="btn" type="button">📷 Camera</button>
         <button id="btn-demo" class="btn" type="button">Demo photo</button>
         <button id="btn-demo-next" class="btn" type="button">Next face</button>
