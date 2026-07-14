@@ -1,5 +1,5 @@
 {
-  "version": 20,
+  "version": 21,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -819,6 +819,36 @@
       },
       "render_mode": "glb3d",
       "description": "Ink clubmaster browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "wayfarer_olive",
+      "name": "Wayfarer Olive",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#556B2F",
+      "lens_tint": "rgba(85,107,47,0.2)",
+      "price_cents": 8600,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-olive.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 17,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Olive wayfarer \u2014 light catalog SKU"
     }
   ],
   "person_models": [
