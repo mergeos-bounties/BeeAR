@@ -1,5 +1,5 @@
 {
-  "version": 22,
+  "version": 23,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -849,6 +849,36 @@
       },
       "render_mode": "glb3d",
       "description": "Olive wayfarer \u2014 light catalog SKU"
+    },
+    {
+      "id": "pilot_copper",
+      "name": "Pilot Copper",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#B87333",
+      "lens_tint": "rgba(184,115,51,0.2)",
+      "price_cents": 9400,
+      "svg": "aviator.svg",
+      "glb": "aviator-copper.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.012,
+        "z": 0.022
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Copper pilot aviator \u2014 light catalog SKU"
     }
   ],
   "person_models": [
