@@ -1,15 +1,19 @@
 from __future__ import annotations
 
+import hashlib
+import json
+from typing import Any
+
 from beear import __version__
-from beear.catalog import get_frame, list_frames, list_person_models, load_catalog
+from beear.catalog import get_frame, load_catalog
 from beear.config import GLB_DIR, SVG_DIR, WEB_ROOT
 from beear import sessions as sess
 from beear.tryon import compare_frames, estimate_fit, landmark_box
 
 try:
-    from fastapi import FastAPI, HTTPException
+    from fastapi import FastAPI, HTTPException, Request, Response
     from fastapi.middleware.cors import CORSMiddleware
-    from fastapi.responses import FileResponse
+    from fastapi.responses import FileResponse, JSONResponse
     from fastapi.staticfiles import StaticFiles
     from pydantic import BaseModel, Field
 except ImportError as exc:  # pragma: no cover
@@ -60,6 +64,55 @@ class WishlistAdd(BaseModel):
     frame_id: str
 
 
+CATALOG_CACHE_CONTROL = "public, max-age=300, stale-while-revalidate=3600"
+
+
+def _catalog_etag(payload: dict[str, Any]) -> str:
+    raw = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode(
+        "utf-8"
+    )
+    return f'"{hashlib.sha256(raw).hexdigest()[:32]}"'
+
+
+def _etag_matches(header_value: str | None, etag: str) -> bool:
+    if not header_value:
+        return False
+    for value in header_value.split(","):
+        candidate = value.strip()
+        if candidate == "*" or candidate == etag:
+            return True
+        if candidate.startswith("W/") and candidate[2:].strip() == etag:
+            return True
+    return False
+
+
+def _cached_catalog_response(
+    request: Request,
+    payload: dict[str, Any],
+) -> Response:
+    etag = _catalog_etag(payload)
+    headers = {
+        "Cache-Control": CATALOG_CACHE_CONTROL,
+        "ETag": etag,
+    }
+    if _etag_matches(request.headers.get("if-none-match"), etag):
+        return Response(status_code=304, headers=headers)
+    return JSONResponse(content=payload, headers=headers)
+
+
+def _filter_frames(
+    frames: list[dict[str, Any]],
+    *,
+    category: str | None,
+    style: str | None,
+) -> list[dict[str, Any]]:
+    if category:
+        frames = [frame for frame in frames if frame.get("category") == category]
+    if style:
+        frames = [frame for frame in frames if frame.get("style") == style]
+    return frames
+
+
 @app.get("/health")
 def health() -> dict:
     cat = load_catalog()
@@ -83,35 +136,46 @@ def health() -> dict:
 
 
 @app.get("/api/catalog")
-def api_catalog(category: str | None = None, style: str | None = None) -> dict:
+def api_catalog(
+    request: Request,
+    category: str | None = None,
+    style: str | None = None,
+) -> Response:
     cat = load_catalog()
-    return {
-        "version": cat.get("version", 1),
-        "frames": list_frames(category=category, style=style),
-        "person_models": cat.get("person_models") or [],
-        "glb_count": cat.get("glb_count", 0),
-    }
+    frames = _filter_frames(cat.get("frames") or [], category=category, style=style)
+    return _cached_catalog_response(
+        request,
+        {
+            "version": cat.get("version", 1),
+            "frames": frames,
+            "person_models": cat.get("person_models") or [],
+            "glb_count": cat.get("glb_count", 0),
+        },
+    )
 
 
 @app.get("/api/catalog/meta")
-def api_catalog_meta() -> dict:
+def api_catalog_meta(request: Request) -> Response:
     """Catalog metadata for 3D studio (person models + glb stats)."""
     cat = load_catalog()
-    return {
-        "version": cat.get("version", 1),
-        "person_models": list_person_models(),
-        "glb_count": cat.get("glb_count", 0),
-        "person_count": cat.get("person_count", 0),
-        "studio_url": "/studio3d.html",
-    }
+    return _cached_catalog_response(
+        request,
+        {
+            "version": cat.get("version", 1),
+            "person_models": cat.get("person_models") or [],
+            "glb_count": cat.get("glb_count", 0),
+            "person_count": cat.get("person_count", 0),
+            "studio_url": "/studio3d.html",
+        },
+    )
 
 
 @app.get("/api/catalog/{frame_id}")
-def api_frame(frame_id: str) -> dict:
+def api_frame(frame_id: str, request: Request) -> Response:
     f = get_frame(frame_id)
     if not f:
         raise HTTPException(404, f"frame not found: {frame_id}")
-    return f
+    return _cached_catalog_response(request, f)
 
 
 @app.post("/api/tryon/fit")
