@@ -1,5 +1,5 @@
 {
-  "version": 25,
+  "version": 26,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -909,6 +909,36 @@
       },
       "render_mode": "glb3d",
       "description": "Slate square frames \u2014 light catalog SKU"
+    },
+    {
+      "id": "browline_espresso",
+      "name": "Browline Espresso",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#3F2A1D",
+      "lens_tint": "rgba(63,42,29,0.16)",
+      "price_cents": 9100,
+      "svg": "browline.svg",
+      "glb": "browline-espresso.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Espresso browline \u2014 light catalog SKU"
     }
   ],
   "person_models": [
