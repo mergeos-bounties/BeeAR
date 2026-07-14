@@ -634,7 +634,12 @@ function drawGlbOverlay(frame) {
 
 function drawGlasses() {
   if (!TryOn) return;
-  if (selected?.glb_url && drawGlbOverlay(selected)) return;
+  // Light procedural GLBs composite as dark blocks on the photo path — use crisp SVG/canvas
+  // overlay for them. Reserve WebGL GLB composite for heavy/photoreal Meshy meshes.
+  const preferGlb =
+    selected?.glb_url &&
+    (selected.heavy === true || /meshy/i.test(String(selected.glb || selected.id || "")));
+  if (preferGlb && drawGlbOverlay(selected)) return;
   TryOn.drawGlassesOverlay(ctx, face, selected, selectedB, compareMode, pdMm);
 }
 
