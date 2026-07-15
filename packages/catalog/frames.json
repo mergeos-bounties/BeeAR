@@ -1,5 +1,5 @@
 {
-  "version": 26,
+  "version": 27,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -939,6 +939,36 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "oval_champagne",
+      "name": "Oval Champagne",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "oval",
+      "color": "#D4AF37",
+      "lens_tint": "rgba(212,175,55,0.16)",
+      "price_cents": 8900,
+      "svg": "oval.svg",
+      "glb": "oval-champagne.glb",
+      "fit": {
+        "width_mm": 135,
+        "bridge_mm": 17,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Champagne oval frames \u2014 light catalog SKU"
     }
   ],
   "person_models": [
