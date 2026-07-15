@@ -1,5 +1,5 @@
 {
-  "version": 40,
+  "version": 41,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1329,6 +1329,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte olive hexagon frames \u2014 catalog SKU cycle 16c"
+    },
+    {
+      "id": "clubmaster_matte_navy",
+      "name": "Clubmaster Matte Navy",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "clubmaster",
+      "color": "#1E3A5F",
+      "lens_tint": "rgba(30,58,95,0.14)",
+      "price_cents": 12500,
+      "svg": "clubmaster.svg",
+      "glb": "clubmaster-matte-navy.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": -0.009,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.004,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte navy clubmaster frames \u2014 catalog SKU cycle 16d"
     }
   ],
   "person_models": [
