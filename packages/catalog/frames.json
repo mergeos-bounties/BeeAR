@@ -939,6 +939,130 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "spring_cherry",
+      "name": "Spring Cherry",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#FF69B4",
+      "lens_tint": "rgba(255,105,180,0.15)",
+      "price_cents": 8900,
+      "svg": "round.svg",
+      "glb": "round-cherry.glb",
+      "fit": {
+        "width_mm": 134,
+        "bridge_mm": 17,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Cherry blossom pink round frames \u2014 spring seasonal SKU",
+      "season": "spring"
+    },
+    {
+      "id": "summer_coral",
+      "name": "Summer Coral",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#FF7F50",
+      "lens_tint": "rgba(255,127,80,0.20)",
+      "price_cents": 9200,
+      "svg": "aviator.svg",
+      "glb": "aviator-coral.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 16,
+        "temple_mm": 144
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.012,
+        "z": 0.022
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Coral aviator \u2014 summer seasonal SKU",
+      "season": "summer"
+    },
+    {
+      "id": "autumn_amber",
+      "name": "Autumn Amber",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#FFBF00",
+      "lens_tint": "rgba(255,191,0,0.18)",
+      "price_cents": 9500,
+      "svg": "browline.svg",
+      "glb": "browline-amber.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Amber browline \u2014 autumn seasonal SKU",
+      "season": "autumn"
+    },
+    {
+      "id": "winter_frost",
+      "name": "Winter Frost",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "square",
+      "color": "#B0C4DE",
+      "lens_tint": "rgba(176,196,222,0.16)",
+      "price_cents": 8700,
+      "svg": "square.svg",
+      "glb": "square-frost.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Frost blue square frames \u2014 winter seasonal SKU",
+      "season": "winter"
     }
   ],
   "person_models": [

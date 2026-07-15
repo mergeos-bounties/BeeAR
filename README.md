@@ -185,6 +185,41 @@ node scripts/release-libs.mjs --publish
 
 Docs: [packages/tryon-js/README.md](packages/tryon-js/README.md) · [packages/android/README.md](packages/android/README.md)
 
+### Install from GitHub tarball
+
+Until the npm 2FA token is configured for `@beear/tryon`, consumers can install
+the try-on library directly from a GitHub release tarball:
+
+```bash
+# npm — install the latest release tarball
+npm install https://github.com/mergeos-bounties/BeeAR/releases/latest/download/beear-tryon-0.4.0.tgz
+
+# yarn
+yarn add https://github.com/mergeos-bounties/BeeAR/releases/latest/download/beear-tryon-0.4.0.tgz
+
+# pnpm
+pnpm add https://github.com/mergeos-bounties/BeeAR/releases/latest/download/beear-tryon-0.4.0.tgz
+```
+
+```html
+<!-- Or load via CDN / script tag (no build step) -->
+<script src="https://github.com/mergeos-bounties/BeeAR/releases/download/libs-v0.4.0/beear-tryon-0.4.0.js"></script>
+<script>
+  BeeARTryOn.init({ container: '#tryon' });
+</script>
+```
+
+**Verify the install:**
+
+```js
+import { BeeARTryOn } from '@beear/tryon';
+console.log(BeeARTryOn.VERSION); // "0.4.0"
+```
+
+> **Note:** The tarball URL points to the GitHub Release asset, not the npm
+> registry. Re-run `npm install` with the same URL to update — or pin a
+> specific release tag (e.g. `libs-v0.4.0`) instead of `latest`.
+
 ---
 
 ## Highlights
