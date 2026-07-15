@@ -1,5 +1,5 @@
 {
-  "version": 26,
+  "version": 27,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -939,6 +939,28 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "kids_flexible_green",
+      "name": "Kids Flexible Green",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "kids",
+      "color": "#32CD32",
+      "lens_tint": "rgba(0,0,0,0.2)",
+      "price_cents": 8500,
+      "svg": "kids.svg",
+      "glb": "kids_flexible_green.glb",
+      "render_mode": "glb3d",
+      "featured": false,
+      "heavy": true,
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "description": "Kids Flexible Green frame",
+      "source": "kids_flexible_green.glb"
     }
   ],
   "person_models": [
