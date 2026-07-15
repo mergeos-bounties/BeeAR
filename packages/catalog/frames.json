@@ -1,5 +1,5 @@
 {
-  "version": 34,
+  "version": 35,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1179,6 +1179,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte black wayfarer frames \u2014 catalog SKU"
+    },
+    {
+      "id": "round_wire_silver",
+      "name": "Round Wire Silver",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#C0C0C0",
+      "lens_tint": "rgba(192,192,192,0.15)",
+      "price_cents": 9900,
+      "svg": "round-wire.svg",
+      "glb": "round-wire-silver.glb",
+      "fit": {
+        "width_mm": 134,
+        "bridge_mm": 20,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": -0.009,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Silver round wire frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
