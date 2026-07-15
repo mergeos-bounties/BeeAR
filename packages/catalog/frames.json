@@ -1,5 +1,5 @@
 {
-  "version": 42,
+  "version": 43,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1420,6 +1420,36 @@
       },
       "render_mode": "glb3d",
       "description": "Chrome pilot frames with smoke lenses \u2014 catalog SKU cycle 16e"
+    },
+    {
+      "id": "shield_matte_graphite",
+      "name": "Shield Matte Graphite",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "shield",
+      "color": "#4B5563",
+      "lens_tint": "rgba(75,85,99,0.22)",
+      "price_cents": 13200,
+      "svg": "shield.svg",
+      "glb": "shield-matte-graphite.glb",
+      "fit": {
+        "width_mm": 144,
+        "bridge_mm": 16,
+        "temple_mm": 146
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.006,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": -0.002,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte graphite shield frames \u2014 catalog SKU cycle 16f"
     }
   ],
   "person_models": [
