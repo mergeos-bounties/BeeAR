@@ -1,5 +1,5 @@
 {
-  "version": 38,
+  "version": 39,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1269,6 +1269,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte navy hexagon frames \u2014 catalog SKU"
+    },
+    {
+      "id": "rectangle_frosted_clear",
+      "name": "Rectangle Frosted Clear",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rectangle",
+      "color": "#F8FAFC",
+      "lens_tint": "rgba(248,250,252,0.10)",
+      "price_cents": 9800,
+      "svg": "rectangle.svg",
+      "glb": "rectangle-frosted-clear.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.019
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.004,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Frosted clear rectangle frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
