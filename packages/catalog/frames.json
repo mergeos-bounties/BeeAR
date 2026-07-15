@@ -1,5 +1,5 @@
 {
-  "version": 35,
+  "version": 36,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1209,6 +1209,36 @@
       },
       "render_mode": "glb3d",
       "description": "Silver round wire frames \u2014 catalog SKU"
+    },
+    {
+      "id": "browline_tortoiseshell",
+      "name": "Browline Tortoiseshell",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#8B4513",
+      "lens_tint": "rgba(139,69,19,0.12)",
+      "price_cents": 11900,
+      "svg": "browline.svg",
+      "glb": "browline-tortoiseshell.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.019
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.004,
+        "pitch": 0.025,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Classic browline tortoiseshell frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
