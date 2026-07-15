@@ -1,5 +1,5 @@
 {
-  "version": 26,
+  "version": 27,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -939,6 +939,28 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "sports_wrap_blue",
+      "name": "Sports Wrap Blue",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wrap",
+      "color": "#1E90FF",
+      "lens_tint": "rgba(0,0,0,0.2)",
+      "price_cents": 8500,
+      "svg": "wrap.svg",
+      "glb": "sports_wrap_blue.glb",
+      "render_mode": "glb3d",
+      "featured": false,
+      "heavy": true,
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "description": "Sports Wrap Blue frame",
+      "source": "sports_wrap_blue.glb"
     }
   ],
   "person_models": [
