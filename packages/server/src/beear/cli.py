@@ -176,11 +176,80 @@ def catalog_list(
 
 
 @catalog_app.command("show")
-def catalog_show(frame_id: str = typer.Argument(...)) -> None:
+def catalog_show(
+    frame_id: str = typer.Argument(..., help="Frame/SKU id to display"),
+    json_output: bool = typer.Option(False, "--json", "-j", help="Output raw JSON instead of table"),
+) -> None:
+    """Show detailed frame info with fit fields as a pretty table."""
     f = get_frame(frame_id)
     if not f:
+        rprint(f"[red]Frame not found: {frame_id}[/red]")
         raise typer.Exit(code=1)
-    rprint(f)
+
+    if json_output:
+        rprint(f)
+        return
+
+    # Header
+    price = f.get("price_cents", 0) or 0
+    table = Table(title=f"SKU: {f['id']}", title_style="bold cyan")
+    table.add_column("Field", style="cyan", no_wrap=True)
+    table.add_column("Value")
+    table.add_row("Name", f.get("name", ""))
+    table.add_row("Brand", f.get("brand", ""))
+    table.add_row("Category", f.get("category", ""))
+    table.add_row("Style", f.get("style", ""))
+    table.add_row("Color", f.get("color", ""))
+    table.add_row("Lens Tint", f.get("lens_tint", ""))
+    table.add_row("Price", f"${price / 100:.2f}")
+    if f.get("description"):
+        table.add_row("Description", f["description"])
+    console.print(table)
+
+    # Fit dimensions
+    fit = f.get("fit") or {}
+    if fit:
+        ft = Table(title="Fit (mm)", title_style="bold green")
+        ft.add_column("Measurement", style="green", no_wrap=True)
+        ft.add_column("Value", justify="right")
+        for key in ("width_mm", "bridge_mm", "temple_mm"):
+            val = fit.get(key)
+            if val is not None:
+                ft.add_row(key.replace("_mm", "").replace("_", " ").title(), str(val))
+        console.print(ft)
+
+    # Studio fit
+    sf = f.get("studio_fit") or {}
+    if sf:
+        st = Table(title="Studio 3D Fit", title_style="bold yellow")
+        st.add_column("Param", style="yellow", no_wrap=True)
+        st.add_column("Value", justify="right")
+        for k in ("scale", "y", "z"):
+            if k in sf:
+                st.add_row(k, str(sf[k]))
+        console.print(st)
+
+    # AR fit
+    ar = f.get("ar_fit") or {}
+    if ar:
+        at = Table(title="AR Fit", title_style="bold magenta")
+        at.add_column("Param", style="magenta", no_wrap=True)
+        at.add_column("Value", justify="right")
+        for k in ("scale", "y", "pitch", "yaw"):
+            if k in ar:
+                at.add_row(k, str(ar[k]))
+        console.print(at)
+
+    # Assets
+    console.print()
+    glb = f.get("glb_url") or "—"
+    svg = f.get("svg_url") or "—"
+    console.print(f"[dim]GLB:[/dim] {glb}")
+    console.print(f"[dim]SVG:[/dim] {svg}")
+    if f.get("featured"):
+        console.print("[bold yellow]★ Featured[/bold yellow]")
+    if f.get("render_mode"):
+        console.print(f"[dim]Render mode:[/dim] {f['render_mode']}")
 
 
 @catalog_app.command("search")

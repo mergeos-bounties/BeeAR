@@ -44,6 +44,18 @@ def test_list_filter():
     assert len(glasses) >= 8
 
 
+def test_list_filter_style():
+    aviators = list_frames(style="aviator")
+    assert all(f["style"] == "aviator" for f in aviators)
+    assert len(aviators) >= 4
+
+
+def test_list_filter_category_and_style():
+    wayfarers = list_frames(category="glasses", style="wayfarer")
+    assert len(wayfarers) >= 3
+    assert all(f["category"] == "glasses" and f["style"] == "wayfarer" for f in wayfarers)
+
+
 def test_fit_pd_and_landmarks():
     f = get_frame("wayfarer_black")
     assert f
