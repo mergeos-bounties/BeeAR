@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from beear.catalog import get_frame, list_frames, load_catalog
+from beear.catalog import get_frame, list_frames, load_catalog, search_frames
 from beear.tryon import compare_frames, estimate_fit, landmark_box
 
 
@@ -25,6 +25,7 @@ def test_catalog_has_glasses_and_accessories():
     assert "glasses" in cats
     assert "accessory" in cats
     assert get_frame("aviator_gold") is not None
+    assert get_frame("aviator_gold_mirror") is not None
     assert get_frame("rectangle_silver") is not None
     assert get_frame("necklace_pendant") is not None
     assert get_frame("missing") is None
@@ -75,3 +76,20 @@ def test_compare_frames():
     assert cmp["ok"]
     assert cmp["a"]["frame_id"] == "aviator_gold"
     assert cmp["b"]["frame_id"] == "sport_blue"
+
+
+def test_catalog_has_mirror_frame():
+    frame = get_frame("aviator_gold_mirror")
+    assert frame is not None
+    assert "lens_tint" in frame
+    tint = frame["lens_tint"]
+    assert tint.startswith("rgba(")
+    alpha = float(tint.rstrip(")").split(",")[-1].strip())
+    assert alpha >= 0.30, f"mirror lens alpha {alpha} < 0.30"
+    assert frame["glb"] == "aviator-gold.glb", "mirror frame should reuse aviator-gold.glb"
+
+
+def test_search_aviator():
+    hits = search_frames("mirror")
+    ids = [f["id"] for f in hits]
+    assert "aviator_gold_mirror" in ids, "search_frames('mirror') should return the mirror SKU"
