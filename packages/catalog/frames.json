@@ -1,5 +1,5 @@
 {
-  "version": 27,
+  "version": 28,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -969,6 +969,36 @@
       },
       "render_mode": "glb3d",
       "description": "Champagne oval frames \u2014 light catalog SKU"
+    },
+    {
+      "id": "geometric_mint",
+      "name": "Geometric Mint",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "geometric",
+      "color": "#34D399",
+      "lens_tint": "rgba(52,211,153,0.18)",
+      "price_cents": 8700,
+      "svg": "geometric.svg",
+      "glb": "geometric-mint.glb",
+      "fit": {
+        "width_mm": 137,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Mint geometric frames \u2014 light catalog SKU"
     }
   ],
   "person_models": [
