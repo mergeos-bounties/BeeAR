@@ -1,5 +1,5 @@
 {
-  "version": 33,
+  "version": 34,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1149,6 +1149,36 @@
       },
       "render_mode": "glb3d",
       "description": "Rose gold cat-eye frames \u2014 catalog SKU"
+    },
+    {
+      "id": "wayfarer_matte_black",
+      "name": "Wayfarer Matte Black",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#111827",
+      "lens_tint": "rgba(17,24,39,0.25)",
+      "price_cents": 10900,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-matte-black.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.011,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": -0.005,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte black wayfarer frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
