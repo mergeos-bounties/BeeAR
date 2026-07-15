@@ -1,5 +1,5 @@
 {
-  "version": 36,
+  "version": 37,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1239,6 +1239,36 @@
       },
       "render_mode": "glb3d",
       "description": "Classic browline tortoiseshell frames \u2014 catalog SKU"
+    },
+    {
+      "id": "hexagon_matte_navy",
+      "name": "Hexagon Matte Navy",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "geometric",
+      "color": "#1E3A5F",
+      "lens_tint": "rgba(30,58,95,0.18)",
+      "price_cents": 12400,
+      "svg": "hexagon.svg",
+      "glb": "hexagon-matte-navy.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.009,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte navy hexagon frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
