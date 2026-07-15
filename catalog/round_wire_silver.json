@@ -1,0 +1,10 @@
+{
+  "sku": "round_wire_silver",
+  "name": "Round Wire Silver",
+  "type": "frame",
+  "material": "metal",
+  "color": "silver",
+  "shape": "round",
+  "model_path": "models/round_wire.glb",
+  "texture_path": "textures/silver_metal.png"
+}

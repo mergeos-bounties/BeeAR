@@ -1,0 +1,10 @@
+{
+  "sku": "wayfarer_matte_black",
+  "name": "Wayfarer Matte Black",
+  "type": "frame",
+  "material": "acetate",
+  "color": "matte_black",
+  "shape": "wayfarer",
+  "model_path": "models/wayfarer.glb",
+  "texture_path": "textures/matte_black.png"
+}
