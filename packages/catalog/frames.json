@@ -1,5 +1,5 @@
 {
-  "version": 32,
+  "version": 33,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1119,6 +1119,36 @@
       },
       "render_mode": "glb3d",
       "description": "Gold flash aviator frames \u2014 catalog SKU"
+    },
+    {
+      "id": "cat_eye_rose_gold",
+      "name": "Cat Eye Rose Gold",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "cat-eye",
+      "color": "#B76E79",
+      "lens_tint": "rgba(183,110,121,0.18)",
+      "price_cents": 13900,
+      "svg": "cat-eye.svg",
+      "glb": "cat-eye-rose-gold.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 16,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.019
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.004,
+        "pitch": 0.03,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Rose gold cat-eye frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
