@@ -1,5 +1,5 @@
 {
-  "version": 28,
+  "version": 29,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -999,6 +999,36 @@
       },
       "render_mode": "glb3d",
       "description": "Mint geometric frames \u2014 light catalog SKU"
+    },
+    {
+      "id": "shield_navy",
+      "name": "Shield Navy",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "shield",
+      "color": "#1E3A5F",
+      "lens_tint": "rgba(30,58,95,0.22)",
+      "price_cents": 9600,
+      "svg": "shield.svg",
+      "glb": "shield-navy.glb",
+      "fit": {
+        "width_mm": 144,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.012,
+        "z": 0.022
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Navy shield sunglasses \u2014 light catalog SKU"
     }
   ],
   "person_models": [
