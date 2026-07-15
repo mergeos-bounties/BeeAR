@@ -1,5 +1,5 @@
 {
-  "version": 30,
+  "version": 31,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1059,6 +1059,36 @@
       },
       "render_mode": "glb3d",
       "description": "Crystal rimless frames \u2014 light catalog SKU"
+    },
+    {
+      "id": "sport_wrap_smoke",
+      "name": "Sport Wrap Smoke",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "sport",
+      "color": "#64748B",
+      "lens_tint": "rgba(100,116,139,0.35)",
+      "price_cents": 11900,
+      "svg": "sport-wrap.svg",
+      "glb": "sport-wrap-smoke.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 16,
+        "temple_mm": 125
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": -0.004,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Smoke wrap-around sport frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
