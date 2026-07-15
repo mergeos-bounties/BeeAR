@@ -1,5 +1,5 @@
 {
-  "version": 29,
+  "version": 30,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1029,6 +1029,36 @@
       },
       "render_mode": "glb3d",
       "description": "Navy shield sunglasses \u2014 light catalog SKU"
+    },
+    {
+      "id": "rimless_crystal",
+      "name": "Rimless Crystal",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rimless",
+      "color": "#E2E8F0",
+      "lens_tint": "rgba(226,232,240,0.12)",
+      "price_cents": 9900,
+      "svg": "rimless.svg",
+      "glb": "rimless-crystal.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.008,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": 0,
+        "pitch": 0.03,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Crystal rimless frames \u2014 light catalog SKU"
     }
   ],
   "person_models": [
