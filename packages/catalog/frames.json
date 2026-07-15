@@ -1,5 +1,5 @@
 {
-  "version": 26,
+  "version": 27,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -939,6 +939,39 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "browline_retro_havana",
+      "name": "Browline Retro Havana",
+      "brand": "BeeAR Heritage",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#8B6914",
+      "lens_tint": "rgba(139,105,20,0.18)",
+      "price_cents": 9500,
+      "svg": "browline.svg",
+      "glb": "browline-retro-havana.glb",
+      "render_mode": "glb3d",
+      "featured": false,
+      "heavy": true,
+      "fit": {
+        "width_mm": 139,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": 0,
+        "pitch": 0.045,
+        "yaw": 0
+      },
+      "description": "Retro browline frame in warm havana acetate \u2014 vintage-inspired with modern proportions",
+      "source": "browline-retro-havana.glb"
     }
   ],
   "person_models": [
