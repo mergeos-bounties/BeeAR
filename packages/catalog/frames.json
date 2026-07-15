@@ -1,5 +1,5 @@
 {
-  "version": 39,
+  "version": 40,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1299,6 +1299,36 @@
       },
       "render_mode": "glb3d",
       "description": "Frosted clear rectangle frames \u2014 catalog SKU"
+    },
+    {
+      "id": "hexagon_matte_olive",
+      "name": "Hexagon Matte Olive",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "hexagon",
+      "color": "#556B2F",
+      "lens_tint": "rgba(85,107,47,0.12)",
+      "price_cents": 11200,
+      "svg": "hexagon.svg",
+      "glb": "hexagon-matte-olive.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 17,
+        "temple_mm": 144
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.008,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.015,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte olive hexagon frames \u2014 catalog SKU cycle 16c"
     }
   ],
   "person_models": [
