@@ -132,6 +132,37 @@
       "description": "Classic gold aviator \u2014 light GLB for instant demo (GitHub Pages)"
     },
     {
+      "id": "aviator_gold_mirror",
+      "name": "Aviator Gold Mirror",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#C9A227",
+      "lens_tint": "rgba(180,195,220,0.35)",
+      "price_cents": 9900,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
+      "featured": false,
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.05,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Gold aviator with mirrored lenses \u2014 catalog SKU"
+    },
+    {
       "id": "wayfarer_black",
       "name": "Wayfarer Black",
       "brand": "BeeAR Studio",
