@@ -1,5 +1,5 @@
 {
-  "version": 41,
+  "version": 42,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1390,6 +1390,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte navy clubmaster frames \u2014 catalog SKU cycle 16d"
+    },
+    {
+      "id": "pilot_chrome_smoke",
+      "name": "Pilot Chrome Smoke",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "pilot",
+      "color": "#C0C0C0",
+      "lens_tint": "rgba(80,80,90,0.28)",
+      "price_cents": 11800,
+      "svg": "pilot.svg",
+      "glb": "pilot-chrome-smoke.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.007,
+        "z": 0.019
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.003,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Chrome pilot frames with smoke lenses \u2014 catalog SKU cycle 16e"
     }
   ],
   "person_models": [
