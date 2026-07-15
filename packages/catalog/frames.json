@@ -1,5 +1,5 @@
 {
-  "version": 31,
+  "version": 32,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1089,6 +1089,36 @@
       },
       "render_mode": "glb3d",
       "description": "Smoke wrap-around sport frames \u2014 catalog SKU"
+    },
+    {
+      "id": "aviator_gold_flash",
+      "name": "Aviator Gold Flash",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#D4AF37",
+      "lens_tint": "rgba(212,175,55,0.22)",
+      "price_cents": 12900,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold-flash.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 17,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.012,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": -0.005,
+        "pitch": 0.025,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Gold flash aviator frames \u2014 catalog SKU"
     }
   ],
   "person_models": [
