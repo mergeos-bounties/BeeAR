@@ -1,5 +1,5 @@
 {
-  "version": 26,
+  "version": 27,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -939,6 +939,27 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "2_accessory_packs_clip_on_chain",
+      "name": "2 accessory packs (clip-on + chain)",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rectangle",
+      "color": "#333333",
+      "price_cents": 8500,
+      "svg": "rectangle.svg",
+      "glb": "2_accessory_packs_clip_on_chain.glb",
+      "render_mode": "glb3d",
+      "featured": false,
+      "heavy": true,
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "description": "2 accessory packs (clip-on + chain)",
+      "source": "2_accessory_packs_clip_on_chain.glb"
     }
   ],
   "person_models": [
