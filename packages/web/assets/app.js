@@ -516,6 +516,10 @@ async function loadCatalog(category = "") {
 
 function renderCatalog() {
   catalogEl.innerHTML = "";
+  if (frames.length === 0) {
+    catalogEl.innerHTML = `<p class="empty-state">No frames match the current filter.</p>`;
+    return;
+  }
   frames.forEach((f) => {
     const el = document.createElement("div");
     let cls = "sku";
