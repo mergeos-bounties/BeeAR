@@ -939,6 +939,36 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "square_tortoiseshell",
+      "name": "Tortoiseshell Square",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "square",
+      "color": "#6B4226",
+      "lens_tint": "rgba(139,90,43,0.12)",
+      "price_cents": 8500,
+      "svg": "square_tortoiseshell.svg",
+      "glb": "square_tortoiseshell.glb",
+      "fit": {
+        "width_mm": 137,
+        "bridge_mm": 17,
+        "temple_mm": 141
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.03,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Classic square frame in rich tortoiseshell acetate"
     }
   ],
   "person_models": [
