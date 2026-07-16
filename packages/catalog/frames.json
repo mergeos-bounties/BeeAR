@@ -939,6 +939,96 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "rimless_silver",
+      "name": "Silver Rimless",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rimless",
+      "color": "#C0C0C0",
+      "lens_tint": "rgba(200,200,200,0.08)",
+      "price_cents": 11000,
+      "svg": "rimless_silver.svg",
+      "glb": "rimless_silver.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Silver Rimless \u2014 modern rimless frame"
+    },
+    {
+      "id": "browline_black",
+      "name": "Black Browline",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#1A1A1A",
+      "lens_tint": "rgba(200,200,200,0.08)",
+      "price_cents": 9000,
+      "svg": "browline_black.svg",
+      "glb": "browline_black.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Black Browline \u2014 modern browline frame"
+    },
+    {
+      "id": "square_crystal",
+      "name": "Crystal Square",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "square",
+      "color": "#E0E0E0",
+      "lens_tint": "rgba(200,200,200,0.08)",
+      "price_cents": 8700,
+      "svg": "square_crystal.svg",
+      "glb": "square_crystal.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Crystal Square \u2014 modern square frame"
     }
   ],
   "person_models": [
