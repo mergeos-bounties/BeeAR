@@ -939,6 +939,36 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "browline_retro_havana",
+      "name": "Retro Havana Browline",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#8B6914",
+      "lens_tint": "rgba(210,180,140,0.15)",
+      "price_cents": 9200,
+      "svg": "browline_retro_havana.svg",
+      "glb": "browline_retro_havana.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 18,
+        "temple_mm": 143
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.03,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Vintage-inspired browline frame in warm havana tortoiseshell"
     }
   ],
   "person_models": [
