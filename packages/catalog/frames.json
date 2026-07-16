@@ -939,6 +939,66 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "clipon_gold_chain",
+      "name": "Gold Chain Clip-On",
+      "brand": "BeeAR Studio",
+      "category": "accessory",
+      "style": "rimless",
+      "color": "#D4AF37",
+      "lens_tint": "rgba(212,175,55,0.05)",
+      "price_cents": 4500,
+      "svg": "clipon_gold_chain.svg",
+      "glb": "clipon_gold_chain.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 0
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "z": 0.01
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Clip-on lenses with decorative gold chain attachment"
+    },
+    {
+      "id": "retro_chain_hanger",
+      "name": "Retro Chain Hanger",
+      "brand": "BeeAR Studio",
+      "category": "accessory",
+      "style": "rimless",
+      "color": "#C0C0C0",
+      "lens_tint": "rgba(192,192,192,0.03)",
+      "price_cents": 3800,
+      "svg": "retro_chain_hanger.svg",
+      "glb": "retro_chain_hanger.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 0
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "z": 0.01
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Retro-style eyeglass chain hanger accessory"
     }
   ],
   "person_models": [
