@@ -1,5 +1,5 @@
 {
-  "version": 43,
+  "version": 44,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1450,6 +1450,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte graphite shield frames \u2014 catalog SKU cycle 16f"
+    },
+    {
+      "id": "butterfly_rose_gradient",
+      "name": "Butterfly Rose Gradient",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "butterfly",
+      "color": "#BE185D",
+      "lens_tint": "rgba(190,24,93,0.18)",
+      "price_cents": 12800,
+      "svg": "butterfly.svg",
+      "glb": "butterfly-rose-gradient.glb",
+      "fit": {
+        "width_mm": 141,
+        "bridge_mm": 17,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.007,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.003,
+        "pitch": 0.015,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Rose gradient butterfly frames \u2014 catalog SKU cycle 16g"
     }
   ],
   "person_models": [
