@@ -939,6 +939,36 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "frame_52_1784216296",
+      "name": "[50 MRG] Catalog: colorway variants for ",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#555555",
+      "lens_tint": "rgba(200,200,200,0.10)",
+      "price_cents": 8500,
+      "svg": "frame_52.svg",
+      "glb": "frame_52.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Catalog frame for [50 MRG] Catalog: colorway variants for 1 base frame (2 SKUs)"
     }
   ],
   "person_models": [
