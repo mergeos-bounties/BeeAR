@@ -939,6 +939,36 @@
       },
       "render_mode": "glb3d",
       "description": "Espresso browline \u2014 light catalog SKU"
+    },
+    {
+      "id": "oval_crystal_clear",
+      "name": "Crystal Clear Oval",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#E8E8E8",
+      "lens_tint": "rgba(255,255,255,0.05)",
+      "price_cents": 8800,
+      "svg": "oval_crystal_clear.svg",
+      "glb": "oval_crystal_clear.glb",
+      "fit": {
+        "width_mm": 134,
+        "bridge_mm": 16,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Minimalist oval frame in transparent crystal acetate"
     }
   ],
   "person_models": [
