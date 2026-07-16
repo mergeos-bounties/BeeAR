@@ -1,0 +1,10 @@
+{
+  "sku": "cat_eye_rose_gold",
+  "name": "Cat Eye Rose Gold",
+  "type": "frame",
+  "material": "metal",
+  "color": "rose_gold",
+  "shape": "cat_eye",
+  "model_path": "models/cat_eye.glb",
+  "texture_path": "textures/rose_gold.png"
+}
