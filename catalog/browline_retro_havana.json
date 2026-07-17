@@ -1,0 +1,18 @@
+{
+  "sku": "browline_retro_havana",
+  "name": "Browline Retro Havana",
+  "type": "frame",
+  "material": "acetate",
+  "color": "havana",
+  "shape": "browline",
+  "model_path": "models/browline_retro.glb",
+  "texture_path": "textures/havana.png",
+  "dimensions": {
+    "lens_width": 52,
+    "bridge_width": 18,
+    "temple_length": 140
+  },
+  "style": "retro",
+  "gender": "unisex",
+  "tags": ["browline", "retro", "havana", "classic", "acetate"]
+}
