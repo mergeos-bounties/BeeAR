@@ -1,5 +1,5 @@
 {
-  "version": 47,
+  "version": 48,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1600,6 +1600,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte gold aviator frames \u2014 catalog SKU cycle 16i"
+    },
+    {
+      "id": "round_tortoiseshell_classic",
+      "name": "Round Tortoiseshell Classic",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#8B5A2B",
+      "lens_tint": "rgba(139,90,43,0.14)",
+      "price_cents": 9900,
+      "svg": "round.svg",
+      "glb": "round-tortoiseshell.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 19,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 0.98,
+        "y": -0.007,
+        "z": 0.016
+      },
+      "ar_fit": {
+        "scale": 0.97,
+        "y": -0.002,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Classic round tortoiseshell \u2014 catalog SKU cycle 16k"
     }
   ],
   "person_models": [
