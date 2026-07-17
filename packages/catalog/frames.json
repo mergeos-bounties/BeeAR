@@ -1,5 +1,5 @@
 {
-  "version": 45,
+  "version": 46,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1570,6 +1570,36 @@
       },
       "render_mode": "glb3d",
       "description": "Clear crystal geometric frames \u2014 catalog SKU cycle 16h"
+    },
+    {
+      "id": "aviator_matte_gold",
+      "name": "Aviator Matte Gold",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#C9A227",
+      "lens_tint": "rgba(201,162,39,0.18)",
+      "price_cents": 12900,
+      "svg": "aviator.svg",
+      "glb": "aviator-matte-gold.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.004,
+        "pitch": 0.012,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte gold aviator frames \u2014 catalog SKU cycle 16i"
     }
   ],
   "person_models": [
