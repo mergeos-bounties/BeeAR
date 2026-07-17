@@ -517,7 +517,7 @@ async function loadCatalog(category = "") {
 function renderCatalog() {
   catalogEl.innerHTML = "";
   if (frames.length === 0) {
-    catalogEl.innerHTML = `<p class="empty-state">No frames match the current filter.</p>`;
+    catalogEl.innerHTML = `<p class="empty-state">No frames match the current filter.</p><p class="suggestion">Try adjusting filters or check your connection.</p>`;
     return;
   }
   frames.forEach((f) => {
