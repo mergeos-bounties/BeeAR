@@ -1,5 +1,5 @@
 {
-  "version": 48,
+  "version": 49,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1630,6 +1630,36 @@
       },
       "render_mode": "glb3d",
       "description": "Classic round tortoiseshell \u2014 catalog SKU cycle 16k"
+    },
+    {
+      "id": "oval_crystal_clear",
+      "name": "Oval Crystal Clear",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "oval",
+      "color": "#DDEAF0",
+      "lens_tint": "rgba(221,234,240,0.10)",
+      "price_cents": 10900,
+      "svg": "oval.svg",
+      "glb": "oval-crystal-clear.glb",
+      "fit": {
+        "width_mm": 137,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.004,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": 0,
+        "pitch": 0.008,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Oval crystal-clear frame \u2014 catalog SKU wave2 (bounty #49)"
     }
   ],
   "person_models": [
