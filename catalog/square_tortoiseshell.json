@@ -1,0 +1,1 @@
+{ "sku": "square_tortoiseshell", "name": "Square Tortoiseshell", "type": "frame", "material": "acetate", "color": "tortoiseshell", "shape": "square", "model_path": "models/square.glb", "texture_path": "textures/tortoiseshell.png" }
