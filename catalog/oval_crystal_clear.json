@@ -1,0 +1,10 @@
+{
+  "sku": "oval_crystal_clear",
+  "name": "Oval Crystal Clear",
+  "type": "frame",
+  "material": "acetate",
+  "color": "crystal_clear",
+  "shape": "oval",
+  "model_path": "models/oval.glb",
+  "texture_path": "textures/crystal_clear.png"
+}
