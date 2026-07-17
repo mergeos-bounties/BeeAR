@@ -1,0 +1,34 @@
+```json
+{
+  "id": "square_tortoiseshell",
+  "name": "Square Tortoiseshell",
+  "brand": "BeeAR Studio",
+  "category": "glasses",
+  "style": "square",
+  "color": "#8B4513",
+  "lens_tint": "rgba(139,69,19,0.15)",
+  "price_cents": 12000,
+  "svg": "square_tortoiseshell.svg",
+  "glb": "square_tortoiseshell.glb",
+  "fit": {
+    "width_mm": 142,
+    "bridge_mm": 18,
+    "temple_mm": 148
+  },
+  "studio_fit": {
+    "scale": 1.02,
+    "y": -0.008,
+    "z": 0.018
+  },
+  "ar_fit": {
+    "scale": 1.01,
+    "y": 0.002,
+    "pitch": 0.02,
+    "yaw": 0.01
+  },
+  "render_mode": "glb3d",
+  "description": "Classic square tortoiseshell frame"
+}
+```
+
+This adds the new SKU to the catalog with the required fit metadata for both studio and AR try-on.
