@@ -732,6 +732,66 @@
       "description": "Smoky hex frame \u2014 light GLB for Pages-friendly demos"
     },
     {
+      "id": "hex_amber",
+      "name": "Hex Amber",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "hex",
+      "color": "#D97706",
+      "lens_tint": "rgba(217,119,6,0.22)",
+      "price_cents": 8500,
+      "svg": "hex.svg",
+      "glb": "hex-graphite.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Amber hex colorway reusing hex graphite mesh"
+    },
+    {
+      "id": "hex_forest",
+      "name": "Hex Forest",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "hex",
+      "color": "#166534",
+      "lens_tint": "rgba(22,101,52,0.22)",
+      "price_cents": 8500,
+      "svg": "hex.svg",
+      "glb": "hex-graphite.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Forest green hex colorway reusing hex graphite mesh"
+    },
+    {
       "id": "rectangle_matte",
       "name": "Rectangle Matte",
       "brand": "BeeAR Studio",
