@@ -1,5 +1,5 @@
 {
-  "version": 48,
+  "version": 49,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1630,6 +1630,36 @@
       },
       "render_mode": "glb3d",
       "description": "Classic round tortoiseshell \u2014 catalog SKU cycle 16k"
+    },
+    {
+      "id": "square_matte_black",
+      "name": "Square Matte Black",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "square",
+      "color": "#1A1A1A",
+      "lens_tint": "rgba(26,26,26,0.12)",
+      "price_cents": 10500,
+      "svg": "square.svg",
+      "glb": "square-matte-black.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 143
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": -0.008,
+        "z": 0.017
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte black square frames \u2014 catalog SKU cycle 16l"
     }
   ],
   "person_models": [

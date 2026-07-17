@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "beear"
-version = "0.4.50"
+version = "0.4.51"
 description = "BeeAR — virtual try-on for glasses and accessories (web + Windows + Android)"
 readme = "README.md"
 requires-python = ">=3.11"
