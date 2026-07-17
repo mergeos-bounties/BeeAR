@@ -1,5 +1,5 @@
 {
-  "version": 44,
+  "version": 45,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -129,7 +129,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Classic gold aviator — light GLB for instant demo (GitHub Pages)"
+      "description": "Classic gold aviator \u2014 light GLB for instant demo (GitHub Pages)"
     },
     {
       "id": "aviator_gold_mirror",
@@ -160,7 +160,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Gold aviator with mirrored lenses — catalog SKU"
+      "description": "Gold aviator with mirrored lenses \u2014 catalog SKU"
     },
     {
       "id": "wayfarer_black",
@@ -729,7 +729,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Smoky hex frame — light GLB for Pages-friendly demos"
+      "description": "Smoky hex frame \u2014 light GLB for Pages-friendly demos"
     },
     {
       "id": "rectangle_matte",
@@ -759,7 +759,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte rectangle — light GLB for static demos"
+      "description": "Matte rectangle \u2014 light GLB for static demos"
     },
     {
       "id": "sport_lime",
@@ -789,7 +789,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Lime sport wrap — light catalog SKU for demos"
+      "description": "Lime sport wrap \u2014 light catalog SKU for demos"
     },
     {
       "id": "cateye_blush",
@@ -819,7 +819,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Blush cat-eye — light catalog SKU"
+      "description": "Blush cat-eye \u2014 light catalog SKU"
     },
     {
       "id": "clubmaster_ink",
@@ -849,7 +849,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Ink clubmaster browline — light catalog SKU"
+      "description": "Ink clubmaster browline \u2014 light catalog SKU"
     },
     {
       "id": "wayfarer_olive",
@@ -879,7 +879,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Olive wayfarer — light catalog SKU"
+      "description": "Olive wayfarer \u2014 light catalog SKU"
     },
     {
       "id": "pilot_copper",
@@ -909,7 +909,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Copper pilot aviator — light catalog SKU"
+      "description": "Copper pilot aviator \u2014 light catalog SKU"
     },
     {
       "id": "square_slate",
@@ -939,7 +939,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Slate square frames — light catalog SKU"
+      "description": "Slate square frames \u2014 light catalog SKU"
     },
     {
       "id": "browline_espresso",
@@ -969,7 +969,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Espresso browline — light catalog SKU"
+      "description": "Espresso browline \u2014 light catalog SKU"
     },
     {
       "id": "oval_champagne",
@@ -999,7 +999,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Champagne oval frames — light catalog SKU"
+      "description": "Champagne oval frames \u2014 light catalog SKU"
     },
     {
       "id": "geometric_mint",
@@ -1029,7 +1029,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Mint geometric frames — light catalog SKU"
+      "description": "Mint geometric frames \u2014 light catalog SKU"
     },
     {
       "id": "shield_navy",
@@ -1059,7 +1059,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Navy shield sunglasses — light catalog SKU"
+      "description": "Navy shield sunglasses \u2014 light catalog SKU"
     },
     {
       "id": "rimless_crystal",
@@ -1089,7 +1089,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Crystal rimless frames — light catalog SKU"
+      "description": "Crystal rimless frames \u2014 light catalog SKU"
     },
     {
       "id": "sport_wrap_smoke",
@@ -1119,7 +1119,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Smoke wrap-around sport frames — catalog SKU"
+      "description": "Smoke wrap-around sport frames \u2014 catalog SKU"
     },
     {
       "id": "aviator_gold_flash",
@@ -1149,7 +1149,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Gold flash aviator frames — catalog SKU"
+      "description": "Gold flash aviator frames \u2014 catalog SKU"
     },
     {
       "id": "cat_eye_rose_gold",
@@ -1179,7 +1179,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Rose gold cat-eye frames — catalog SKU"
+      "description": "Rose gold cat-eye frames \u2014 catalog SKU"
     },
     {
       "id": "wayfarer_matte_black",
@@ -1209,7 +1209,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte black wayfarer frames — catalog SKU"
+      "description": "Matte black wayfarer frames \u2014 catalog SKU"
     },
     {
       "id": "round_wire_silver",
@@ -1239,7 +1239,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Silver round wire frames — catalog SKU"
+      "description": "Silver round wire frames \u2014 catalog SKU"
     },
     {
       "id": "browline_tortoiseshell",
@@ -1269,7 +1269,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Classic browline tortoiseshell frames — catalog SKU"
+      "description": "Classic browline tortoiseshell frames \u2014 catalog SKU"
     },
     {
       "id": "hexagon_matte_navy",
@@ -1299,7 +1299,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte navy hexagon frames — catalog SKU"
+      "description": "Matte navy hexagon frames \u2014 catalog SKU"
     },
     {
       "id": "rectangle_frosted_clear",
@@ -1329,7 +1329,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Frosted clear rectangle frames — catalog SKU"
+      "description": "Frosted clear rectangle frames \u2014 catalog SKU"
     },
     {
       "id": "hexagon_matte_olive",
@@ -1359,7 +1359,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte olive hexagon frames — catalog SKU cycle 16c"
+      "description": "Matte olive hexagon frames \u2014 catalog SKU cycle 16c"
     },
     {
       "id": "clubmaster_matte_navy",
@@ -1389,7 +1389,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte navy clubmaster frames — catalog SKU cycle 16d"
+      "description": "Matte navy clubmaster frames \u2014 catalog SKU cycle 16d"
     },
     {
       "id": "pilot_chrome_smoke",
@@ -1419,7 +1419,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Chrome pilot frames with smoke lenses — catalog SKU cycle 16e"
+      "description": "Chrome pilot frames with smoke lenses \u2014 catalog SKU cycle 16e"
     },
     {
       "id": "shield_matte_graphite",
@@ -1449,7 +1449,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte graphite shield frames — catalog SKU cycle 16f"
+      "description": "Matte graphite shield frames \u2014 catalog SKU cycle 16f"
     },
     {
       "id": "butterfly_rose_gradient",
@@ -1479,7 +1479,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Rose gradient butterfly frames — catalog SKU cycle 16g"
+      "description": "Rose gradient butterfly frames \u2014 catalog SKU cycle 16g"
     },
     {
       "id": "kids_flexible_green",
@@ -1540,6 +1540,36 @@
         "y": 0.01,
         "z": 0.02
       }
+    },
+    {
+      "id": "geometric_clear_crystal",
+      "name": "Geometric Clear Crystal",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "geometric",
+      "color": "#E2E8F0",
+      "lens_tint": "rgba(226,232,240,0.12)",
+      "price_cents": 10900,
+      "svg": "geometric.svg",
+      "glb": "geometric-clear-crystal.glb",
+      "fit": {
+        "width_mm": 139,
+        "bridge_mm": 18,
+        "temple_mm": 144
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": -0.008,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Clear crystal geometric frames \u2014 catalog SKU cycle 16h"
     }
   ],
   "person_models": [
