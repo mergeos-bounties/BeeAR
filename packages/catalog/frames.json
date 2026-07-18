@@ -1749,7 +1749,41 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte olive wayfarer frames \u2014 catalog SKU cycle 16o"
+      "description": "Matte olive wayfarer frames — catalog SKU cycle 16o"
+    },
+    {
+      "id": "wayfarer_sand_matte",
+      "name": "Wayfarer Sand Matte",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#D4A574",
+      "lens_tint": "rgba(212,165,116,0.16)",
+      "price_cents": 10800,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-olive-matte.glb",
+      "fit": { "width_mm": 140, "bridge_mm": 18, "temple_mm": 144 },
+      "studio_fit": { "scale": 1.0, "y": -0.008, "z": 0.017 },
+      "ar_fit": { "scale": 0.99, "y": -0.003, "pitch": 0.011, "yaw": 0 },
+      "render_mode": "glb3d",
+      "description": "Warm sand wayfarer colorway — reuses olive geometry"
+    },
+    {
+      "id": "wayfarer_slate_matte",
+      "name": "Wayfarer Slate Matte",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#475569",
+      "lens_tint": "rgba(71,85,105,0.16)",
+      "price_cents": 10800,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-olive-matte.glb",
+      "fit": { "width_mm": 140, "bridge_mm": 18, "temple_mm": 144 },
+      "studio_fit": { "scale": 1.0, "y": -0.008, "z": 0.017 },
+      "ar_fit": { "scale": 0.99, "y": -0.003, "pitch": 0.011, "yaw": 0 },
+      "render_mode": "glb3d",
+      "description": "Cool slate wayfarer colorway — reuses olive geometry"
     }
   ],
   "person_models": [
