@@ -78,10 +78,26 @@
           </select>
         </div>
         <div class="pd-panel">
-          <label id="lbl-pd">PD (mm) <span id="pd-val">64</span>
-            <input id="pd" type="range" min="54" max="74" step="1" value="64" />
-          </label>
+          <div class="pd-header">
+            <label id="lbl-pd">PD (mm) <span id="pd-val">64</span></label>
+            <button id="btn-calibrate" class="btn tiny" type="button">📏 Calibrate</button>
+          </div>
+          <input id="pd" type="range" min="50" max="80" step="0.5" value="64" />
           <p class="muted small" id="pd-hint">Calibrate pupil distance for better fit scale</p>
+          <div id="pd-wizard" class="pd-wizard hidden">
+            <div class="wizard-step">
+              <span class="wizard-icon">👁️</span>
+              <span id="wizard-text">Adjust slider until circles align with your pupils, then confirm.</span>
+            </div>
+            <div class="wizard-btns">
+              <button id="btn-confirm-pd" class="btn primary small" type="button">✓ Confirm PD</button>
+              <button id="btn-cancel-pd" class="btn small" type="button">✕ Cancel</button>
+            </div>
+            <div class="wizard-measure" id="wizard-measure">
+              <span id="wizard-pd-measure">PD: 64.0 mm</span>
+              <span id="wizard-fit-info"></span>
+            </div>
+          </div>
         </div>
         <div id="catalog" class="catalog"></div>
         <div class="meta" id="meta">Select a SKU</div>
