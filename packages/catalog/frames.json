@@ -1722,6 +1722,130 @@
       "description": "Minimal silver rimless frames \u2014 catalog SKU cycle 16n"
     },
     {
+      "id": "spring_cherry",
+      "name": "Spring Cherry Blossom",
+      "brand": "BeeAR Seasonal",
+      "category": "glasses",
+      "style": "round",
+      "color": "#FFB7C5",
+      "lens_tint": "rgba(255,183,197,0.2)",
+      "price_cents": 8900,
+      "svg": "round.svg",
+      "glb": "round-tortoise.glb",
+      "fit": {
+        "width_mm": 134,
+        "bridge_mm": 19,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.05,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Cherry blossom pink round frames — spring seasonal collection"
+    },
+    {
+      "id": "summer_coral",
+      "name": "Summer Coral Aviator",
+      "brand": "BeeAR Seasonal",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#FF7F50",
+      "lens_tint": "rgba(255,127,80,0.25)",
+      "price_cents": 9200,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 18,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.06,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.03,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Coral-tone aviator frames — summer seasonal collection"
+    },
+    {
+      "id": "autumn_amber",
+      "name": "Autumn Amber Browline",
+      "brand": "BeeAR Heritage",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#B45309",
+      "lens_tint": "rgba(180,83,9,0.22)",
+      "price_cents": 9500,
+      "svg": "browline.svg",
+      "glb": "clubmaster-amber.glb",
+      "fit": {
+        "width_mm": 139,
+        "bridge_mm": 19,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Amber-toned browline frames — autumn seasonal collection"
+    },
+    {
+      "id": "winter_frost",
+      "name": "Winter Frost Square",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rectangle",
+      "color": "#93C5FD",
+      "lens_tint": "rgba(147,197,253,0.2)",
+      "price_cents": 8400,
+      "svg": "square.svg",
+      "glb": "rectangle-frost.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Frost blue square frames — winter seasonal collection"
+    },
+    {
       "id": "wayfarer_olive_matte",
       "name": "Wayfarer Olive Matte",
       "brand": "BeeAR Studio",
@@ -1749,7 +1873,7 @@
         "yaw": 0
       },
       "render_mode": "glb3d",
-      "description": "Matte olive wayfarer frames \u2014 catalog SKU cycle 16o"
+      "description": "Matte olive wayfarer frames — catalog SKU cycle 16o"
     }
   ],
   "person_models": [
