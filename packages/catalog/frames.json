@@ -1874,6 +1874,254 @@
       },
       "render_mode": "glb3d",
       "description": "Matte olive wayfarer frames — catalog SKU cycle 16o"
+    },
+    {
+      "id": "bamboo_wayfarer",
+      "name": "Bamboo Wayfarer",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#8B7355",
+      "lens_tint": "rgba(139,115,85,0.18)",
+      "price_cents": 9900,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-black.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Bamboo brown wayfarer frames — natural collection"
+    },
+    {
+      "id": "ocean_blue_round",
+      "name": "Ocean Blue Round",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#0EA5E9",
+      "lens_tint": "rgba(14,165,233,0.2)",
+      "price_cents": 8500,
+      "svg": "round.svg",
+      "glb": "round-tortoise.glb",
+      "fit": {
+        "width_mm": 134,
+        "bridge_mm": 19,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.022
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Ocean blue round frames — aqua collection"
+    },
+    {
+      "id": "sunset_aviator",
+      "name": "Sunset Aviator",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#F97316",
+      "lens_tint": "rgba(249,115,22,0.2)",
+      "price_cents": 9300,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 18,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.05,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.03,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Sunset orange aviator frames — horizon collection"
+    },
+    {
+      "id": "midnight_cateye",
+      "name": "Midnight Cat-Eye",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "cat_eye",
+      "color": "#2D1B69",
+      "lens_tint": "rgba(45,27,105,0.18)",
+      "price_cents": 9500,
+      "svg": "cateye.svg",
+      "glb": "cateye-rose.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.012,
+        "z": 0.022
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Midnight purple cat-eye frames — noir collection"
+    },
+    {
+      "id": "crimson_hex",
+      "name": "Crimson Hex",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "hex",
+      "color": "#DC2626",
+      "lens_tint": "rgba(220,38,38,0.18)",
+      "price_cents": 8900,
+      "svg": "hex.svg",
+      "glb": "hex-graphite.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Crimson red hexagonal frames — bold collection"
+    },
+    {
+      "id": "ice_rectangle",
+      "name": "Ice Rectangle",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rectangle",
+      "color": "#BAE6FD",
+      "lens_tint": "rgba(186,230,253,0.18)",
+      "price_cents": 7900,
+      "svg": "rectangle.svg",
+      "glb": "rectangle-frost.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Ice blue rectangle frames — arctic collection"
+    },
+    {
+      "id": "sport_orange",
+      "name": "Sport Neon Orange",
+      "brand": "BeeAR Active",
+      "category": "glasses",
+      "style": "sport",
+      "color": "#EA580C",
+      "lens_tint": "rgba(234,88,12,0.25)",
+      "price_cents": 9600,
+      "svg": "sport.svg",
+      "glb": "sport-blue.glb",
+      "fit": {
+        "width_mm": 144,
+        "bridge_mm": 16,
+        "temple_mm": 130
+      },
+      "studio_fit": {
+        "scale": 1.05,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.03,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Neon orange sport wrap frames — active collection"
+    },
+    {
+      "id": "vintage_clubmaster",
+      "name": "Vintage Clubmaster",
+      "brand": "BeeAR Heritage",
+      "category": "glasses",
+      "style": "clubmaster",
+      "color": "#7C3AED",
+      "lens_tint": "rgba(124,58,237,0.15)",
+      "price_cents": 10200,
+      "svg": "clubmaster.svg",
+      "glb": "clubmaster-amber.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 19,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": 0,
+        "pitch": 0.04,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": true,
+      "description": "Vintage amethyst clubmaster frames — heritage collection"
     }
   ],
   "person_models": [
