@@ -1,5 +1,5 @@
 {
-  "version": 51,
+  "version": 52,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1720,6 +1720,36 @@
       },
       "render_mode": "glb3d",
       "description": "Minimal silver rimless frames \u2014 catalog SKU cycle 16n"
+    },
+    {
+      "id": "wayfarer_olive_matte",
+      "name": "Wayfarer Olive Matte",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#556B2F",
+      "lens_tint": "rgba(85,107,47,0.16)",
+      "price_cents": 10800,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-olive-matte.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 144
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": -0.008,
+        "z": 0.017
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.011,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Matte olive wayfarer frames \u2014 catalog SKU cycle 16o"
     }
   ],
   "person_models": [
