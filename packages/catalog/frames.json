@@ -1,5 +1,5 @@
 {
-  "version": 50,
+  "version": 51,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1690,6 +1690,36 @@
       },
       "render_mode": "glb3d",
       "description": "Retro havana browline frames \u2014 catalog SKU cycle 16m"
+    },
+    {
+      "id": "rimless_silver_minimal",
+      "name": "Rimless Silver Minimal",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rimless",
+      "color": "#C0C0C0",
+      "lens_tint": "rgba(192,192,192,0.10)",
+      "price_cents": 13500,
+      "svg": "rimless.svg",
+      "glb": "rimless-silver-minimal.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 0.98,
+        "y": -0.007,
+        "z": 0.016
+      },
+      "ar_fit": {
+        "scale": 0.97,
+        "y": -0.002,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Minimal silver rimless frames \u2014 catalog SKU cycle 16n"
     }
   ],
   "person_models": [
