@@ -1,5 +1,5 @@
 {
-  "version": 49,
+  "version": 50,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1660,6 +1660,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte black square frames \u2014 catalog SKU cycle 16l"
+    },
+    {
+      "id": "browline_retro_havana",
+      "name": "Browline Retro Havana",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "browline",
+      "color": "#5C4033",
+      "lens_tint": "rgba(92,64,51,0.14)",
+      "price_cents": 11200,
+      "svg": "browline.svg",
+      "glb": "browline-retro-havana.glb",
+      "fit": {
+        "width_mm": 141,
+        "bridge_mm": 19,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.0,
+        "y": -0.009,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.012,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Retro havana browline frames \u2014 catalog SKU cycle 16m"
     }
   ],
   "person_models": [
