@@ -54,28 +54,39 @@ export function drawGlassesOverlay(ctx, face, selectedA, selectedB, compareMode,
   const m = faceMetricsFromLandmarks(face, w, h);
 
   if (compareMode && selectedA && selectedB) {
+    // Side-by-side: shift each frame to center in its own half
+    const halfW = w / 2;
+    const leftOffset = m.midX - halfW / 2; // center frame A in left half → shift left
+    const rightOffset = halfW / 2 - m.midX; // center frame B in right half → shift right
     ctx.save();
     ctx.beginPath();
-    ctx.rect(0, 0, w / 2, h);
+    ctx.rect(0, 0, halfW, h);
     ctx.clip();
-    drawFrameAt(ctx, selectedA, m.midX, m.midY, m.angle, m.pdPx, pdMm, 0);
+    drawFrameAt(ctx, selectedA, m.midX, m.midY, m.angle, m.pdPx, pdMm, -leftOffset);
     ctx.restore();
     ctx.save();
     ctx.beginPath();
-    ctx.rect(w / 2, 0, w / 2, h);
+    ctx.rect(halfW, 0, halfW, h);
     ctx.clip();
-    drawFrameAt(ctx, selectedB, m.midX, m.midY, m.angle, m.pdPx, pdMm, 0);
+    drawFrameAt(ctx, selectedB, m.midX, m.midY, m.angle, m.pdPx, pdMm, rightOffset);
     ctx.restore();
     ctx.strokeStyle = "#f5c518aa";
     ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
     ctx.beginPath();
-    ctx.moveTo(w / 2, 0);
-    ctx.lineTo(w / 2, h);
+    ctx.moveTo(halfW, 12);
+    ctx.lineTo(halfW, h - 12);
     ctx.stroke();
+    ctx.setLineDash([]);
     ctx.fillStyle = "#f5c518";
-    ctx.font = "12px system-ui";
+    ctx.font = "bold 13px system-ui";
     ctx.fillText("A", 12, 20);
-    ctx.fillText("B", w / 2 + 12, 20);
+    ctx.fillText("B", halfW + 12, 20);
+    // Frame names below labels
+    ctx.fillStyle = "#e8eefccc";
+    ctx.font = "11px system-ui";
+    ctx.fillText(selectedA.name || "", 12, 34);
+    ctx.fillText(selectedB.name || "", halfW + 12, 34);
   } else if (selectedA) {
     drawFrameAt(ctx, selectedA, m.midX, m.midY, m.angle, m.pdPx, pdMm, 0);
   }
