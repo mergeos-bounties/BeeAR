@@ -1750,6 +1750,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte olive wayfarer frames \u2014 catalog SKU cycle 16o"
+    },
+    {
+      "id": "square_tortoiseshell",
+      "name": "Square Tortoiseshell",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "square",
+      "color": "#8B5A2B",
+      "lens_tint": "rgba(139,90,43,0.14)",
+      "price_cents": 10200,
+      "svg": "square.svg",
+      "glb": "square-tortoiseshell.glb",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 18,
+        "temple_mm": 143
+      },
+      "studio_fit": {
+        "scale": 0.99,
+        "y": -0.008,
+        "z": 0.017
+      },
+      "ar_fit": {
+        "scale": 0.98,
+        "y": -0.003,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Square tortoiseshell frames \u2014 catalog SKU wave2"
     }
   ],
   "person_models": [
