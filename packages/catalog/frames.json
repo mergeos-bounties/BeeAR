@@ -1,5 +1,5 @@
 {
-  "version": 53,
+  "version": 54,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1780,6 +1780,36 @@
       },
       "render_mode": "glb3d",
       "description": "Gunmetal aviator frames \u2014 catalog SKU cycle 16p"
+    },
+    {
+      "id": "round_rose_gold",
+      "name": "Round Rose Gold",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "round",
+      "color": "#B76E79",
+      "lens_tint": "rgba(183,110,121,0.14)",
+      "price_cents": 11500,
+      "svg": "round.svg",
+      "glb": "round-rose-gold.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 0.98,
+        "y": -0.007,
+        "z": 0.016
+      },
+      "ar_fit": {
+        "scale": 0.98,
+        "y": -0.002,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Rose gold round frames \u2014 catalog SKU cycle 16q"
     }
   ],
   "person_models": [
