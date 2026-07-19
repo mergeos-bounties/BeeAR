@@ -1,5 +1,5 @@
 {
-  "version": 52,
+  "version": 53,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1750,6 +1750,36 @@
       },
       "render_mode": "glb3d",
       "description": "Matte olive wayfarer frames \u2014 catalog SKU cycle 16o"
+    },
+    {
+      "id": "aviator_gunmetal",
+      "name": "Aviator Gunmetal",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#4B5563",
+      "lens_tint": "rgba(75,85,99,0.18)",
+      "price_cents": 12200,
+      "svg": "aviator.svg",
+      "glb": "aviator-gunmetal.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.006,
+        "z": 0.016
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.002,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Gunmetal aviator frames \u2014 catalog SKU cycle 16p"
     }
   ],
   "person_models": [
