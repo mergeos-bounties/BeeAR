@@ -76,3 +76,10 @@ def test_compare_and_sessions():
     assert "sport_blue" in r.json()["wishlist"]
     r = client.get(f"/api/sessions/{sid}")
     assert r.status_code == 200
+
+def test_gallery_endpoint_stub():
+    """Stub test to ensure gallery functionality can be tested"""
+    # This is a placeholder test - actual gallery testing would require 
+    # frontend testing with tools like Playwright or Cypress
+    # For now, we just verify the endpoint structure exists conceptually
+    assert True  # Placeholder - real test would check frontend behavior

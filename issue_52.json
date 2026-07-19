@@ -1,0 +1,117 @@
+{
+  "url": "https://api.github.com/repos/mergeos-bounties/BeeAR/issues/52",
+  "repository_url": "https://api.github.com/repos/mergeos-bounties/BeeAR",
+  "labels_url": "https://api.github.com/repos/mergeos-bounties/BeeAR/issues/52/labels{/name}",
+  "comments_url": "https://api.github.com/repos/mergeos-bounties/BeeAR/issues/52/comments",
+  "events_url": "https://api.github.com/repos/mergeos-bounties/BeeAR/issues/52/events",
+  "html_url": "https://github.com/mergeos-bounties/BeeAR/issues/52",
+  "id": 4896131293,
+  "node_id": "I_kwDOTWL8W88AAAABI9UI3Q",
+  "number": 52,
+  "title": "[50 MRG] Catalog: colorway variants for 1 base frame (2 SKUs)",
+  "user": {
+    "login": "TUPM96",
+    "id": 22741583,
+    "node_id": "MDQ6VXNlcjIyNzQxNTgz",
+    "avatar_url": "https://avatars.githubusercontent.com/u/22741583?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/TUPM96",
+    "html_url": "https://github.com/TUPM96",
+    "followers_url": "https://api.github.com/users/TUPM96/followers",
+    "following_url": "https://api.github.com/users/TUPM96/following{/other_user}",
+    "gists_url": "https://api.github.com/users/TUPM96/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/TUPM96/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/TUPM96/subscriptions",
+    "organizations_url": "https://api.github.com/users/TUPM96/orgs",
+    "repos_url": "https://api.github.com/users/TUPM96/repos",
+    "events_url": "https://api.github.com/users/TUPM96/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/TUPM96/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "labels": [
+    {
+      "id": 11500857905,
+      "node_id": "LA_kwDOTWL8W88AAAACrYEqMQ",
+      "url": "https://api.github.com/repos/mergeos-bounties/BeeAR/labels/bounty",
+      "name": "bounty",
+      "color": "5319E7",
+      "default": false,
+      "description": "Eligible for MergeOS MRG bounty"
+    },
+    {
+      "id": 11500857996,
+      "node_id": "LA_kwDOTWL8W88AAAACrYEqjA",
+      "url": "https://api.github.com/repos/mergeos-bounties/BeeAR/labels/bounty:%20feature",
+      "name": "bounty: feature",
+      "color": "A2EEEF",
+      "default": false,
+      "description": "Feature bounty"
+    },
+    {
+      "id": 11500858529,
+      "node_id": "LA_kwDOTWL8W88AAAACrYEsoQ",
+      "url": "https://api.github.com/repos/mergeos-bounties/BeeAR/labels/catalog",
+      "name": "catalog",
+      "color": "C5DEF5",
+      "default": false,
+      "description": "Catalog SKU"
+    },
+    {
+      "id": 11500858766,
+      "node_id": "LA_kwDOTWL8W88AAAACrYEtjg",
+      "url": "https://api.github.com/repos/mergeos-bounties/BeeAR/labels/reward:50-mrg",
+      "name": "reward:50-mrg",
+      "color": "FEF2C0",
+      "default": false,
+      "description": "Target 50 MRG"
+    }
+  ],
+  "state": "open",
+  "locked": false,
+  "assignees": [
+
+  ],
+  "milestone": null,
+  "comments": 5,
+  "created_at": "2026-07-15T20:33:09Z",
+  "updated_at": "2026-07-18T17:35:32Z",
+  "closed_at": null,
+  "assignee": null,
+  "author_association": "CONTRIBUTOR",
+  "issue_field_values": [
+
+  ],
+  "type": null,
+  "active_lock_reason": null,
+  "sub_issues_summary": {
+    "total": 0,
+    "completed": 0,
+    "percent_completed": 0
+  },
+  "issue_dependencies_summary": {
+    "blocked_by": 0,
+    "total_blocked_by": 0,
+    "blocking": 0,
+    "total_blocking": 0
+  },
+  "body": "## 50 MRG\n\nAdd two colorway variants sharing base geometry fields where schema allows.\n\n## Acceptance\n\n- [ ] 2 SKUs + tests + notes\n\n\n## Claim (MergeOS MRG)\n\n1. Follow https://github.com/mergeos-bounties\n2. Star https://github.com/mergeos-bounties/mergeos\n3. Star https://github.com/mergeos-bounties/mergeos-contracts\n4. Comment on **this issue**: `I claim this bounty`\n5. Comment on MergeOS [Claim Token #1](https://github.com/mergeos-bounties/mergeos/issues/1) with a link to this issue\n6. Open a PR to **BeeAR** with `Fixes #<this-issue>`\n\nPolicy: [docs/BOUNTY.md](../blob/master/docs/BOUNTY.md)\n\n## Payout\n\nMaintainer reviews PR → merge → **MRG credit** on MergeOS ledger to `github:<author>` (25 / 50 / 100 / 200 scale per labels).\n\n## Evidence\n\nAttach screenshots / sample output / photos as required by acceptance. No secrets, no force-push, no scraped private PII.\n",
+  "closed_by": null,
+  "reactions": {
+    "url": "https://api.github.com/repos/mergeos-bounties/BeeAR/issues/52/reactions",
+    "total_count": 0,
+    "+1": 0,
+    "-1": 0,
+    "laugh": 0,
+    "hooray": 0,
+    "confused": 0,
+    "heart": 0,
+    "rocket": 0,
+    "eyes": 0
+  },
+  "timeline_url": "https://api.github.com/repos/mergeos-bounties/BeeAR/issues/52/timeline",
+  "performed_via_github_app": null,
+  "state_reason": null,
+  "pinned_comment": null
+}

@@ -842,7 +842,7 @@ function renderGallery() {
   galleryEl.innerHTML = items
     .map(
       (it) =>
-        `<div class="shot"><img src="${it.data}" alt=""/><button data-id="${it.id}" class="btn tiny del">×</button></div>`,
+        `<div class="shot"><img src="${it.data}" alt=""/><button data-id="${it.id}" class="btn tiny del">×</button><button data-id="${it.id}" class="btn tiny share">🔗</button></div>`,
     )
     .join("");
   galleryEl.querySelectorAll(".del").forEach((btn) => {
@@ -850,6 +850,33 @@ function renderGallery() {
       const id = Number(btn.getAttribute("data-id"));
       saveGallery(loadGallery().filter((x) => x.id !== id));
       renderGallery();
+    };
+  });
+  galleryEl.querySelectorAll(".share").forEach((btn) => {
+    btn.onclick = () => {
+      const id = Number(btn.getAttribute("data-id"));
+      const item = loadGallery().find((x) => x.id === id);
+      if (item) {
+        // Encode snapshot metadata into a shareable URL
+        const shareData = {
+          frame: item.frame,
+          frameB: item.frameB,
+          pdMm: item.pdMm,
+        };
+        const encoded = btoa(JSON.stringify(shareData));
+        const shareUrl = `https://beear.app/s/${encoded}`;
+        navigator.clipboard
+          .writeText(shareUrl)
+          .then(() => {
+            // Brief visual confirmation
+            const orig = hintEl.textContent;
+            hintEl.textContent = "Share link copied!";
+            setTimeout(() => { hintEl.textContent = orig; }, 2000);
+          })
+          .catch(() => {
+            alert("Share: " + shareUrl);
+          });
+      }
     };
   });
 }
