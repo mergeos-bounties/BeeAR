@@ -1,0 +1,17 @@
+{
+  "sku": "chain_gold_eyewear",
+  "name": "Gold Eyewear Chain",
+  "type": "accessory",
+  "category": "chain",
+  "material": "metal",
+  "color": "gold",
+  "model_path": "models/eyewear_chain.glb",
+  "texture_path": "textures/gold_chain.png",
+  "fit": {
+    "width_mm": 0,
+    "bridge_mm": 0,
+    "temple_mm": 700
+  },
+  "price_usd": 25,
+  "notes": "Adjustable gold-plated eyewear chain. Length: 70cm. Rubber temple grips included."
+}
