@@ -1,0 +1,17 @@
+{
+  "sku": "clipon_sunglasses_polarized",
+  "name": "Clip-On Polarized Sunglasses",
+  "type": "accessory",
+  "category": "clip_on",
+  "material": "metal",
+  "color": "gunmetal",
+  "model_path": "models/clipon_sunglasses.glb",
+  "texture_path": "textures/gunmetal_polarized.png",
+  "fit": {
+    "width_mm": 140,
+    "bridge_mm": 16,
+    "temple_mm": 0
+  },
+  "price_usd": 35,
+  "notes": "Universal clip-on polarized sunglasses. Fits most wayfarer and round frames. UV400 protection."
+}
