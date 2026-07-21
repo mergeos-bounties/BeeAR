@@ -1,0 +1,10 @@
+{
+  "sku": "wayfarer_sand",
+  "name": "Wayfarer Sand",
+  "type": "frame",
+  "material": "acetate",
+  "color": "sand",
+  "shape": "wayfarer",
+  "model_path": "models/wayfarer.glb",
+  "texture_path": "textures/sand.png"
+}

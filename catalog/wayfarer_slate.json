@@ -1,0 +1,10 @@
+{
+  "sku": "wayfarer_slate",
+  "name": "Wayfarer Slate",
+  "type": "frame",
+  "material": "acetate",
+  "color": "slate",
+  "shape": "wayfarer",
+  "model_path": "models/wayfarer.glb",
+  "texture_path": "textures/slate.png"
+}
