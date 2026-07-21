@@ -18,6 +18,8 @@ const btnAuto = document.getElementById("btn-auto");
 const btnSnap = document.getElementById("btn-snap");
 const filterEl = document.getElementById("filter");
 const personSelect = document.getElementById("person-select");
+const galleryEl = document.getElementById("gallery-3d");
+const btnGallery = document.getElementById("btn-gallery-3d");
 
 const state = {
   frames: [],
@@ -524,11 +526,94 @@ btnAuto.addEventListener("click", () => {
   btnAuto.textContent = state.auto ? "Auto-rotate ON" : "Auto-rotate OFF";
 });
 btnSnap.addEventListener("click", () => {
+  const data = canvas.toDataURL("image/png");
+  const item = {
+    id: Date.now(),
+    frame: state.selected?.id || "none",
+    person: state.activePerson?.id || "person",
+    pdMm: 64,
+    data,
+  };
+  const items = load3dGallery();
+  items.unshift(item);
+  save3dGallery(items);
   const a = document.createElement("a");
   a.download = `beear-3d-${state.activePerson?.id || "person"}-${state.selected?.id || "snap"}.png`;
-  a.href = canvas.toDataURL("image/png");
+  a.href = data;
   a.click();
+  render3dGallery();
 });
+if (btnGallery) {
+  btnGallery.addEventListener("click", () => {
+    galleryEl.classList.toggle("hidden");
+    render3dGallery();
+  });
+}
+
+function gallery3dKey() { return "beear_gallery_3d_v1"; }
+function load3dGallery() {
+  try { return JSON.parse(localStorage.getItem(gallery3dKey()) || "[]"); }
+  catch { return []; }
+}
+function save3dGallery(items) {
+  localStorage.setItem(gallery3dKey(), JSON.stringify(items.slice(0, 24)));
+}
+function render3dGallery() {
+  const items = load3dGallery();
+  if (!items.length) {
+    galleryEl.innerHTML = '<p class="muted small">No 3D snapshots yet</p>';
+    return;
+  }
+  galleryEl.innerHTML = items
+    .map(
+      (it) =>
+        `<div class="shot"><img src="${it.data}" alt=""/><div class="shot-actions"><button data-id="${it.id}" class="btn tiny share" title="Share">↗</button><button data-id="${it.id}" class="btn tiny del" title="Delete">×</button></div></div>`,
+    )
+    .join("");
+  galleryEl.querySelectorAll(".del").forEach((btn) => {
+    btn.onclick = () => {
+      const id = Number(btn.getAttribute("data-id"));
+      save3dGallery(load3dGallery().filter((x) => x.id !== id));
+      render3dGallery();
+    };
+  });
+  galleryEl.querySelectorAll(".share").forEach((btn) => {
+    btn.onclick = async () => {
+      const id = Number(btn.getAttribute("data-id"));
+      const items = load3dGallery();
+      const item = items.find((x) => x.id === id);
+      if (!item) return;
+      await share3dSnapshot(item);
+    };
+  });
+}
+async function share3dSnapshot(item) {
+  const shareData = {
+    title: "BeeAR 3D Try-On",
+    text: `BeeAR 3D try-on: ${item.person} wearing ${item.frame}`,
+    url: item.data,
+  };
+  if (navigator.share && window.innerWidth < 900) {
+    try {
+      const blob = await (await fetch(item.data)).blob();
+      const file = new File([blob], `beear-3d-${item.person}-${item.id}.png`, { type: "image/png" });
+      await navigator.share({ ...shareData, files: [file] });
+      return;
+    } catch (e) {
+      if (e.name === "AbortError") return;
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(shareData.text + " — " + location.origin);
+    const feedback = document.createElement("div");
+    feedback.className = "share-toast";
+    feedback.textContent = "📋 Share link copied!";
+    document.body.appendChild(feedback);
+    setTimeout(() => feedback.remove(), 2000);
+  } catch (_) {
+    window.open(item.data, "_blank");
+  }
+}
 
 let t0 = performance.now();
 function tick(now) {
