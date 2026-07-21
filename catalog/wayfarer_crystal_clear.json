@@ -1,0 +1,17 @@
+{
+  "sku": "wayfarer_crystal_clear",
+  "name": "Wayfarer Crystal Clear",
+  "type": "frame",
+  "material": "acetate",
+  "color": "crystal_clear",
+  "shape": "wayfarer",
+  "model_path": "models/wayfarer.glb",
+  "texture_path": "textures/crystal_clear.png",
+  "fit": {
+    "width_mm": 142,
+    "bridge_mm": 18,
+    "temple_mm": 145
+  },
+  "price_usd": 89,
+  "notes": "Colorway variant of wayfarer base frame. Transparent crystal acetate with silver hinges."
+}

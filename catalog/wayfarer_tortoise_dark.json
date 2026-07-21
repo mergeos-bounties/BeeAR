@@ -1,0 +1,17 @@
+{
+  "sku": "wayfarer_tortoise_dark",
+  "name": "Wayfarer Dark Tortoise",
+  "type": "frame",
+  "material": "acetate",
+  "color": "dark_tortoise",
+  "shape": "wayfarer",
+  "model_path": "models/wayfarer.glb",
+  "texture_path": "textures/dark_tortoise.png",
+  "fit": {
+    "width_mm": 142,
+    "bridge_mm": 18,
+    "temple_mm": 145
+  },
+  "price_usd": 95,
+  "notes": "Colorway variant of wayfarer base frame. Classic dark tortoiseshell acetate with gold hinges."
+}
