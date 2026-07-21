@@ -23,6 +23,7 @@ let compareMode = false;
 let svgCache = {};
 let raf = 0;
 let pdMm = TryOn?.DEFAULT_PD_MM || 64;
+let calibrating = false;
 let lang = "en";
 let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
@@ -140,6 +141,12 @@ const I18N = {
     cloudLocal: "🔒 Local Only",
     cloudServer: "☁️ Cloud Enabled",
     photoConsentLabel: "Allow face photo server upload & cloud features",
+    calibrateBtn: "📏 Calibrate",
+    calibrating: "📏 Calibrating…",
+    wizardText: "Adjust slider until circles align with your pupils, then confirm.",
+    confirmPd: "✓ Confirm PD",
+    cancelPd: "✕ Cancel",
+    calHint: "Adjust slider until circles align with your pupils",
   },
   vi: {
     tagline: "Thử kính & phụ kiện ảo",
@@ -167,6 +174,12 @@ const I18N = {
     cloudLocal: "🔒 Chỉ lưu cục bộ",
     cloudServer: "☁️ Đã bật Cloud",
     photoConsentLabel: "Cho phép tải ảnh mặt lên server & dùng tính năng đám mây",
+    calibrateBtn: "📏 Hiệu chỉnh",
+    calibrating: "📏 Đang hiệu chỉnh…",
+    wizardText: "Chỉnh slider đến khi vòng tròn khớp với đồng tử của bạn.",
+    confirmPd: "✓ Xác nhận PD",
+    cancelPd: "✕ Hủy",
+    calHint: "Chỉnh slider đến khi vòng tròn khớp đồng tử",
   },
 };
 
@@ -177,7 +190,8 @@ function t(k) {
 function applyLang() {
   document.getElementById("tagline").textContent = t("tagline");
   document.getElementById("lbl-catalog").textContent = t("catalog");
-  document.getElementById("lbl-pd").childNodes[0].textContent = t("pd") + " ";
+  const pdLabel = document.getElementById("lbl-pd");
+  if (pdLabel) pdLabel.innerHTML = t("pd") + ' <span id="pd-val">' + pdMm + "</span>";
   document.getElementById("pd-hint").textContent = t("pdHint");
   document.getElementById("btn-cam").textContent = t("cam");
   document.getElementById("btn-demo").textContent = t("demo");
@@ -191,6 +205,11 @@ function applyLang() {
   document.getElementById("consent-body").textContent = t("consentBody");
   document.getElementById("consent-ok").textContent = t("consentOk");
   document.getElementById("consent-demo").textContent = t("consentDemo");
+  
+  const btnCalibrate = document.getElementById("btn-calibrate");
+  if (btnCalibrate) {
+    btnCalibrate.textContent = calibrating ? t("calibrating") : t("calibrateBtn");
+  }
   
   // Update cloud toggle and checkbox translation labels (optional DOM from consent PR)
   const btnCloud = document.getElementById("btn-cloud");
@@ -647,6 +666,145 @@ function drawGlasses() {
   TryOn.drawGlassesOverlay(ctx, face, selected, selectedB, compareMode, pdMm);
 }
 
+/**
+ * Draw PD calibration overlay with visual measurement guides.
+ * Shows reference circles at estimated pupil positions and a ruler line.
+ */
+function drawCalibrationOverlay() {
+  if (!TryOn) return;
+  const w = canvas.width, h = canvas.height;
+  const metrics = TryOn.faceMetricsFromLandmarks(face, w, h);
+  const pdPx = metrics.pdPx;
+
+  const calPxPerMm = pdPx / pdMm;
+  const halfPdPx = (pdMm * calPxPerMm) / 2;
+  const midX = metrics.midX;
+  const midY = metrics.midY;
+  const angle = metrics.angle;
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
+
+  const lx = midX - halfPdPx * cosA;
+  const ly = midY - halfPdPx * sinA;
+  const rx = midX + halfPdPx * cosA;
+  const ry = midY + halfPdPx * sinA;
+
+  ctx.save();
+
+  // Draw ruler line between calibration points
+  ctx.strokeStyle = "#f5c518";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([6, 4]);
+  ctx.beginPath();
+  ctx.moveTo(lx, ly);
+  ctx.lineTo(rx, ry);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw calibration reference circles with crosshairs
+  const circleR = 16;
+  [ [lx, ly], [rx, ry] ].forEach(([cx, cy]) => {
+    const grad = ctx.createRadialGradient(cx, cy, 2, cx, cy, circleR + 6);
+    grad.addColorStop(0, "rgba(91, 140, 255, 0.3)");
+    grad.addColorStop(1, "rgba(91, 140, 255, 0)");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, circleR + 6, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#5b8cff";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, circleR, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#5b8cff88";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx - 6, cy);
+    ctx.lineTo(cx + 6, cy);
+    ctx.moveTo(cx, cy - 6);
+    ctx.lineTo(cx, cy + 6);
+    ctx.stroke();
+  });
+
+  // PD measurement label
+  ctx.fillStyle = "#f5c518";
+  ctx.font = "bold 14px system-ui";
+  ctx.textAlign = "center";
+  ctx.fillText(`${pdMm.toFixed(1)} mm`, midX, midY - 32);
+
+  ctx.fillStyle = "#8b9bb888";
+  ctx.font = "11px system-ui";
+  ctx.fillText(`detected: ${pdPx.toFixed(0)} px`, midX, midY + circleR + 24);
+
+  ctx.restore();
+
+  const fitScale = selected ? (pdPx / pdMm) * (selected.fit?.width_mm || 140) / (pdPx || 1) : 0;
+  const fitInfo = selected ? ` · fit: ${(fitScale * 100).toFixed(0)}%` : '';
+  document.getElementById("wizard-pd-measure").textContent = `PD: ${pdMm.toFixed(1)} mm`;
+  const fiEl = document.getElementById("wizard-fit-info");
+  if (fiEl) fiEl.textContent = fitInfo;
+}
+
+function loadPd() {
+  try {
+    const saved = localStorage.getItem("beear_pd_mm");
+    if (saved !== null) {
+      const v = parseFloat(saved);
+      if (v >= 50 && v <= 80) {
+        pdMm = v;
+        document.getElementById("pd").value = v;
+        document.getElementById("pd-val").textContent = String(v);
+      }
+    }
+  } catch (_) {}
+}
+
+function savePd(val) {
+  try {
+    localStorage.setItem("beear_pd_mm", String(val));
+  } catch (_) {}
+}
+
+function startCalibration() {
+  calibrating = true;
+  document.getElementById("pd-wizard").classList.remove("hidden");
+  const btnCal = document.getElementById("btn-calibrate");
+  if (btnCal) {
+    btnCal.textContent = t("calibrating");
+    btnCal.disabled = true;
+  }
+  document.getElementById("pd-hint").textContent = t("calHint");
+  updateMeta();
+}
+
+function confirmCalibration() {
+  calibrating = false;
+  document.getElementById("pd-wizard").classList.add("hidden");
+  const btnCal = document.getElementById("btn-calibrate");
+  if (btnCal) {
+    btnCal.textContent = t("calibrateBtn");
+    btnCal.disabled = false;
+  }
+  document.getElementById("pd-hint").textContent = t("pdHint");
+  savePd(pdMm);
+  updateMeta();
+}
+
+function cancelCalibration() {
+  calibrating = false;
+  document.getElementById("pd-wizard").classList.add("hidden");
+  const btnCal = document.getElementById("btn-calibrate");
+  if (btnCal) {
+    btnCal.textContent = t("calibrateBtn");
+    btnCal.disabled = false;
+  }
+  document.getElementById("pd-hint").textContent = t("pdHint");
+  loadPd();
+  updateMeta();
+}
+
 function sendToMesh() {
   if (!faceMesh || meshBusy || mode !== "camera" || video.readyState < 2) return;
   meshBusy = true;
@@ -686,7 +844,8 @@ function loop() {
     ctx.font = "16px system-ui";
     ctx.fillText(t("hintIdle"), 40, h / 2);
   }
-  if (mode !== "idle") drawGlasses();
+  if (mode !== "idle" && calibrating) drawCalibrationOverlay();
+  else if (mode !== "idle") drawGlasses();
   raf = requestAnimationFrame(loop);
 }
 
@@ -894,8 +1053,14 @@ document.getElementById("filter").onchange = (e) => loadCatalog(e.target.value);
 document.getElementById("pd").oninput = (e) => {
   pdMm = Number(e.target.value) || 64;
   document.getElementById("pd-val").textContent = String(pdMm);
+  if (!calibrating) {
+    savePd(pdMm);
+  }
   updateMeta();
 };
+document.getElementById("btn-calibrate").onclick = startCalibration;
+document.getElementById("btn-confirm-pd").onclick = confirmCalibration;
+document.getElementById("btn-cancel-pd").onclick = cancelCalibration;
 
 // Update interaction execution pipeline on primary modal acknowledgement
 document.getElementById("consent-ok").onclick = () => {
@@ -910,6 +1075,7 @@ document.getElementById("consent-demo").onclick = startDemo;
 
 setStageLoad("Starting BeeAR demo…");
 applyLang();
+loadPd();
 Promise.all([
   loadDemoImages(),
   loadCatalog().catch((e) => {
