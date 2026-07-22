@@ -23,7 +23,11 @@ let compareMode = false;
 let svgCache = {};
 let raf = 0;
 let pdMm = TryOn?.DEFAULT_PD_MM || 64;
-let lang = "en";
+const I18n = globalThis.BeeARI18n;
+if (!I18n) {
+  console.error("BeeARI18n missing — load /assets/i18n.js before app.js");
+}
+let lang = I18n ? I18n.loadLang() : "en";
 let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
 let meshBusy = false;
@@ -113,93 +117,70 @@ let demoFaceIndex = 0;
 let demoImages = {}; // id -> HTMLImageElement
 let demoReady = false;
 
-const I18N = {
-  en: {
-    tagline: "Virtual try-on · glasses & accessories",
-    catalog: "Catalog",
-    pd: "PD (mm)",
-    pdHint: "Calibrate pupil distance for better fit scale",
-    select: "Select a SKU",
-    cam: "📷 Camera",
-    demo: "Demo photo",
-    demoNext: "Next face",
-    compare: "Compare",
-    snap: "Snapshot",
-    gallery: "Gallery",
-    consentTitle: "Camera consent",
-    consentBody:
-      "BeeAR uses the camera only in your browser for try-on. Video is not uploaded to the server.",
-    consentOk: "Allow & start",
-    consentDemo: "Use demo photo",
-    hintIdle: "Start camera or use Demo photo · pick a frame",
-    hintDemo: "Photoreal demo face · PD slider · Compare A/B · Next face",
-    hintCam: "Camera live",
-    trackGeo: "tracking: geometric",
-    trackMp: "tracking: mediapipe",
-    trackDemo: "tracking: demo photo",
-    cloudLocal: "🔒 Local Only",
-    cloudServer: "☁️ Cloud Enabled",
-    photoConsentLabel: "Allow face photo server upload & cloud features",
-  },
-  vi: {
-    tagline: "Thử kính & phụ kiện ảo",
-    catalog: "Danh mục",
-    pd: "Khoảng đồng tử PD (mm)",
-    pdHint: "Hiệu chỉnh PD để scale kính chính xác hơn",
-    select: "Chọn mẫu",
-    cam: "📷 Camera",
-    demo: "Ảnh demo",
-    demoNext: "Đổi mặt",
-    compare: "So sánh",
-    snap: "Chụp",
-    gallery: "Thư viện",
-    consentTitle: "Đồng ý camera",
-    consentBody:
-      "BeeAR chỉ dùng camera trên trình duyệt để thử đồ. Video không gửi lên server.",
-    consentOk: "Cho phép & bắt đầu",
-    consentDemo: "Dùng ảnh demo",
-    hintIdle: "Bật camera hoặc ảnh demo · chọn khung",
-    hintDemo: "Ảnh người demo · chỉnh PD · So sánh · Đổi mặt",
-    hintCam: "Camera đang bật",
-    trackGeo: "tracking: hình học",
-    trackMp: "tracking: mediapipe",
-    trackDemo: "tracking: ảnh demo",
-    cloudLocal: "🔒 Chỉ lưu cục bộ",
-    cloudServer: "☁️ Đã bật Cloud",
-    photoConsentLabel: "Cho phép tải ảnh mặt lên server & dùng tính năng đám mây",
-  },
-};
-
 function t(k) {
-  return (I18N[lang] || I18N.en)[k] || k;
+  if (I18n) return I18n.t(lang, k);
+  return k;
 }
 
 function applyLang() {
-  document.getElementById("tagline").textContent = t("tagline");
-  document.getElementById("lbl-catalog").textContent = t("catalog");
-  document.getElementById("lbl-pd").childNodes[0].textContent = t("pd") + " ";
-  document.getElementById("pd-hint").textContent = t("pdHint");
-  document.getElementById("btn-cam").textContent = t("cam");
-  document.getElementById("btn-demo").textContent = t("demo");
-  const btnNext = document.getElementById("btn-demo-next");
-  if (btnNext) btnNext.textContent = t("demoNext");
-  document.getElementById("btn-compare").textContent = t("compare");
-  document.getElementById("btn-snap").textContent = t("snap");
-  document.getElementById("btn-gallery").textContent = t("gallery");
-  document.getElementById("btn-lang").textContent = lang === "en" ? "VI" : "EN";
-  document.getElementById("consent-title").textContent = t("consentTitle");
-  document.getElementById("consent-body").textContent = t("consentBody");
-  document.getElementById("consent-ok").textContent = t("consentOk");
-  document.getElementById("consent-demo").textContent = t("consentDemo");
-  
+  document.documentElement.lang = lang === "vi" ? "vi" : "en";
+  if (I18n) I18n.saveLang(lang);
+
+  const setText = (id, key) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key);
+  };
+
+  setText("tagline", "tagline");
+  setText("lbl-catalog", "catalog");
+  const lblPd = document.getElementById("lbl-pd");
+  if (lblPd && lblPd.childNodes[0]) {
+    lblPd.childNodes[0].textContent = t("pd") + " ";
+  }
+  setText("pd-hint", "pdHint");
+  setText("btn-cam", "cam");
+  setText("btn-demo", "demo");
+  setText("btn-demo-next", "demoNext");
+  setText("btn-compare", "compare");
+  setText("btn-snap", "snap");
+  setText("btn-gallery", "gallery");
+  setText("btn-3d", "person3d");
+  const btnLang = document.getElementById("btn-lang");
+  if (btnLang) {
+    btnLang.textContent = I18n ? I18n.langButtonLabel(lang) : lang === "en" ? "VI" : "EN";
+    btnLang.setAttribute("aria-label", lang === "en" ? "Switch to Vietnamese" : "Chuyển sang tiếng Anh");
+    btnLang.setAttribute("title", btnLang.getAttribute("aria-label"));
+  }
+  setText("consent-title", "consentTitle");
+  setText("consent-body", "consentBody");
+  setText("consent-ok", "consentOk");
+  setText("consent-demo", "consentDemo");
+
+  // Filter <option> labels
+  const filter = document.getElementById("filter");
+  if (filter) {
+    for (const opt of filter.options) {
+      if (opt.value === "") opt.textContent = t("filterAll");
+      else if (opt.value === "glasses") opt.textContent = t("filterGlasses");
+      else if (opt.value === "accessory") opt.textContent = t("filterAccessory");
+    }
+  }
+
   // Update cloud toggle and checkbox translation labels (optional DOM from consent PR)
   const btnCloud = document.getElementById("btn-cloud");
   if (btnCloud) btnCloud.textContent = photoConsent ? t("cloudServer") : t("cloudLocal");
   const lblPhoto = document.getElementById("lbl-photo-consent");
   if (lblPhoto) lblPhoto.textContent = t("photoConsentLabel");
 
-  if (mode === "demo") trackBadge.textContent = t("trackDemo");
-  else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
+  if (mode === "idle") hintEl.textContent = t("hintIdle");
+  else if (mode === "demo") {
+    trackBadge.textContent = t("trackDemo");
+    const faceName = DEMO_FACES[demoFaceIndex % DEMO_FACES.length]?.label || "";
+    hintEl.textContent = t("hintDemo") + (faceName ? " · " + faceName : "");
+  } else {
+    trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
+    if (mode === "camera") hintEl.textContent = t("hintCam");
+  }
   if (!selected) metaEl.textContent = t("select");
 }
 
@@ -517,7 +498,7 @@ async function loadCatalog(category = "") {
 function renderCatalog() {
   catalogEl.innerHTML = "";
   if (frames.length === 0) {
-    catalogEl.innerHTML = `<p class="empty-state">No frames match the current filter.</p><p class="suggestion">Try adjusting filters or check your connection.</p>`;
+    catalogEl.innerHTML = `<p class="empty-state">${t("emptyFilter")}</p><p class="suggestion">${t("emptyFilterHint")}</p>`;
     return;
   }
   frames.forEach((f) => {
@@ -836,7 +817,7 @@ async function snapshot() {
 function renderGallery() {
   const items = loadGallery();
   if (!items.length) {
-    galleryEl.innerHTML = '<p class="muted small">No snapshots yet</p>';
+    galleryEl.innerHTML = `<p class="muted small">${t("emptyGallery")}</p>`;
     return;
   }
   galleryEl.innerHTML = items
@@ -861,7 +842,7 @@ const btnDemoNext = document.getElementById("btn-demo-next");
 if (btnDemoNext) btnDemoNext.onclick = nextDemoFace;
 document.getElementById("btn-snap").onclick = snapshot;
 document.getElementById("btn-lang").onclick = () => {
-  lang = lang === "en" ? "vi" : "en";
+  lang = I18n ? I18n.toggleLang(lang) : lang === "en" ? "vi" : "en";
   applyLang();
   updateMeta();
 };

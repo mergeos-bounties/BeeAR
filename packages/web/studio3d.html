@@ -16,12 +16,13 @@
         <span class="logo">🐝</span>
         <div>
           <strong>BeeAR 3D Studio</strong>
-          <div class="tag">Real 3D characters · glasses GLB try-on</div>
+          <div class="tag" id="studio-tagline">Real 3D characters · glasses GLB try-on</div>
         </div>
       </div>
       <div class="actions">
         <a class="btn" href="https://github.com/mergeos-bounties/BeeAR" target="_blank" rel="noopener">GitHub</a>
-        <a class="btn" href="/">← 2D / Camera</a>
+        <button id="btn-lang" class="btn" type="button" aria-label="Switch to Vietnamese" title="Switch to Vietnamese">VI</button>
+        <a class="btn" id="btn-back-2d" href="/">← 2D / Camera</a>
         <button id="btn-auto" class="btn primary" type="button">Auto-rotate</button>
         <button id="btn-snap" class="btn" type="button">Snapshot</button>
       </div>
@@ -38,30 +39,30 @@
       </section>
       <aside class="rail">
         <div class="rail-head">
-          <h2>Person</h2>
+          <h2 id="lbl-person">Person</h2>
         </div>
         <div class="pd-panel">
-          <label>Character
+          <label id="lbl-character">Character
             <select id="person-select">
               <option value="">Loading…</option>
             </select>
           </label>
         </div>
         <div class="rail-head">
-          <h2>Frames (3D)</h2>
+          <h2 id="lbl-frames3d">Frames (3D)</h2>
           <select id="filter">
             <option value="glasses">Glasses</option>
             <option value="">All</option>
           </select>
         </div>
         <div class="pd-panel">
-          <label>Fit scale <span id="scale-val">1.00</span>
+          <label id="lbl-fit-scale">Fit scale <span id="scale-val">1.00</span>
             <input id="scale" type="range" min="0.5" max="1.6" step="0.01" value="1" />
           </label>
-          <label>Y offset <span id="y-val">0.00</span>
+          <label id="lbl-y-offset">Y offset <span id="y-val">0.00</span>
             <input id="yoff" type="range" min="-0.25" max="0.25" step="0.005" value="0" />
           </label>
-          <label>Z (depth) <span id="z-val">0.00</span>
+          <label id="lbl-z-depth">Z (depth) <span id="z-val">0.00</span>
             <input id="zoff" type="range" min="-0.2" max="0.25" step="0.005" value="0" />
           </label>
         </div>
@@ -79,6 +80,7 @@
       }
     }
   </script>
+  <script src="/assets/i18n.js"></script>
   <script src="/assets/static-api.js"></script>
   <script type="module" src="/assets/studio3d.js"></script>
 </body>
