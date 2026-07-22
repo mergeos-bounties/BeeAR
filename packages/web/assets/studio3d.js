@@ -18,6 +18,73 @@ const btnAuto = document.getElementById("btn-auto");
 const btnSnap = document.getElementById("btn-snap");
 const filterEl = document.getElementById("filter");
 const personSelect = document.getElementById("person-select");
+const I18n = globalThis.BeeARI18n;
+let lang = I18n ? I18n.loadLang() : "en";
+
+function t(key) {
+  return I18n ? I18n.t(lang, key) : key;
+}
+
+function applyLang() {
+  document.documentElement.lang = lang === "vi" ? "vi" : "en";
+  if (I18n) I18n.saveLang(lang);
+
+  const setText = (id, key) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key);
+  };
+
+  setText("studio-tagline", "studioTagline");
+  setText("btn-back-2d", "studioBack");
+  setText("btn-snap", "snap");
+  setText("lbl-person", "person");
+  setText("lbl-frames3d", "frames3d");
+  setText("hint", "hintStudio");
+  setText("badge", "badgeStudio");
+  setText("stage-load-text", "loadingStudio");
+
+  const lblChar = document.getElementById("lbl-character");
+  if (lblChar && lblChar.childNodes[0]) {
+    lblChar.childNodes[0].textContent = t("character") + " ";
+  }
+  const lblFit = document.getElementById("lbl-fit-scale");
+  if (lblFit && lblFit.childNodes[0]) {
+    lblFit.childNodes[0].textContent = t("fitScale") + " ";
+  }
+  const lblY = document.getElementById("lbl-y-offset");
+  if (lblY && lblY.childNodes[0]) {
+    lblY.childNodes[0].textContent = t("yOffset") + " ";
+  }
+  const lblZ = document.getElementById("lbl-z-depth");
+  if (lblZ && lblZ.childNodes[0]) {
+    lblZ.childNodes[0].textContent = t("zDepth") + " ";
+  }
+
+  if (filterEl) {
+    for (const opt of filterEl.options) {
+      if (opt.value === "") opt.textContent = t("filterAll");
+      else if (opt.value === "glasses") opt.textContent = t("filterGlasses");
+      else if (opt.value === "accessory") opt.textContent = t("filterAccessory");
+    }
+  }
+
+  const btnLang = document.getElementById("btn-lang");
+  if (btnLang) {
+    btnLang.textContent = I18n ? I18n.langButtonLabel(lang) : lang === "en" ? "VI" : "EN";
+    btnLang.setAttribute(
+      "aria-label",
+      lang === "en" ? "Switch to Vietnamese" : "Chuyển sang tiếng Anh",
+    );
+    btnLang.setAttribute("title", btnLang.getAttribute("aria-label"));
+  }
+
+  if (btnAuto) {
+    btnAuto.textContent = state.auto ? t("autoRotateOn") : t("autoRotateOff");
+  }
+  if (!state.selected && metaEl) {
+    metaEl.textContent = t("loadingPerson");
+  }
+}
 
 const state = {
   frames: [],
@@ -521,7 +588,7 @@ filterEl.addEventListener("change", renderCatalog);
 btnAuto.addEventListener("click", () => {
   state.auto = !state.auto;
   btnAuto.classList.toggle("active", state.auto);
-  btnAuto.textContent = state.auto ? "Auto-rotate ON" : "Auto-rotate OFF";
+  btnAuto.textContent = state.auto ? t("autoRotateOn") : t("autoRotateOff");
 });
 btnSnap.addEventListener("click", () => {
   const a = document.createElement("a");
@@ -529,6 +596,14 @@ btnSnap.addEventListener("click", () => {
   a.href = canvas.toDataURL("image/png");
   a.click();
 });
+
+const btnLang = document.getElementById("btn-lang");
+if (btnLang) {
+  btnLang.addEventListener("click", () => {
+    lang = I18n ? I18n.toggleLang(lang) : lang === "en" ? "vi" : "en";
+    applyLang();
+  });
+}
 
 let t0 = performance.now();
 function tick(now) {
@@ -546,8 +621,8 @@ async function main() {
   resize();
   ensureGlassesRoot();
   btnAuto.classList.add("active");
-  btnAuto.textContent = "Auto-rotate ON";
-  setStageLoad("Starting 3D studio…");
+  applyLang();
+  setStageLoad(t("loadingStudio"));
   await loadCatalog();
   // Default bust (tiny GLB) for fast Pages first paint; full-body Meshy still in dropdown
   const def =
