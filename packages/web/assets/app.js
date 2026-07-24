@@ -37,6 +37,13 @@ try {
 }
 let sessionId = null;
 
+// --- PD Calibration Wizard state ---
+let calMode = false;
+let cardPx = 200;             // credit card width in pixels (adjustable)
+const CARD_WIDTH_MM = 85.6;   // standard ISO/IEC 7810 ID-1 credit card
+const CARD_HEIGHT_MM = 54.0;
+const CARD_ASPECT = CARD_WIDTH_MM / CARD_HEIGHT_MM;
+
 function isStaticDemo() {
   return !!(globalThis.BeeARStatic && globalThis.BeeARStatic.detectStatic());
 }
@@ -856,6 +863,102 @@ function renderGallery() {
 
 // UI element event binding configuration
 document.getElementById("btn-cam").onclick = startCamera;
+
+// --- PD Calibration Wizard ---
+function measurePdPx() {
+  const lx = face.left[0] * canvas.width;
+  const ly = face.left[1] * canvas.height;
+  const rx = face.right[0] * canvas.width;
+  const ry = face.right[1] * canvas.height;
+  return Math.hypot(rx - lx, ry - ly) || 100;
+}
+
+function pdToFitScale(frameWidthMm, pdMmVal, pdPxVal) {
+  const pd = Math.max(50, Math.min(80, Number(pdMmVal) || 64));
+  const pdPixels = Number(pdPxVal) || 100;
+  return (Number(frameWidthMm) || 140) / pd * pdPixels * 1.15;
+}
+
+function computePdFromCard(cardPxWidth, pupilPx) {
+  if (!cardPxWidth || cardPxWidth <= 0) return null;
+  return Math.round(pupilPx / (cardPxWidth / CARD_WIDTH_MM));
+}
+
+function toggleCalibration() {
+  calMode = !calMode;
+  const btn = document.getElementById("btn-calibrate");
+  const info = document.getElementById("cal-info");
+  const overlay = document.getElementById("cal-overlay");
+  if (calMode) {
+    btn.classList.add("active");
+    btn.textContent = "📏 Exit Calibration";
+    info.classList.remove("hidden");
+    if (mode === "idle") startDemo();
+    updateCalInfo();
+  } else {
+    btn.classList.remove("active");
+    btn.textContent = "📏 Calibrate PD";
+    info.classList.add("hidden");
+    if (overlay) overlay.classList.remove("visible");
+  }
+}
+
+function updateCalInfo() {
+  if (!calMode) return;
+  const pdPx = measurePdPx();
+  const pxPerMm = cardPx / CARD_WIDTH_MM;
+  const estimatedPd = computePdFromCard(cardPx, pdPx) || pdMm;
+  const info = document.getElementById("cal-info");
+  if (!info) return;
+  info.innerHTML =
+    '<div class="cal-row"><span class="cal-label">Card width</span><span class="cal-value">' + cardPx + 'px</span></div>' +
+    '<div class="cal-row"><span class="cal-label">Scale</span><span class="cal-value">' + pxPerMm.toFixed(2) + ' px/mm</span></div>' +
+    '<div class="cal-row"><span class="cal-label">PD (pixels)</span><span class="cal-value">' + pdPx.toFixed(0) + 'px</span></div>' +
+    '<div class="cal-row"><span class="cal-label">Estimated PD</span><span class="cal-value">' + estimatedPd + 'mm</span></div>' +
+    '<p class="cal-hint">Hold a credit card (85.6×54mm) to your forehead. Adjust the slider until the outline matches your card.</p>' +
+    '<div class="cal-actions">' +
+      '<button class="btn primary" id="cal-apply">✅ Apply PD</button>' +
+      '<button class="btn" id="cal-cancel">✖ Cancel</button>' +
+    '</div>';
+  document.getElementById("cal-apply").onclick = function() {
+    pdMm = Math.max(50, Math.min(80, estimatedPd));
+    document.getElementById("pd").value = pdMm;
+    document.getElementById("pd-val").textContent = String(pdMm);
+    updateMeta();
+    toggleCalibration();
+  };
+  document.getElementById("cal-cancel").onclick = toggleCalibration;
+  drawCardCalibrationOverlay();
+}
+
+function drawCardCalibrationOverlay() {
+  var overlay = document.getElementById("cal-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "cal-overlay";
+    var lbl = document.createElement("span");
+    lbl.className = "cal-card-label";
+    lbl.textContent = "Credit card ref (85.6×54mm)";
+    overlay.appendChild(lbl);
+    var stage = document.querySelector(".stage");
+    if (stage) stage.appendChild(overlay);
+  }
+  if (!calMode) { overlay.classList.remove("visible"); return; }
+  overlay.classList.add("visible");
+  var stageEl = document.querySelector(".stage");
+  if (!stageEl) return;
+  var cRect = canvas.getBoundingClientRect();
+  var sRect = stageEl.getBoundingClientRect();
+  var cardH = Math.round(cardPx / CARD_ASPECT);
+  var midX = (face.left[0] + face.right[0]) / 2 * cRect.width;
+  var midY = Math.min(face.left[1], face.right[1]) * cRect.height - cardH * 0.8;
+  overlay.style.left = (cRect.left - sRect.left + midX - cardPx / 2) + "px";
+  overlay.style.top = (cRect.top - sRect.top + Math.max(0, midY)) + "px";
+  overlay.style.width = cardPx + "px";
+  overlay.style.height = cardH + "px";
+}
+
+document.getElementById("btn-calibrate").onclick = toggleCalibration;
 document.getElementById("btn-demo").onclick = startDemo;
 const btnDemoNext = document.getElementById("btn-demo-next");
 if (btnDemoNext) btnDemoNext.onclick = nextDemoFace;
