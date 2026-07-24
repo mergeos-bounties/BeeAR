@@ -897,6 +897,51 @@ document.getElementById("pd").oninput = (e) => {
   updateMeta();
 };
 
+// PD Calibration Wizard
+document.getElementById("btn-calibrate").onclick = () => {
+  document.getElementById("calibrate-modal").classList.remove("hidden");
+  document.getElementById("calibrate-result").style.display = "none";
+  // Pre-fill measured pupil distance from current face landmarks
+  const metrics = TryOn.faceMetricsFromLandmarks(face, canvas.width, canvas.height);
+  document.getElementById("calibrate-pd-px-display").textContent = String(Math.round(metrics.pdPx));
+};
+
+document.getElementById("calibrate-close").onclick = () => {
+  document.getElementById("calibrate-modal").classList.add("hidden");
+};
+
+// Measure pupil distance from current face landmarks
+document.getElementById("calibrate-measure").onclick = () => {
+  const metrics = TryOn.faceMetricsFromLandmarks(face, canvas.width, canvas.height);
+  document.getElementById("calibrate-pd-px-display").textContent = String(Math.round(metrics.pdPx));
+};
+
+// Apply calibration
+document.getElementById("calibrate-apply").onclick = () => {
+  const cardPx = Number(document.getElementById("calibrate-card-px").value);
+  const cardMm = Number(document.getElementById("calibrate-card-mm").value) || TryOn.REFERENCE_CARD_WIDTH_MM;
+  const facePx = Number(document.getElementById("calibrate-pd-px-display").textContent);
+  
+  if (cardPx <= 0 || facePx <= 0 || isNaN(facePx)) {
+    document.getElementById("calibrate-result").style.display = "block";
+    document.getElementById("calibrate-pd-result").textContent = "Invalid input";
+    return;
+  }
+  
+  const result = TryOn.calibrateFromReference(cardPx, cardMm, facePx);
+  if (result.ok) {
+    pdMm = result.pdMm;
+    document.getElementById("pd").value = pdMm;
+    document.getElementById("pd-val").textContent = String(pdMm);
+    document.getElementById("calibrate-result").style.display = "block";
+    document.getElementById("calibrate-pd-result").textContent = String(pdMm) + " mm";
+    updateMeta();
+  } else {
+    document.getElementById("calibrate-result").style.display = "block";
+    document.getElementById("calibrate-pd-result").textContent = "Calibration failed";
+  }
+};
+
 // Update interaction execution pipeline on primary modal acknowledgement
 document.getElementById("consent-ok").onclick = () => {
   const cb = document.getElementById("photo-consent-cb");
