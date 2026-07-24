@@ -64,6 +64,10 @@ class WishlistAdd(BaseModel):
     frame_id: str
 
 
+class WishlistSet(BaseModel):
+    frame_ids: list[str]
+
+
 CATALOG_CACHE_CONTROL = "public, max-age=300, stale-while-revalidate=3600"
 
 
@@ -238,6 +242,14 @@ def api_wishlist_add(session_id: str, body: WishlistAdd) -> dict:
     if not get_frame(body.frame_id):
         raise HTTPException(400, "unknown frame_id")
     row = sess.add_wishlist(session_id, body.frame_id)
+    if not row:
+        raise HTTPException(404, "session not found")
+    return row
+
+
+@app.put("/api/sessions/{session_id}/wishlist")
+def api_wishlist_set(session_id: str, body: WishlistSet) -> dict:
+    row = sess.set_wishlist(session_id, body.frame_ids)
     if not row:
         raise HTTPException(404, "session not found")
     return row

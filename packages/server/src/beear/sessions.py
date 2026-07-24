@@ -60,6 +60,15 @@ def add_wishlist(session_id: str, frame_id: str) -> dict[str, Any] | None:
     return dict(row)
 
 
+def set_wishlist(session_id: str, frame_ids: list[str]) -> dict[str, Any] | None:
+    row = _sessions.get(session_id)
+    if not row:
+        return None
+    row["wishlist"] = list(dict.fromkeys(frame_ids))
+    row["updated_at"] = time.time()
+    return dict(row)
+
+
 def list_sessions(limit: int = 50) -> list[dict[str, Any]]:
     rows = sorted(_sessions.values(), key=lambda r: r.get("updated_at", 0), reverse=True)
     return [dict(r) for r in rows[: max(1, min(limit, 200))]]
