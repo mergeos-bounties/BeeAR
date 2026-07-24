@@ -687,6 +687,7 @@ function loop() {
     ctx.fillText(t("hintIdle"), 40, h / 2);
   }
   if (mode !== "idle") drawGlasses();
+  if (calMode) drawCardCalibrationOverlay();
   raf = requestAnimationFrame(loop);
 }
 
@@ -892,6 +893,11 @@ document.getElementById("btn-gallery").onclick = () => {
 };
 document.getElementById("filter").onchange = (e) => loadCatalog(e.target.value);
 document.getElementById("pd").oninput = (e) => {
+  if (calMode) {
+    cardPx = Math.round(120 + (Number(e.target.value) - 54) * 13);
+    updateCalInfo();
+    return;
+  }
   pdMm = Number(e.target.value) || 64;
   document.getElementById("pd-val").textContent = String(pdMm);
   updateMeta();

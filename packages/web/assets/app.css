@@ -143,3 +143,77 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
   font-size: 0.9rem;
   margin-top: 12px;
 }
+
+/* PD calibration wizard */
+.calibrate-btn {
+  margin-top: 8px;
+  width: 100%;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-color: var(--accent2);
+  color: var(--accent2);
+  background: #0d1528;
+}
+.calibrate-btn.active {
+  background: #1a2744;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.cal-info {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #0d1528;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.cal-info.hidden { display: none; }
+.cal-info .cal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.cal-info .cal-label { color: var(--muted); }
+.cal-info .cal-value { color: var(--accent); font-weight: 600; }
+.cal-info .cal-hint {
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 4px;
+  font-style: italic;
+}
+.cal-info .cal-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.cal-info .cal-actions .btn {
+  font-size: 10px;
+  padding: 4px 8px;
+  flex: 1;
+}
+/* Calibration card overlay on stage */
+#cal-overlay {
+  position: absolute;
+  border: 2px dashed var(--accent);
+  border-radius: 8px;
+  background: rgba(245,197,24,0.08);
+  pointer-events: none;
+  display: none;
+  z-index: 3;
+  transition: none;
+}
+#cal-overlay.visible { display: block; }
+#cal-overlay .cal-card-label {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--accent);
+  background: #000a;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
