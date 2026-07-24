@@ -1,5 +1,5 @@
 {
-  "version": 54,
+  "version": 55,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1810,6 +1810,246 @@
       },
       "render_mode": "glb3d",
       "description": "Rose gold round frames \u2014 catalog SKU cycle 16q"
+    },
+    {
+      "id": "oval_midnight",
+      "name": "Oval Midnight",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "oval",
+      "color": "#1E3A5F",
+      "lens_tint": "rgba(30,58,95,0.22)",
+      "price_cents": 9500,
+      "svg": "round.svg",
+      "glb": "round-tortoise.glb",
+      "fit": {
+        "width_mm": 135,
+        "bridge_mm": 17,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.008,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.003,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Midnight blue oval frames \u2014 catalog expansion SKU"
+    },
+    {
+      "id": "geometric_sunset",
+      "name": "Geometric Sunset",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "geometric",
+      "color": "#D97706",
+      "lens_tint": "rgba(217,119,6,0.20)",
+      "price_cents": 10200,
+      "svg": "hex.svg",
+      "glb": "hex-graphite.glb",
+      "fit": {
+        "width_mm": 137,
+        "bridge_mm": 17,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.009,
+        "z": 0.019
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.003,
+        "pitch": 0.025,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Sunset amber geometric frames \u2014 catalog expansion SKU"
+    },
+    {
+      "id": "shield_crimson",
+      "name": "Shield Crimson",
+      "brand": "BeeAR Active",
+      "category": "glasses",
+      "style": "shield",
+      "color": "#DC2626",
+      "lens_tint": "rgba(220,38,38,0.25)",
+      "price_cents": 11800,
+      "svg": "sport.svg",
+      "glb": "sport-blue.glb",
+      "fit": {
+        "width_mm": 144,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.04,
+        "y": -0.011,
+        "z": 0.021
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": -0.004,
+        "pitch": 0.03,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Crimson shield sports frames \u2014 catalog expansion SKU"
+    },
+    {
+      "id": "butterfly_lilac",
+      "name": "Butterfly Lilac",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "butterfly",
+      "color": "#A855F7",
+      "lens_tint": "rgba(168,85,247,0.18)",
+      "price_cents": 13500,
+      "svg": "cateye.svg",
+      "glb": "cateye-rose.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 16,
+        "temple_mm": 144
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.009,
+        "z": 0.019
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.003,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Lilac butterfly frames \u2014 catalog expansion SKU"
+    },
+    {
+      "id": "rimless_gold",
+      "name": "Rimless Gold",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "rimless",
+      "color": "#D4AF37",
+      "lens_tint": "rgba(212,175,55,0.12)",
+      "price_cents": 14200,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
+      "fit": {
+        "width_mm": 137,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 0.99,
+        "y": -0.007,
+        "z": 0.017
+      },
+      "ar_fit": {
+        "scale": 0.98,
+        "y": -0.002,
+        "pitch": 0.015,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Gold rimless frames \u2014 catalog expansion SKU"
+    },
+    {
+      "id": "square_espresso",
+      "name": "Square Espresso",
+      "brand": "BeeAR Heritage",
+      "category": "glasses",
+      "style": "square",
+      "color": "#3F2A1D",
+      "lens_tint": "rgba(63,42,29,0.16)",
+      "price_cents": 9800,
+      "svg": "wayfarer.svg",
+      "glb": "wayfarer-black.glb",
+      "fit": {
+        "width_mm": 139,
+        "bridge_mm": 18,
+        "temple_mm": 143
+      },
+      "studio_fit": {
+        "scale": 1.01,
+        "y": -0.008,
+        "z": 0.018
+      },
+      "ar_fit": {
+        "scale": 0.99,
+        "y": -0.003,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Espresso brown square frames \u2014 catalog expansion SKU"
+    },
+    {
+      "id": "pilot_emerald",
+      "name": "Pilot Emerald",
+      "brand": "BeeAR Studio",
+      "category": "glasses",
+      "style": "pilot",
+      "color": "#059669",
+      "lens_tint": "rgba(5,150,105,0.24)",
+      "price_cents": 12500,
+      "svg": "aviator.svg",
+      "glb": "aviator-gold.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 16,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.004,
+        "pitch": 0.025,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Emerald green pilot frames \u2014 catalog expansion SKU"
+    },
+    {
+      "id": "rectangle_burgundy",
+      "name": "Rectangle Burgundy",
+      "brand": "BeeAR Heritage",
+      "category": "glasses",
+      "style": "rectangle",
+      "color": "#9F1239",
+      "lens_tint": "rgba(159,18,57,0.20)",
+      "price_cents": 10800,
+      "svg": "rectangle.svg",
+      "glb": "rectangle-frost.glb",
+      "fit": {
+        "width_mm": 141,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.009,
+        "z": 0.019
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.003,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "description": "Burgundy rectangle frames \u2014 catalog expansion SKU"
     }
   ],
   "person_models": [
