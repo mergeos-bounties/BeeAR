@@ -82,6 +82,7 @@
             <input id="pd" type="range" min="54" max="74" step="1" value="64" />
           </label>
           <p class="muted small" id="pd-hint">Calibrate pupil distance for better fit scale</p>
+          <button id="btn-calibrate" class="btn tiny" type="button" style="margin-top:6px;width:100%;">📐 Calibrate PD</button>
         </div>
         <div id="catalog" class="catalog"></div>
         <div class="meta" id="meta">Select a SKU</div>
@@ -105,5 +106,45 @@
     }
   </script>
   <script src="/assets/app.js"></script>
+  <!-- PD Calibration Wizard Modal -->
+  <div id="calibrate-modal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-box">
+      <h3 id="calibrate-title">📐 PD Calibration Wizard</h3>
+      <p class="muted small" id="calibrate-desc">Use a credit card or known-width object to calibrate your PD for accurate frame fit.</p>
+      
+      <div class="calibrate-step" id="calibrate-step-1">
+        <p><strong>Step 1:</strong> Hold a credit card (85.6mm wide) against your face below your eyes.</p>
+        <p class="muted small">Use camera or demo face. The card width helps us calculate your PD.</p>
+      </div>
+      
+      <div class="calibrate-inputs">
+        <div class="calibrate-row">
+          <label>Card width (pixels):</label>
+          <input id="calibrate-card-px" type="number" min="1" max="640" value="200" placeholder="px" />
+        </div>
+        <div class="calibrate-row">
+          <label>Card width (mm):</label>
+          <input id="calibrate-card-mm" type="number" min="1" max="200" step="0.1" value="85.6" />
+          <span class="muted small">default: 85.6mm (credit card)</span>
+        </div>
+        <div class="calibrate-row">
+          <label>Pupil distance (px):</label>
+          <span id="calibrate-pd-px-display" class="calibrate-value">—</span>
+          <button id="calibrate-measure" class="btn tiny" type="button">📏 Measure from face</button>
+        </div>
+      </div>
+      
+      <div class="calibrate-result" id="calibrate-result" style="display:none">
+        <p><strong>Calculated PD: <span id="calibrate-pd-result" class="calibrate-result-value">64</span> mm</strong></p>
+        <p class="muted small">Your PD has been set. Close to see the updated fit.</p>
+      </div>
+      
+      <div class="calibrate-actions">
+        <button id="calibrate-apply" class="btn primary" type="button">✅ Apply</button>
+        <button id="calibrate-close" class="btn" type="button">Close</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
