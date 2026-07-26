@@ -3,6 +3,40 @@
 export const DEFAULT_PD_MM = 64.0;
 
 /**
+ * Credit card standard width in mm (ISO/IEC 7810 ID-1).
+ */
+export const REFERENCE_CARD_WIDTH_MM = 85.6;
+
+/**
+ * Calibrate PD (mm) from a known reference object width.
+ * @param {number} referencePx - measured width of the reference object in pixels
+ * @param {number} referenceMm - known width of the reference object in mm
+ * @param {number} facePx - measured inter-pupil distance in pixels
+ * @returns {{ pdMm: number, pxPerMm: number, ok: boolean }}
+ */
+export function calibrateFromReference(referencePx, referenceMm = REFERENCE_CARD_WIDTH_MM, facePx) {
+  if (referencePx <= 0 || facePx <= 0) {
+    return { pdMm: DEFAULT_PD_MM, pxPerMm: 0, ok: false };
+  }
+  const pxPerMm = referencePx / referenceMm;
+  const pdMm = clampPd(facePx / pxPerMm);
+  return { pdMm, pxPerMm: round2(pxPerMm), ok: true };
+}
+
+/**
+ * Estimate PD from face landmarks and a reference pixel-to-mm ratio.
+ * @param {number} facePx - inter-pupil distance in pixels
+ * @param {number} pxPerMm - pixels per mm from calibration
+ * @returns {{ pdMm: number, ok: boolean }}
+ */
+export function estimatePd(facePx, pxPerMm) {
+  if (facePx <= 0 || pxPerMm <= 0) {
+    return { pdMm: DEFAULT_PD_MM, ok: false };
+  }
+  return { pdMm: clampPd(facePx / pxPerMm), ok: true };
+}
+
+/**
  * @param {object} frame catalog frame with fit.width_mm / bridge_mm
  * @param {object} [opts]
  * @param {number} [opts.pupilDistancePx=120]
