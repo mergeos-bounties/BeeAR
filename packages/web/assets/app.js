@@ -575,7 +575,12 @@ function updateMeta() {
   }
   let text = `${selected.name} · ${selected.fit?.width_mm || "?"}mm · PD ${pdMm}mm`;
   if (selected.glb_url) text += " · GLB";
-  if (compareMode && selectedB) text += `  |  B: ${selectedB.name}`;
+  if (compareMode && selectedB) {
+    text += `  |  ⓐ ${selected.name} vs ⓑ ${selectedB.name}`;
+    metaEl.style.borderLeft = "2px solid #f5c518";
+  } else {
+    metaEl.style.borderLeft = "";
+  }
   metaEl.textContent = text;
 }
 
@@ -883,7 +888,21 @@ if (btnCloudEl) {
 document.getElementById("btn-compare").onclick = () => {
   compareMode = !compareMode;
   document.getElementById("btn-compare").classList.toggle("active", compareMode);
-  if (compareMode && !selectedB && frames[1]) selectFrame(frames[1].id, "B");
+  document.getElementById("app").classList.toggle("compare-active", compareMode);
+  if (compareMode) {
+    // Enter compare mode — if no second frame selected, pick next available
+    if (!selectedB && frames.length > 1) {
+      const bIdx = selected ? frames.findIndex((f) => f.id === selected.id) : 0;
+      const nextIdx = (bIdx + 1) % frames.length;
+      selectFrame(frames[nextIdx].id, "B");
+    } else if (!selectedB && frames.length === 1) {
+      // Only one frame — duplicate it for comparison
+      selectFrame(frames[0].id, "B");
+    }
+    hintEl.textContent = "Compare mode — tap a different frame in catalog for slot B";
+  } else {
+    hintEl.textContent = mode === "demo" ? t("hintDemo") : t("hintCam");
+  }
   updateMeta();
 };
 document.getElementById("btn-gallery").onclick = () => {

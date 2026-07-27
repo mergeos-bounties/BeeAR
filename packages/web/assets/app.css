@@ -77,6 +77,10 @@ html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
   min-height: 56px;
 }
 .sku.on-b { border-color: var(--accent); box-shadow: 0 0 0 1px #f5c51855; }
+.sku.on-b h3::after { content: " ⓑ"; color: var(--accent); font-size: 10px; }
+.sku.on h3::after { content: " ⓐ"; color: var(--accent2); font-size: 10px; }
+.compare-active .sku { border-left: 2px solid transparent; }
+.compare-active .sku:hover { border-left-color: var(--accent); }
 .pd-panel {
   padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 12px;
 }

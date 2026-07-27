@@ -351,28 +351,78 @@ function drawGlassesOverlay(ctx, face, selectedA, selectedB, compareMode, pdMm) 
   const m = faceMetricsFromLandmarks(face, w, h);
 
   if (compareMode && selectedA && selectedB) {
+    // Subtle half-tint backgrounds to distinguish sides
+    ctx.save();
+    ctx.fillStyle = "rgba(91,140,255,0.04)";
+    ctx.fillRect(0, 0, w / 2, h);
+    ctx.restore();
+    ctx.save();
+    ctx.fillStyle = "rgba(245,197,24,0.04)";
+    ctx.fillRect(w / 2, 0, w / 2, h);
+    ctx.restore();
+
+    // Frame A on left half
     ctx.save();
     ctx.beginPath();
     ctx.rect(0, 0, w / 2, h);
     ctx.clip();
     drawFrameAt(ctx, selectedA, m.midX, m.midY, m.angle, m.pdPx, pdMm, 0);
     ctx.restore();
+
+    // Frame B on right half
     ctx.save();
     ctx.beginPath();
     ctx.rect(w / 2, 0, w / 2, h);
     ctx.clip();
     drawFrameAt(ctx, selectedB, m.midX, m.midY, m.angle, m.pdPx, pdMm, 0);
     ctx.restore();
-    ctx.strokeStyle = "#f5c518aa";
+
+    // Center divider — dashed gold line
+    ctx.save();
+    ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = "#f5c518cc";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(w / 2, 0);
     ctx.lineTo(w / 2, h);
     ctx.stroke();
-    ctx.fillStyle = "#f5c518";
-    ctx.font = "12px system-ui";
-    ctx.fillText("A", 12, 20);
-    ctx.fillText("B", w / 2 + 12, 20);
+    ctx.restore();
+
+    // Divider glow
+    ctx.save();
+    ctx.shadowColor = "#f5c518";
+    ctx.shadowBlur = 8;
+    ctx.strokeStyle = "rgba(245,197,24,0.2)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(w / 2, 0);
+    ctx.lineTo(w / 2, h);
+    ctx.stroke();
+    ctx.restore();
+
+    // Labels: frame name badges
+    ctx.save();
+    ctx.font = "bold 11px system-ui";
+    ctx.textBaseline = "top";
+    // A label
+    const aName = selectedA.name || "A";
+    const aLabelW = ctx.measureText("A: " + aName).width + 16;
+    const labelH = 24;
+    ctx.fillStyle = "rgba(91,140,255,0.85)";
+    roundRect(ctx, 8, 8, aLabelW, labelH, 6);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.fillText("A: " + aName, 16, 13);
+    // B label
+    const bName = selectedB.name || "B";
+    const bLabelW = ctx.measureText("B: " + bName).width + 16;
+    const bX = w / 2 + 8;
+    ctx.fillStyle = "rgba(245,197,24,0.85)";
+    roundRect(ctx, bX, 8, bLabelW, labelH, 6);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.fillText("B: " + bName, bX + 8, 13);
+    ctx.restore();
   } else if (selectedA) {
     drawFrameAt(ctx, selectedA, m.midX, m.midY, m.angle, m.pdPx, pdMm, 0);
   }
