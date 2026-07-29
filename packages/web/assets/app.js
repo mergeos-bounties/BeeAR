@@ -24,6 +24,11 @@ let svgCache = {};
 let raf = 0;
 let pdMm = TryOn?.DEFAULT_PD_MM || 64;
 let lang = "en";
+try {
+  lang = localStorage.getItem("beear_lang") || "en";
+} catch (_) {
+  lang = "en";
+}
 let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
 let meshBusy = false;
@@ -117,6 +122,9 @@ const I18N = {
   en: {
     tagline: "Virtual try-on · glasses & accessories",
     catalog: "Catalog",
+    all: "All",
+    glasses: "Glasses",
+    accessories: "Accessories",
     pd: "PD (mm)",
     pdHint: "Calibrate pupil distance for better fit scale",
     select: "Select a SKU",
@@ -126,6 +134,7 @@ const I18N = {
     compare: "Compare",
     snap: "Snapshot",
     gallery: "Gallery",
+    person3d: "🧑 3D Person",
     consentTitle: "Camera consent",
     consentBody:
       "BeeAR uses the camera only in your browser for try-on. Video is not uploaded to the server.",
@@ -140,10 +149,22 @@ const I18N = {
     cloudLocal: "🔒 Local Only",
     cloudServer: "☁️ Cloud Enabled",
     photoConsentLabel: "Allow face photo server upload & cloud features",
+    emptyCatalog: "No frames match the current filter.",
+    emptySuggestion: "Try adjusting filters or check your connection.",
+    loadingCatalog: "Loading catalog...",
+    starting: "Starting BeeAR demo...",
+    catalogError: "Catalog error",
+    apiError: "API error",
+    serverHint: "is beear serve running?",
+    cameraBlocked: "Camera blocked - demo.",
+    noSnapshots: "No snapshots yet",
   },
   vi: {
     tagline: "Thử kính & phụ kiện ảo",
     catalog: "Danh mục",
+    all: "Tất cả",
+    glasses: "Kính",
+    accessories: "Phụ kiện",
     pd: "Khoảng đồng tử PD (mm)",
     pdHint: "Hiệu chỉnh PD để scale kính chính xác hơn",
     select: "Chọn mẫu",
@@ -153,6 +174,7 @@ const I18N = {
     compare: "So sánh",
     snap: "Chụp",
     gallery: "Thư viện",
+    person3d: "🧑 Nhân vật 3D",
     consentTitle: "Đồng ý camera",
     consentBody:
       "BeeAR chỉ dùng camera trên trình duyệt để thử đồ. Video không gửi lên server.",
@@ -167,6 +189,15 @@ const I18N = {
     cloudLocal: "🔒 Chỉ lưu cục bộ",
     cloudServer: "☁️ Đã bật Cloud",
     photoConsentLabel: "Cho phép tải ảnh mặt lên server & dùng tính năng đám mây",
+    emptyCatalog: "Không có mẫu nào khớp với bộ lọc hiện tại.",
+    emptySuggestion: "Hãy đổi bộ lọc hoặc kiểm tra kết nối.",
+    loadingCatalog: "Đang tải danh mục...",
+    starting: "Đang khởi động BeeAR...",
+    catalogError: "Lỗi danh mục",
+    apiError: "Lỗi API",
+    serverHint: "beear serve đã chạy chưa?",
+    cameraBlocked: "Camera bị chặn - dùng demo.",
+    noSnapshots: "Chưa có ảnh chụp",
   },
 };
 
@@ -175,8 +206,12 @@ function t(k) {
 }
 
 function applyLang() {
+  document.documentElement.lang = lang;
   document.getElementById("tagline").textContent = t("tagline");
   document.getElementById("lbl-catalog").textContent = t("catalog");
+  document.querySelector('#filter option[value=""]').textContent = t("all");
+  document.querySelector('#filter option[value="glasses"]').textContent = t("glasses");
+  document.querySelector('#filter option[value="accessory"]').textContent = t("accessories");
   document.getElementById("lbl-pd").childNodes[0].textContent = t("pd") + " ";
   document.getElementById("pd-hint").textContent = t("pdHint");
   document.getElementById("btn-cam").textContent = t("cam");
@@ -187,6 +222,7 @@ function applyLang() {
   document.getElementById("btn-snap").textContent = t("snap");
   document.getElementById("btn-gallery").textContent = t("gallery");
   document.getElementById("btn-lang").textContent = lang === "en" ? "VI" : "EN";
+  document.getElementById("btn-3d").textContent = t("person3d");
   document.getElementById("consent-title").textContent = t("consentTitle");
   document.getElementById("consent-body").textContent = t("consentBody");
   document.getElementById("consent-ok").textContent = t("consentOk");
@@ -201,6 +237,7 @@ function applyLang() {
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
   else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
   if (!selected) metaEl.textContent = t("select");
+  if (mode === "idle") hintEl.textContent = t("hintIdle");
 }
 
 function loadDemoImages() {
@@ -499,7 +536,7 @@ async function ensureSession() {
 
 async function loadCatalog(category = "") {
   const q = category ? `?category=${encodeURIComponent(category)}` : "";
-  setStageLoad("Loading catalog…");
+  setStageLoad(t("loadingCatalog"));
   try {
     const data = await api("/api/catalog" + q);
     frames = data.frames || [];
@@ -517,7 +554,7 @@ async function loadCatalog(category = "") {
 function renderCatalog() {
   catalogEl.innerHTML = "";
   if (frames.length === 0) {
-    catalogEl.innerHTML = `<p class="empty-state">No frames match the current filter.</p><p class="suggestion">Try adjusting filters or check your connection.</p>`;
+    catalogEl.innerHTML = `<p class="empty-state">${t("emptyCatalog")}</p><p class="suggestion">${t("emptySuggestion")}</p>`;
     return;
   }
   frames.forEach((f) => {
@@ -748,7 +785,7 @@ async function startCameraAfterConsent() {
       hintEl.textContent = t("hintCam") + " · geometric fallback";
     }
   } catch (e) {
-    hintEl.textContent = "Camera blocked — demo. " + e.message;
+    hintEl.textContent = `${t("cameraBlocked")} ${e.message}`;
     startDemo();
   }
 }
@@ -836,7 +873,7 @@ async function snapshot() {
 function renderGallery() {
   const items = loadGallery();
   if (!items.length) {
-    galleryEl.innerHTML = '<p class="muted small">No snapshots yet</p>';
+    galleryEl.innerHTML = `<p class="muted small">${t("noSnapshots")}</p>`;
     return;
   }
   galleryEl.innerHTML = items
@@ -862,6 +899,9 @@ if (btnDemoNext) btnDemoNext.onclick = nextDemoFace;
 document.getElementById("btn-snap").onclick = snapshot;
 document.getElementById("btn-lang").onclick = () => {
   lang = lang === "en" ? "vi" : "en";
+  try {
+    localStorage.setItem("beear_lang", lang);
+  } catch (_) {}
   applyLang();
   updateMeta();
 };
@@ -908,14 +948,14 @@ document.getElementById("consent-ok").onclick = () => {
 
 document.getElementById("consent-demo").onclick = startDemo;
 
-setStageLoad("Starting BeeAR demo…");
+setStageLoad(t("starting"));
 applyLang();
 Promise.all([
   loadDemoImages(),
   loadCatalog().catch((e) => {
     const msg = isStaticDemo()
-      ? "Catalog error: " + e.message
-      : "API error: " + e.message + " — is beear serve running?";
+      ? `${t("catalogError")}: ${e.message}`
+      : `${t("apiError")}: ${e.message} - ${t("serverHint")}`;
     hintEl.textContent = msg;
     setStageLoad(msg);
   }),
