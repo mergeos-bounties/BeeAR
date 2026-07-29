@@ -93,3 +93,20 @@ def test_search_aviator():
     hits = search_frames("mirror")
     ids = [f["id"] for f in hits]
     assert "aviator_gold_mirror" in ids, "search_frames('mirror') should return the mirror SKU"
+
+
+def test_catalog_has_seasonal_frame_skus():
+    seasonal_ids = {
+        "autumn_havana_wayfarer",
+        "winter_frost_rectangle",
+        "spring_sage_round",
+        "summer_coral_cateye",
+    }
+
+    for frame_id in seasonal_ids:
+        frame = get_frame(frame_id)
+        assert frame is not None
+        assert frame["brand"] == "BeeAR Seasons"
+        assert frame["has_svg"] is True
+        assert frame["has_glb"] is True
+        assert frame["glb_url"].startswith("/catalog/glb/")

@@ -1,5 +1,5 @@
 {
-  "version": 54,
+  "version": 55,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -251,6 +251,82 @@
       },
       "glb": "rectangle-frost.glb",
       "render_mode": "glb3d"
+    },
+    {
+      "id": "autumn_havana_wayfarer",
+      "name": "Autumn Havana Wayfarer",
+      "brand": "BeeAR Seasons",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#7C3F1D",
+      "lens_tint": "rgba(90,55,30,0.24)",
+      "price_cents": 8600,
+      "svg": "wayfarer.svg",
+      "fit": {
+        "width_mm": 138,
+        "bridge_mm": 20,
+        "temple_mm": 145
+      },
+      "glb": "wayfarer-black.glb",
+      "render_mode": "glb3d",
+      "description": "Warm havana seasonal colorway for fall try-on collections"
+    },
+    {
+      "id": "winter_frost_rectangle",
+      "name": "Winter Frost Rectangle",
+      "brand": "BeeAR Seasons",
+      "category": "glasses",
+      "style": "rectangle",
+      "color": "#D8E7F3",
+      "lens_tint": "rgba(190,220,245,0.2)",
+      "price_cents": 8200,
+      "svg": "rectangle.svg",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "glb": "rectangle-frost.glb",
+      "render_mode": "glb3d",
+      "description": "Frosted winter rectangle SKU with pale blue tint"
+    },
+    {
+      "id": "spring_sage_round",
+      "name": "Spring Sage Round",
+      "brand": "BeeAR Seasons",
+      "category": "glasses",
+      "style": "round",
+      "color": "#7A9B76",
+      "lens_tint": "rgba(110,150,105,0.18)",
+      "price_cents": 7600,
+      "svg": "round.svg",
+      "fit": {
+        "width_mm": 132,
+        "bridge_mm": 19,
+        "temple_mm": 142
+      },
+      "glb": "round-tortoise.glb",
+      "render_mode": "glb3d",
+      "description": "Soft sage round frame for spring catalog merchandising"
+    },
+    {
+      "id": "summer_coral_cateye",
+      "name": "Summer Coral Cat-Eye",
+      "brand": "BeeAR Seasons",
+      "category": "glasses",
+      "style": "cat_eye",
+      "color": "#E06F5F",
+      "lens_tint": "rgba(230,110,95,0.18)",
+      "price_cents": 8900,
+      "svg": "cateye.svg",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 17,
+        "temple_mm": 140
+      },
+      "glb": "cateye-rose.glb",
+      "render_mode": "glb3d",
+      "description": "Bright coral cat-eye SKU for summer style collections"
     },
     {
       "id": "browline_classic",
