@@ -1,0 +1,332 @@
+## Root-Cause Analysis
+
+The issue stems from hardcoded English string literals across the chrome UI (headers, navigation menus, try-on controls, and status indicators) without a standardized internationalization (i18n) framework. Users attempting to view the UI in Vietnamese (`vi`) currently have no mechanism to switch language contexts dynamically or persist their language preference across sessions.
+
+Key technical challenges addressed:
+1. **Lack of Dynamic Locale State**: Chrome UI components do not listen to an i18n context or locale store.
+2. **Missing Localized Dictionaries**: Vietnamese (`vi`) translation strings were absent for header navigation, button tooltips, AR status feedback, and setting toggles.
+3. **Session Persistence & Preference Fallbacks**: Without `localStorage` binding and `navigator.language` auto-detection, reloads reset language preferences.
+
+---
+
+## Boundary Conditions & Risk Analysis
+
+* **Missing Translation Key Fallback**: If a key exists in English (`en`) but is omitted in Vietnamese (`vi`), the i18n helper must gracefully fall back to the English string without throwing runtime rendering errors or returning `undefined`.
+* **Parameter Interpolation**: Handles nested key paths (e.g., `chrome.header.title`) and dynamic placeholder replacements (e.g., `{count}`).
+* **Storage Access Restrictions**: Encloses `localStorage` interactions in `try/catch` blocks to prevent exceptions in sandboxed or privacy-restricted environments (e.g., disabled third-party cookies or incognito mode).
+* **Backward Compatibility**: Preserves default locale as `'en'` so existing tests and workflows remain unaffected.
+
+---
+
+## Direct File Modifications
+
+### 1. Translation Dictionaries (`web/src/i18n/translations.ts`)
+
+```typescript filepath: web/src/i18n/translations.ts
+export type SupportedLocale = 'en' | 'vi';
+
+export interface TranslationSchema {
+  chrome: {
+    title: string;
+    subtitle: string;
+    nav: {
+      tryOn: string;
+      catalog: string;
+      settings: string;
+      help: string;
+    };
+    language: {
+      toggleLabel: string;
+      en: string;
+      vi: string;
+    };
+    controls: {
+      snapshot: string;
+      resetCamera: string;
+      toggleLighting: string;
+      fullscreen: string;
+    };
+    status: {
+      cameraLoading: string;
+      cameraReady: string;
+      cameraError: string;
+      faceDetected: string;
+      searchingFace: string;
+    };
+  };
+}
+
+export const translations: Record<SupportedLocale, TranslationSchema> = {
+  en: {
+    chrome: {
+      title: 'BeeAR',
+      subtitle: 'Virtual Try-On for Glasses & Accessories',
+      nav: {
+        tryOn: 'Virtual Try-On',
+        catalog: 'Catalog',
+        settings: 'Settings',
+        help: 'Help & Support',
+      },
+      language: {
+        toggleLabel: 'Change Language',
+        en: 'English',
+        vi: 'Tiếng Việt',
+      },
+      controls: {
+        snapshot: 'Take Snapshot',
+        resetCamera: 'Reset View',
+        toggleLighting: 'Toggle Lighting',
+        fullscreen: 'Fullscreen',
+      },
+      status: {
+        cameraLoading: 'Initializing camera...',
+        cameraReady: 'Camera active',
+        cameraError: 'Camera access denied or unavailable',
+        faceDetected: 'Face tracking active',
+        searchingFace: 'Aligning face in frame...',
+      },
+    },
+  },
+  vi: {
+    chrome: {
+      title: 'BeeAR',
+      subtitle: 'Thử Mắt Kính & Phụ Kiện Ảo',
+      nav: {
+        tryOn: 'Thử Đồ Ảo',
+        catalog: 'Danh Mục',
+        settings: 'Cài Đặt',
+        help: 'Trợ Giúp & Hỗ Trợ',
+      },
+      language: {
+        toggleLabel: 'Đổi Ngôn Ngữ',
+        en: 'English',
+        vi: 'Tiếng Việt',
+      },
+      controls: {
+        snapshot: 'Chụp Ảnh',
+        resetCamera: 'Đặt Lại Góc Nhìn',
+        toggleLighting: 'Bật/Tắt Ánh Sáng',
+        fullscreen: 'Toàn Màn Hình',
+      },
+      status: {
+        cameraLoading: 'Đang khởi tạo máy ảnh...',
+        cameraReady: 'Máy ảnh hoạt động',
+        cameraError: 'Không thể truy cập máy ảnh',
+        faceDetected: 'Đã nhận diện khuôn mặt',
+        searchingFace: 'Đang căn chỉnh khuôn mặt...',
+      },
+    },
+  },
+};
+```
+
+---
+
+### 2. i18n Context Provider (`web/src/i18n/I18nContext.tsx`)
+
+```tsx filepath: web/src/i18n/I18nContext.tsx
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { translations, SupportedLocale, TranslationSchema } from './translations';
+
+const LOCALE_STORAGE_KEY = 'beear_chrome_locale';
+
+interface I18nContextType {
+  locale: SupportedLocale;
+  setLocale: (locale: SupportedLocale) => void;
+  toggleLocale: () => void;
+  t: (keyPath: string, params?: Record<string, string | number>) => string;
+}
+
+const I18nContext = createContext<I18nContextType | undefined>(undefined);
+
+const getInitialLocale = (): SupportedLocale => {
+  try {
+    const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY) as SupportedLocale;
+    if (savedLocale && (savedLocale === 'en' || savedLocale === 'vi')) {
+      return savedLocale;
+    }
+  } catch {
+    // Graceful fallback if localStorage is restricted
+  }
+
+  if (typeof navigator !== 'undefined' && navigator.language) {
+    if (navigator.language.toLowerCase().startsWith('vi')) {
+      return 'vi';
+    }
+  }
+
+  return 'en';
+};
+
+export const I18nProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [locale, setLocaleState] = useState<SupportedLocale>(getInitialLocale);
+
+  const setLocale = (newLocale: SupportedLocale) => {
+    setLocaleState(newLocale);
+    try {
+      localStorage.setItem(LOCALE_STORAGE_KEY, newLocale);
+    } catch {
+      // Ignore storage errors
+    }
+  };
+
+  const toggleLocale = () => {
+    setLocale(locale === 'en' ? 'vi' : 'en');
+  };
+
+  const t = (keyPath: string, params?: Record<string, string | number>): string => {
+    const keys = keyPath.split('.');
+    
+    const resolveKey = (dict: Record<string, any>): string | undefined => {
+      let current: any = dict;
+      for (const k of keys) {
+        if (current && typeof current === 'object' && k in current) {
+          current = current[k];
+        } else {
+          return undefined;
+        }
+      }
+      return typeof current === 'string' ? current : undefined;
+    };
+
+    // Primary resolution with fallback to English
+    let value = resolveKey(translations[locale]) ?? resolveKey(translations.en) ?? keyPath;
+
+    if (params) {
+      Object.entries(params).forEach(([pKey, pVal]) => {
+        value = value.replace(new RegExp(`\\{${pKey}\\}`, 'g'), String(pVal));
+      });
+    }
+
+    return value;
+  };
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = locale;
+    }
+  }, [locale]);
+
+  return (
+    <I18nContext.Provider value={{ locale, setLocale, toggleLocale, t }}>
+      {children}
+    </I18nContext.Provider>
+  );
+};
+
+export const useI18n = (): I18nContextType => {
+  const context = useContext(I18nContext);
+  if (!context) {
+    throw new Error('useI18n must be used within an I18nProvider');
+  }
+  return context;
+};
+```
+
+---
+
+### 3. Language Toggle UI Component (`web/src/components/LanguageToggle.tsx`)
+
+```tsx filepath: web/src/components/LanguageToggle.tsx
+import React from 'react';
+import { useI18n } from '../i18n/I18nContext';
+
+export const LanguageToggle: React.FC = () => {
+  const { locale, setLocale, t } = useI18n();
+
+  return (
+    <div 
+      className="beear-lang-toggle flex items-center bg-gray-800/60 rounded-lg p-1 border border-gray-700/50"
+      aria-label={t('chrome.language.toggleLabel')}
+    >
+      <button
+        type="button"
+        onClick={() => setLocale('en')}
+        className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all duration-200 ${
+          locale === 'en'
+            ? 'bg-amber-500 text-gray-900 shadow-sm'
+            : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+        }`}
+        aria-pressed={locale === 'en'}
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        onClick={() => setLocale('vi')}
+        className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all duration-200 ${
+          locale === 'vi'
+            ? 'bg-amber-500 text-gray-900 shadow-sm'
+            : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+        }`}
+        aria-pressed={locale === 'vi'}
+      >
+        VI
+      </button>
+    </div>
+  );
+};
+```
+
+---
+
+### 4. Localized Chrome Header (`web/src/components/Header.tsx`)
+
+```tsx filepath: web/src/components/Header.tsx
+import React from 'react';
+import { useI18n } from '../i18n/I18nContext';
+import { LanguageToggle } from './LanguageToggle';
+
+export const Header: React.FC = () => {
+  const { t } = useI18n();
+
+  return (
+    <header className="w-full bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between shadow-md">
+      <div className="flex items-center space-x-3">
+        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-bold text-gray-900 text-lg">
+          B
+        </div>
+        <div>
+          <h1 className="text-lg font-bold text-white tracking-wide">
+            {t('chrome.title')}
+          </h1>
+          <p className="text-xs text-gray-400">
+            {t('chrome.subtitle')}
+          </p>
+        </div>
+      </div>
+
+      <nav className="hidden md:flex items-center space-x-6">
+        <a href="#tryon" className="text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors">
+          {t('chrome.nav.tryOn')}
+        </a>
+        <a href="#catalog" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+          {t('chrome.nav.catalog')}
+        </a>
+        <a href="#settings" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+          {t('chrome.nav.settings')}
+        </a>
+        <a href="#help" className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+          {t('chrome.nav.help')}
+        </a>
+      </nav>
+
+      <div className="flex items-center space-x-4">
+        <LanguageToggle />
+      </div>
+    </header>
+  );
+};
+```
+
+---
+
+## Acceptance Verification
+
+1. **Language Switching**:
+   - Clicking `EN` sets the UI text to English ("Virtual Try-On for Glasses & Accessories").
+   - Clicking `VI` dynamically re-renders all chrome navigation strings to Vietnamese ("Thử Mắt Kính & Phụ Kiện Ảo").
+2. **Persistence**:
+   - Setting language preference to `VI` saves `beear_chrome_locale: "vi"` in `localStorage`. Page refreshes maintain Vietnamese context.
+3. **Fallback Safety**:
+   - Querying unmapped translation paths safely resolves to English default or key path, preventing UI crashes.
