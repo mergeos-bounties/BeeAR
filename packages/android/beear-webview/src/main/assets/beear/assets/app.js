@@ -23,11 +23,20 @@ let compareMode = false;
 let svgCache = {};
 let raf = 0;
 let pdMm = TryOn?.DEFAULT_PD_MM || 64;
+const LANG_KEY = "beear_lang";
 let lang = "en";
 let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
 let meshBusy = false;
 let sessionId = null;
+try {
+  const savedLang = localStorage.getItem(LANG_KEY);
+  if (savedLang === "en" || savedLang === "vi") {
+    lang = savedLang;
+  } else if (/^vi/i.test((globalThis.navigator?.language || "").trim())) {
+    lang = "vi";
+  }
+} catch (_) {}
 const threeState = {
   ready: false,
   failed: false,
@@ -90,6 +99,10 @@ const I18N = {
     trackGeo: "tracking: geometric",
     trackMp: "tracking: mediapipe",
     trackDemo: "tracking: demo photo",
+    emptyCatalog: "No frames match the current filter.",
+    catalogSuggestion: "Try adjusting filters or check your connection.",
+    noSnapshots: "No snapshots yet",
+    cameraBlocked: "Camera blocked — demo.",
   },
   vi: {
     tagline: "Thử kính & phụ kiện ảo",
@@ -114,6 +127,10 @@ const I18N = {
     trackGeo: "tracking: hình học",
     trackMp: "tracking: mediapipe",
     trackDemo: "tracking: ảnh demo",
+    emptyCatalog: "Không có khung nào phù hợp với bộ lọc hiện tại.",
+    catalogSuggestion: "Hãy thử thay đổi bộ lọc hoặc kiểm tra kết nối.",
+    noSnapshots: "Chưa có ảnh chụp nào",
+    cameraBlocked: "Camera bị chặn — chuyển sang chế độ demo.",
   },
 };
 
@@ -122,6 +139,7 @@ function t(k) {
 }
 
 function applyLang() {
+  document.documentElement.setAttribute("lang", lang);
   document.getElementById("tagline").textContent = t("tagline");
   document.getElementById("lbl-catalog").textContent = t("catalog");
   document.getElementById("lbl-pd").childNodes[0].textContent = t("pd") + " ";
@@ -141,6 +159,14 @@ function applyLang() {
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
   else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
   if (!selected) metaEl.textContent = t("select");
+}
+
+function setLang(nextLang) {
+  lang = nextLang === "vi" ? "vi" : "en";
+  try {
+    localStorage.setItem(LANG_KEY, lang);
+  } catch (_) {}
+  applyLang();
 }
 
 function loadDemoImages() {
@@ -433,6 +459,10 @@ async function loadCatalog(category = "") {
 
 function renderCatalog() {
   catalogEl.innerHTML = "";
+  if (frames.length === 0) {
+    catalogEl.innerHTML = `<p class="empty-state">${t("emptyCatalog")}</p><p class="suggestion">${t("catalogSuggestion")}</p>`;
+    return;
+  }
   frames.forEach((f) => {
     const el = document.createElement("div");
     let cls = "sku";
@@ -655,7 +685,7 @@ async function startCameraAfterConsent() {
       hintEl.textContent = t("hintCam") + " · geometric fallback";
     }
   } catch (e) {
-    hintEl.textContent = "Camera blocked — demo. " + e.message;
+    hintEl.textContent = `${t("cameraBlocked")} ${e.message}`;
     startDemo();
   }
 }
@@ -725,7 +755,7 @@ function snapshot() {
 function renderGallery() {
   const items = loadGallery();
   if (!items.length) {
-    galleryEl.innerHTML = '<p class="muted small">No snapshots yet</p>';
+    galleryEl.innerHTML = `<p class="muted small">${t("noSnapshots")}</p>`;
     return;
   }
   galleryEl.innerHTML = items
@@ -750,8 +780,7 @@ const btnDemoNext = document.getElementById("btn-demo-next");
 if (btnDemoNext) btnDemoNext.onclick = nextDemoFace;
 document.getElementById("btn-snap").onclick = snapshot;
 document.getElementById("btn-lang").onclick = () => {
-  lang = lang === "en" ? "vi" : "en";
-  applyLang();
+  setLang(lang === "en" ? "vi" : "en");
   updateMeta();
 };
 document.getElementById("btn-compare").onclick = () => {
