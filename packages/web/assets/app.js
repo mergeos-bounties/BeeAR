@@ -516,10 +516,15 @@ async function loadCatalog(category = "") {
 
 function renderCatalog() {
   catalogEl.innerHTML = "";
-  if (frames.length === 0) {
-    catalogEl.innerHTML = `<p class="empty-state">No frames match the current filter.</p><p class="suggestion">Try adjusting filters or check your connection.</p>`;
+  if (!frames.length) {
+    catalogEl.className = "catalog catalog-empty";
+    catalogEl.innerHTML = `
+      <div class="empty-icon">🔍</div>
+      <p class="empty-title">No frames found</p>
+      <p class="empty-hint">Try selecting a different category, or check back later for new arrivals.</p>`;
     return;
   }
+  catalogEl.className = "catalog";
   frames.forEach((f) => {
     const el = document.createElement("div");
     let cls = "sku";
