@@ -8,6 +8,9 @@ export {
   landmarkBox,
   compareFrames,
   faceMetricsFromLandmarks,
+  faceMetricsFromMesh,
+  MP_LANDMARKS,
+  MP_LANDMARK_GROUPS,
 } from "./fit.js";
 export { paintFrameShape, roundRect } from "./paint.js";
 export { drawFrameAt, drawGlassesOverlay } from "./overlay.js";

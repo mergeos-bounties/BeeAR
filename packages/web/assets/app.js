@@ -199,7 +199,12 @@ function applyLang() {
   if (lblPhoto) lblPhoto.textContent = t("photoConsentLabel");
 
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
-  else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
+  else if (tracking === "mediapipe") {
+    const pts = face.landmarks?.length;
+    trackBadge.textContent = t("trackMp") + (pts ? ` · ${pts} pts` : "");
+  } else {
+    trackBadge.textContent = t("trackGeo");
+  }
   if (!selected) metaEl.textContent = t("select");
 }
 
@@ -670,6 +675,8 @@ function loop() {
     ctx.drawImage(video, 0, 0, w, h);
     if (tracking !== "mediapipe") {
       face.t += 0.03;
+      // Clear any latent MediaPipe landmarks — use geometric fallback
+      delete face.landmarks;
       const j = Math.sin(face.t) * 0.002;
       face.left = [0.38 + j, 0.42];
       face.right = [0.62 + j, 0.42];
@@ -710,15 +717,18 @@ function initMediaPipe() {
     faceMesh.onResults((results) => {
       const lm = results.multiFaceLandmarks && results.multiFaceLandmarks[0];
       if (!lm) return;
+      // Store full landmarks array for mesh-based fitting
+      face.landmarks = lm;
+      // Keep backward-compatible 2-point references
       face.left = [lm[33].x, lm[33].y];
       face.right = [lm[263].x, lm[263].y];
       face.source = "mediapipe";
       tracking = "mediapipe";
-      trackBadge.textContent = t("trackMp");
+      trackBadge.textContent = t("trackMp") + ` · ${lm.length} pts`;
     });
     tracking = "mediapipe";
     trackBadge.textContent = t("trackMp");
-    hintEl.textContent = t("hintCam") + " · MediaPipe Face Mesh";
+    hintEl.textContent = t("hintCam") + " · MediaPipe Face Mesh (real landmarks)";
   } catch (_) {
     faceMesh = null;
     tracking = "geometric";
@@ -758,6 +768,8 @@ function startDemo() {
   stopCameraTracks();
   mode = "demo";
   tracking = "demo";
+  // Clear any stale MediaPipe landmarks — fall back to geometric
+  delete face.landmarks;
   trackBadge.textContent = t("trackDemo");
   const faceName = DEMO_FACES[demoFaceIndex % DEMO_FACES.length].label;
   hintEl.textContent = t("hintDemo") + " · " + faceName;
