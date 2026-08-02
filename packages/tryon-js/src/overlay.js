@@ -1,4 +1,4 @@
-import { faceMetricsFromLandmarks, overlaySize } from "./fit.js";
+import { faceMetricsFromLandmarks, faceMetricsFromMesh, overlaySize } from "./fit.js";
 import { paintFrameShape } from "./paint.js";
 
 /**
@@ -51,7 +51,14 @@ export function drawGlassesOverlay(ctx, face, selectedA, selectedB, compareMode,
   const canvas = ctx.canvas;
   const w = canvas.width;
   const h = canvas.height;
-  const m = faceMetricsFromLandmarks(face, w, h);
+
+  // Use mesh-based metrics when full MediaPipe landmarks are available
+  let m;
+  if (face.landmarks && face.source === 'mediapipe') {
+    m = faceMetricsFromMesh(face.landmarks, w, h) || faceMetricsFromLandmarks(face, w, h);
+  } else {
+    m = faceMetricsFromLandmarks(face, w, h);
+  }
 
   if (compareMode && selectedA && selectedB) {
     ctx.save();

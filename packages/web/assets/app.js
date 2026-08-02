@@ -199,7 +199,12 @@ function applyLang() {
   if (lblPhoto) lblPhoto.textContent = t("photoConsentLabel");
 
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
-  else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
+  else if (tracking === "mediapipe") {
+    const pts = face.landmarks?.length;
+    trackBadge.textContent = t("trackMp") + (pts ? ` · ${pts} pts` : "");
+  } else {
+    trackBadge.textContent = t("trackGeo");
+  }
   if (!selected) metaEl.textContent = t("select");
 }
 
@@ -670,6 +675,8 @@ function loop() {
     ctx.drawImage(video, 0, 0, w, h);
     if (tracking !== "mediapipe") {
       face.t += 0.03;
+      // Clear any latent MediaPipe landmarks — use geometric fallback
+      delete face.landmarks;
       const j = Math.sin(face.t) * 0.002;
       face.left = [0.38 + j, 0.42];
       face.right = [0.62 + j, 0.42];
@@ -710,15 +717,18 @@ function initMediaPipe() {
     faceMesh.onResults((results) => {
       const lm = results.multiFaceLandmarks && results.multiFaceLandmarks[0];
       if (!lm) return;
+      // Store full landmarks array for mesh-based fitting
+      face.landmarks = lm;
+      // Keep backward-compatible 2-point references
       face.left = [lm[33].x, lm[33].y];
       face.right = [lm[263].x, lm[263].y];
       face.source = "mediapipe";
       tracking = "mediapipe";
-      trackBadge.textContent = t("trackMp");
+      trackBadge.textContent = t("trackMp") + ` · ${lm.length} pts`;
     });
     tracking = "mediapipe";
     trackBadge.textContent = t("trackMp");
-    hintEl.textContent = t("hintCam") + " · MediaPipe Face Mesh";
+    hintEl.textContent = t("hintCam") + " · MediaPipe Face Mesh (real landmarks)";
   } catch (_) {
     faceMesh = null;
     tracking = "geometric";
@@ -758,6 +768,8 @@ function startDemo() {
   stopCameraTracks();
   mode = "demo";
   tracking = "demo";
+  // Clear any stale MediaPipe landmarks — fall back to geometric
+  delete face.landmarks;
   trackBadge.textContent = t("trackDemo");
   const faceName = DEMO_FACES[demoFaceIndex % DEMO_FACES.length].label;
   hintEl.textContent = t("hintDemo") + " · " + faceName;
@@ -895,6 +907,51 @@ document.getElementById("pd").oninput = (e) => {
   pdMm = Number(e.target.value) || 64;
   document.getElementById("pd-val").textContent = String(pdMm);
   updateMeta();
+};
+
+// PD Calibration Wizard
+document.getElementById("btn-calibrate").onclick = () => {
+  document.getElementById("calibrate-modal").classList.remove("hidden");
+  document.getElementById("calibrate-result").style.display = "none";
+  // Pre-fill measured pupil distance from current face landmarks
+  const metrics = TryOn.faceMetricsFromLandmarks(face, canvas.width, canvas.height);
+  document.getElementById("calibrate-pd-px-display").textContent = String(Math.round(metrics.pdPx));
+};
+
+document.getElementById("calibrate-close").onclick = () => {
+  document.getElementById("calibrate-modal").classList.add("hidden");
+};
+
+// Measure pupil distance from current face landmarks
+document.getElementById("calibrate-measure").onclick = () => {
+  const metrics = TryOn.faceMetricsFromLandmarks(face, canvas.width, canvas.height);
+  document.getElementById("calibrate-pd-px-display").textContent = String(Math.round(metrics.pdPx));
+};
+
+// Apply calibration
+document.getElementById("calibrate-apply").onclick = () => {
+  const cardPx = Number(document.getElementById("calibrate-card-px").value);
+  const cardMm = Number(document.getElementById("calibrate-card-mm").value) || TryOn.REFERENCE_CARD_WIDTH_MM;
+  const facePx = Number(document.getElementById("calibrate-pd-px-display").textContent);
+  
+  if (cardPx <= 0 || facePx <= 0 || isNaN(facePx)) {
+    document.getElementById("calibrate-result").style.display = "block";
+    document.getElementById("calibrate-pd-result").textContent = "Invalid input";
+    return;
+  }
+  
+  const result = TryOn.calibrateFromReference(cardPx, cardMm, facePx);
+  if (result.ok) {
+    pdMm = result.pdMm;
+    document.getElementById("pd").value = pdMm;
+    document.getElementById("pd-val").textContent = String(pdMm);
+    document.getElementById("calibrate-result").style.display = "block";
+    document.getElementById("calibrate-pd-result").textContent = String(pdMm) + " mm";
+    updateMeta();
+  } else {
+    document.getElementById("calibrate-result").style.display = "block";
+    document.getElementById("calibrate-pd-result").textContent = "Calibration failed";
+  }
 };
 
 // Update interaction execution pipeline on primary modal acknowledgement
