@@ -92,10 +92,12 @@ function compareFrames(frameA, frameB, opts = {}) {
 }
 
 function faceMetricsFromLandmarks(face, canvasW, canvasH) {
-  const lx = face.left[0] * canvasW;
-  const ly = face.left[1] * canvasH;
-  const rx = face.right[0] * canvasW;
-  const ry = face.right[1] * canvasH;
+  const left = (face && face.left) || [0.38, 0.42];
+  const right = (face && face.right) || [0.62, 0.42];
+  const lx = left[0] * canvasW;
+  const ly = left[1] * canvasH;
+  const rx = right[0] * canvasW;
+  const ry = right[1] * canvasH;
   return {
     left: [lx, ly],
     right: [rx, ry],

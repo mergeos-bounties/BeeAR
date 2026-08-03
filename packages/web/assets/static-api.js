@@ -55,20 +55,22 @@
    */
   async function staticApi(path, opts) {
     const method = ((opts && opts.method) || "GET").toUpperCase();
+    const normPath = String(path || "").startsWith("/") ? path : "/" + String(path || "");
     // Soft-mock sessions / wishlist on static demos
-    if (path.startsWith("/api/sessions")) {
-      if (method === "POST" && path === "/api/sessions") {
+    if (normPath.startsWith("/api/sessions")) {
+      if (method === "POST" && normPath === "/api/sessions") {
         return { id: "static-demo", frame_ids: [], wishlist: [], note: "static" };
       }
-      if (path.includes("/wishlist")) {
+      if (normPath.includes("/wishlist")) {
         return { ok: true, static: true };
       }
       return { id: "static-demo", ok: true, static: true };
     }
 
     const cat = await loadCatalog();
-    const u = new URL(path, "https://beear.local");
-    if (u.pathname === "/api/catalog/meta") {
+    const u = new URL(normPath, "https://beear.local");
+    const cleanPath = u.pathname.length > 1 ? u.pathname.replace(/\/+$/, "") : u.pathname;
+    if (cleanPath === "/api/catalog/meta") {
       return {
         version: cat.version,
         person_models: cat.person_models || [],
@@ -77,14 +79,14 @@
         frames: (cat.frames || []).length,
       };
     }
-    const single = u.pathname.match(/^\/api\/catalog\/([^/]+)$/);
+    const single = cleanPath.match(/^\/api\/catalog\/([^/]+)$/);
     if (single) {
       const id = decodeURIComponent(single[1]);
       const f = (cat.frames || []).find((x) => x.id === id);
       if (!f) throw new Error("frame not found: " + id);
       return f;
     }
-    if (u.pathname === "/api/catalog") {
+    if (cleanPath === "/api/catalog") {
       return {
         version: cat.version,
         frames: filterFrames(cat.frames || [], u.searchParams),
