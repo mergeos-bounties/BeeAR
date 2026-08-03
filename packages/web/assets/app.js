@@ -32,6 +32,8 @@ let meshBusy = false;
 let photoConsent = false;
 try {
   photoConsent = localStorage.getItem("beear_photo_consent") === "true";
+  const savedLang = localStorage.getItem("beear_lang");
+  if (savedLang === "en" || savedLang === "vi") lang = savedLang;
 } catch (_) {
   photoConsent = false;
 }
@@ -140,6 +142,16 @@ const I18N = {
     cloudLocal: "🔒 Local Only",
     cloudServer: "☁️ Cloud Enabled",
     photoConsentLabel: "Allow face photo server upload & cloud features",
+    filterAll: "All",
+    filterGlasses: "Glasses",
+    filterAccessory: "Accessories",
+    emptyCatalog: "No frames match the current filter.",
+    emptyCatalogHint: "Try adjusting filters or check your connection.",
+    emptyGallery: "No snapshots yet",
+    loadingCatalog: "Loading catalog…",
+    loadingMesh: "Loading 3D mesh",
+    starting: "Starting BeeAR demo…",
+    studio3d: "🧑 3D Person",
   },
   vi: {
     tagline: "Thử kính & phụ kiện ảo",
@@ -167,6 +179,16 @@ const I18N = {
     cloudLocal: "🔒 Chỉ lưu cục bộ",
     cloudServer: "☁️ Đã bật Cloud",
     photoConsentLabel: "Cho phép tải ảnh mặt lên server & dùng tính năng đám mây",
+    filterAll: "Tất cả",
+    filterGlasses: "Kính",
+    filterAccessory: "Phụ kiện",
+    emptyCatalog: "Không có mẫu khớp bộ lọc hiện tại.",
+    emptyCatalogHint: "Thử đổi bộ lọc hoặc kiểm tra kết nối.",
+    emptyGallery: "Chưa có ảnh chụp",
+    loadingCatalog: "Đang tải danh mục…",
+    loadingMesh: "Đang tải mesh 3D",
+    starting: "Đang khởi động BeeAR…",
+    studio3d: "🧑 Người 3D",
   },
 };
 
@@ -174,7 +196,14 @@ function t(k) {
   return (I18N[lang] || I18N.en)[k] || k;
 }
 
+function persistLang() {
+  try {
+    localStorage.setItem("beear_lang", lang);
+  } catch (_) {}
+}
+
 function applyLang() {
+  document.documentElement.lang = lang;
   document.getElementById("tagline").textContent = t("tagline");
   document.getElementById("lbl-catalog").textContent = t("catalog");
   document.getElementById("lbl-pd").childNodes[0].textContent = t("pd") + " ";
@@ -191,7 +220,21 @@ function applyLang() {
   document.getElementById("consent-body").textContent = t("consentBody");
   document.getElementById("consent-ok").textContent = t("consentOk");
   document.getElementById("consent-demo").textContent = t("consentDemo");
-  
+
+  const filter = document.getElementById("filter");
+  if (filter) {
+    const opts = filter.options;
+    for (let i = 0; i < opts.length; i++) {
+      const v = opts[i].value;
+      if (v === "") opts[i].textContent = t("filterAll");
+      else if (v === "glasses") opts[i].textContent = t("filterGlasses");
+      else if (v === "accessory") opts[i].textContent = t("filterAccessory");
+    }
+  }
+
+  const btn3d = document.getElementById("btn-3d");
+  if (btn3d) btn3d.textContent = t("studio3d");
+
   // Update cloud toggle and checkbox translation labels (optional DOM from consent PR)
   const btnCloud = document.getElementById("btn-cloud");
   if (btnCloud) btnCloud.textContent = photoConsent ? t("cloudServer") : t("cloudLocal");
@@ -201,6 +244,7 @@ function applyLang() {
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
   else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
   if (!selected) metaEl.textContent = t("select");
+  if (mode === "idle" && hintEl) hintEl.textContent = t("hintIdle");
 }
 
 function loadDemoImages() {
@@ -362,7 +406,7 @@ function requestGlbModel(frame) {
   if (!frame?.glb_url || threeState.models[frame.id] || threeState.loading[frame.id]) return;
   threeState.loading[frame.id] = true;
   const heavy = frame.heavy || /meshy/i.test(String(frame.glb || frame.glb_url || ""));
-  if (heavy) setStageLoad(`Loading 3D mesh (${frame.name})… large file`);
+  if (heavy) setStageLoad(`${t("loadingMesh")} (${frame.name})…`);
   initThreeRenderer().then((ok) => {
     if (!ok) {
       threeState.loading[frame.id] = false;
@@ -383,7 +427,7 @@ function requestGlbModel(frame) {
       (ev) => {
         if (!heavy || !ev?.total) return;
         const pct = Math.min(99, Math.round((100 * ev.loaded) / ev.total));
-        setStageLoad(`Loading 3D mesh ${pct}%…`);
+        setStageLoad(`${t("loadingMesh")} ${pct}%…`);
       },
       (err) => {
         console.warn("GLB load failed", frame.id, err);
@@ -499,7 +543,7 @@ async function ensureSession() {
 
 async function loadCatalog(category = "") {
   const q = category ? `?category=${encodeURIComponent(category)}` : "";
-  setStageLoad("Loading catalog…");
+  setStageLoad(t("loadingCatalog"));
   try {
     const data = await api("/api/catalog" + q);
     frames = data.frames || [];
@@ -517,7 +561,7 @@ async function loadCatalog(category = "") {
 function renderCatalog() {
   catalogEl.innerHTML = "";
   if (frames.length === 0) {
-    catalogEl.innerHTML = `<p class="empty-state">No frames match the current filter.</p><p class="suggestion">Try adjusting filters or check your connection.</p>`;
+    catalogEl.innerHTML = `<p class="empty-state">${t("emptyCatalog")}</p><p class="suggestion">${t("emptyCatalogHint")}</p>`;
     return;
   }
   frames.forEach((f) => {
@@ -836,7 +880,7 @@ async function snapshot() {
 function renderGallery() {
   const items = loadGallery();
   if (!items.length) {
-    galleryEl.innerHTML = '<p class="muted small">No snapshots yet</p>';
+    galleryEl.innerHTML = `<p class="muted small">${t("emptyGallery")}</p>`;
     return;
   }
   galleryEl.innerHTML = items
@@ -862,7 +906,10 @@ if (btnDemoNext) btnDemoNext.onclick = nextDemoFace;
 document.getElementById("btn-snap").onclick = snapshot;
 document.getElementById("btn-lang").onclick = () => {
   lang = lang === "en" ? "vi" : "en";
+  persistLang();
   applyLang();
+  renderCatalog();
+  if (!galleryEl.classList.contains("hidden")) renderGallery();
   updateMeta();
 };
 
@@ -908,7 +955,7 @@ document.getElementById("consent-ok").onclick = () => {
 
 document.getElementById("consent-demo").onclick = startDemo;
 
-setStageLoad("Starting BeeAR demo…");
+setStageLoad(t("starting"));
 applyLang();
 Promise.all([
   loadDemoImages(),
