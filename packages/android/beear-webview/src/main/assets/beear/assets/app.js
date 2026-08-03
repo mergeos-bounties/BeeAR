@@ -27,7 +27,57 @@ let lang = "en";
 let tracking = "geometric"; // geometric | mediapipe
 let faceMesh = null;
 let meshBusy = false;
+
+// Privacy & Bounty State Constraints (localStorage can throw in private mode)
+let photoConsent = false;
+try {
+  photoConsent = localStorage.getItem("beear_photo_consent") === "true";
+  const savedLang = localStorage.getItem("beear_lang");
+  if (savedLang === "en" || savedLang === "vi") lang = savedLang;
+} catch (_) {
+  photoConsent = false;
+}
 let sessionId = null;
+
+function isStaticDemo() {
+  return !!(globalThis.BeeARStatic && globalThis.BeeARStatic.detectStatic());
+}
+
+function absUrl(u) {
+  if (!u) return u;
+  try {
+    return new URL(u, location.href).href;
+  } catch (_) {
+    return u;
+  }
+}
+
+function setStageLoad(msg) {
+  const el = document.getElementById("stage-load");
+  const tx = document.getElementById("stage-load-text");
+  if (!el) return;
+  if (msg == null) {
+    el.classList.add("hidden");
+    return;
+  }
+  if (tx) tx.textContent = msg;
+  el.classList.remove("hidden");
+}
+
+/** Prefer light featured SKUs on GitHub Pages (Meshy GLBs are ~11MB each). */
+function pickDefaultFrame(list) {
+  if (!list?.length) return null;
+  const heavy = (f) =>
+    f.heavy === true || /meshy/i.test(String(f.glb || f.glb_url || f.id || ""));
+  const featured = list.find((f) => f.featured && !heavy(f));
+  if (featured) return featured;
+  if (isStaticDemo()) {
+    const light = list.find((f) => (f.glb_url || f.glb) && !heavy(f));
+    if (light) return light;
+  }
+  return list.find((f) => f.featured) || list[0];
+}
+
 const threeState = {
   ready: false,
   failed: false,
@@ -50,7 +100,6 @@ const DEMO_FACES = [
     id: "face-01",
     label: "Demo A",
     src: "/assets/demo-faces/face-01.jpg",
-    // calibrated for front portrait (pupil centers, image 0–1)
     left: [0.385, 0.428],
     right: [0.615, 0.428],
   },
@@ -90,6 +139,19 @@ const I18N = {
     trackGeo: "tracking: geometric",
     trackMp: "tracking: mediapipe",
     trackDemo: "tracking: demo photo",
+    cloudLocal: "🔒 Local Only",
+    cloudServer: "☁️ Cloud Enabled",
+    photoConsentLabel: "Allow face photo server upload & cloud features",
+    filterAll: "All",
+    filterGlasses: "Glasses",
+    filterAccessory: "Accessories",
+    emptyCatalog: "No frames match the current filter.",
+    emptyCatalogHint: "Try adjusting filters or check your connection.",
+    emptyGallery: "No snapshots yet",
+    loadingCatalog: "Loading catalog…",
+    loadingMesh: "Loading 3D mesh",
+    starting: "Starting BeeAR demo…",
+    studio3d: "🧑 3D Person",
   },
   vi: {
     tagline: "Thử kính & phụ kiện ảo",
@@ -114,6 +176,19 @@ const I18N = {
     trackGeo: "tracking: hình học",
     trackMp: "tracking: mediapipe",
     trackDemo: "tracking: ảnh demo",
+    cloudLocal: "🔒 Chỉ lưu cục bộ",
+    cloudServer: "☁️ Đã bật Cloud",
+    photoConsentLabel: "Cho phép tải ảnh mặt lên server & dùng tính năng đám mây",
+    filterAll: "Tất cả",
+    filterGlasses: "Kính",
+    filterAccessory: "Phụ kiện",
+    emptyCatalog: "Không có mẫu khớp bộ lọc hiện tại.",
+    emptyCatalogHint: "Thử đổi bộ lọc hoặc kiểm tra kết nối.",
+    emptyGallery: "Chưa có ảnh chụp",
+    loadingCatalog: "Đang tải danh mục…",
+    loadingMesh: "Đang tải mesh 3D",
+    starting: "Đang khởi động BeeAR…",
+    studio3d: "🧑 Người 3D",
   },
 };
 
@@ -121,7 +196,14 @@ function t(k) {
   return (I18N[lang] || I18N.en)[k] || k;
 }
 
+function persistLang() {
+  try {
+    localStorage.setItem("beear_lang", lang);
+  } catch (_) {}
+}
+
 function applyLang() {
+  document.documentElement.lang = lang;
   document.getElementById("tagline").textContent = t("tagline");
   document.getElementById("lbl-catalog").textContent = t("catalog");
   document.getElementById("lbl-pd").childNodes[0].textContent = t("pd") + " ";
@@ -138,9 +220,31 @@ function applyLang() {
   document.getElementById("consent-body").textContent = t("consentBody");
   document.getElementById("consent-ok").textContent = t("consentOk");
   document.getElementById("consent-demo").textContent = t("consentDemo");
+
+  const filter = document.getElementById("filter");
+  if (filter) {
+    const opts = filter.options;
+    for (let i = 0; i < opts.length; i++) {
+      const v = opts[i].value;
+      if (v === "") opts[i].textContent = t("filterAll");
+      else if (v === "glasses") opts[i].textContent = t("filterGlasses");
+      else if (v === "accessory") opts[i].textContent = t("filterAccessory");
+    }
+  }
+
+  const btn3d = document.getElementById("btn-3d");
+  if (btn3d) btn3d.textContent = t("studio3d");
+
+  // Update cloud toggle and checkbox translation labels (optional DOM from consent PR)
+  const btnCloud = document.getElementById("btn-cloud");
+  if (btnCloud) btnCloud.textContent = photoConsent ? t("cloudServer") : t("cloudLocal");
+  const lblPhoto = document.getElementById("lbl-photo-consent");
+  if (lblPhoto) lblPhoto.textContent = t("photoConsentLabel");
+
   if (mode === "demo") trackBadge.textContent = t("trackDemo");
   else trackBadge.textContent = tracking === "mediapipe" ? t("trackMp") : t("trackGeo");
   if (!selected) metaEl.textContent = t("select");
+  if (mode === "idle" && hintEl) hintEl.textContent = t("hintIdle");
 }
 
 function loadDemoImages() {
@@ -269,7 +373,6 @@ function prepareGlbModel(scene) {
   scene.updateMatrixWorld(true);
   box = new THREE.Box3().setFromObject(scene);
   let size = box.getSize(new THREE.Vector3());
-  // If mesh is deeper than wide, rotate so left-right is X (frame width)
   let baseYaw = 0;
   if (size.z > size.x * 1.15) {
     scene.rotation.y += Math.PI / 2;
@@ -302,20 +405,34 @@ function prepareGlbModel(scene) {
 function requestGlbModel(frame) {
   if (!frame?.glb_url || threeState.models[frame.id] || threeState.loading[frame.id]) return;
   threeState.loading[frame.id] = true;
+  const heavy = frame.heavy || /meshy/i.test(String(frame.glb || frame.glb_url || ""));
+  if (heavy) setStageLoad(`${t("loadingMesh")} (${frame.name})…`);
   initThreeRenderer().then((ok) => {
     if (!ok) {
       threeState.loading[frame.id] = false;
+      if (heavy) setStageLoad(null);
       return;
     }
+    const url = absUrl(frame.glb_url);
     threeState.loader.load(
-      frame.glb_url,
+      url,
       (gltf) => {
         threeState.models[frame.id] = prepareGlbModel(gltf.scene);
         threeState.loading[frame.id] = false;
+        if (heavy) setStageLoad(null);
+        if (hintEl && heavy) {
+          hintEl.textContent = (hintEl.textContent || "") + " · 3D mesh ready";
+        }
       },
-      undefined,
-      () => {
+      (ev) => {
+        if (!heavy || !ev?.total) return;
+        const pct = Math.min(99, Math.round((100 * ev.loaded) / ev.total));
+        setStageLoad(`${t("loadingMesh")} ${pct}%…`);
+      },
+      (err) => {
+        console.warn("GLB load failed", frame.id, err);
         threeState.loading[frame.id] = false;
+        if (heavy) setStageLoad(null);
       },
     );
   });
@@ -330,10 +447,6 @@ function clearThreeFrame() {
   if (threeState.renderer) threeState.renderer.clear();
 }
 
-/**
- * Render GLB into offscreen WebGL layer, then composite onto main 2D canvas
- * so face + glasses stay pixel-aligned (true AR overlay) and snapshots include GLB.
- */
 function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   if (!frame?.glb_url || compareMode) return false;
   const model = threeState.models[frame.id];
@@ -348,7 +461,6 @@ function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   });
 
   const size = model.userData.size || { x: 1, y: 1, z: 1 };
-  // Fit primarily by frame width (IPD-scaled overlayW); cap height so thick meshes don't explode
   const scaleW = overlayW / Math.max(size.x, 0.01);
   const scaleH = (overlayH * 1.35) / Math.max(size.y, 0.01);
   const scale = Math.min(scaleW, scaleH) * 0.98;
@@ -361,12 +473,10 @@ function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
     canvas.height / 2 - centerY + yBias,
     0,
   );
-  // Front-facing glasses in orthographic AR (Z out of screen)
   model.rotation.set(Number(ar.pitch) || 0.08, Number(ar.yaw) || 0, -angle);
   model.scale.setScalar(scale * scaleBias);
   model.visible = true;
 
-  // Offscreen buffer only — never show separate CSS layer (avoids misalignment)
   threeState.layer.hidden = true;
   threeState.layer.style.display = "none";
   threeState.renderer.setClearColor(0x000000, 0);
@@ -380,7 +490,6 @@ function drawThreeFrame(frame, centerX, centerY, angle, overlayW, overlayH) {
   return true;
 }
 
-/** Draw image cover-fit into canvas; return draw rect for landmark mapping */
 function drawImageCover(img, w, h) {
   const ir = img.width / img.height;
   const cr = w / h;
@@ -401,6 +510,10 @@ function drawImageCover(img, w, h) {
 }
 
 async function api(path, opts) {
+  const S = globalThis.BeeARStatic;
+  if (S && S.detectStatic()) {
+    return S.staticApi(path, opts);
+  }
   const r = await fetch(path, {
     headers: { "Content-Type": "application/json" },
     ...opts,
@@ -410,7 +523,12 @@ async function api(path, opts) {
 }
 
 async function ensureSession() {
-  if (sessionId) return sessionId;
+  // If consent is false, intercept and issue a strict mock fallback session ID
+  if (!photoConsent) {
+    sessionId = "local-session";
+    return sessionId;
+  }
+  if (sessionId && sessionId !== "local-session") return sessionId;
   try {
     const s = await api("/api/sessions", {
       method: "POST",
@@ -425,14 +543,27 @@ async function ensureSession() {
 
 async function loadCatalog(category = "") {
   const q = category ? `?category=${encodeURIComponent(category)}` : "";
-  const data = await api("/api/catalog" + q);
-  frames = data.frames || [];
-  renderCatalog();
-  if (!selected && frames[0]) selectFrame(frames[0].id, "A");
+  setStageLoad(t("loadingCatalog"));
+  try {
+    const data = await api("/api/catalog" + q);
+    frames = data.frames || [];
+    renderCatalog();
+    if (!selected) {
+      const first = pickDefaultFrame(frames);
+      if (first) selectFrame(first.id, "A");
+    }
+  } finally {
+    // Keep overlay only if a heavy GLB is still downloading
+    if (!Object.values(threeState.loading).some(Boolean)) setStageLoad(null);
+  }
 }
 
 function renderCatalog() {
   catalogEl.innerHTML = "";
+  if (frames.length === 0) {
+    catalogEl.innerHTML = `<p class="empty-state">${t("emptyCatalog")}</p><p class="suggestion">${t("emptyCatalogHint")}</p>`;
+    return;
+  }
   frames.forEach((f) => {
     const el = document.createElement("div");
     let cls = "sku";
@@ -468,8 +599,10 @@ async function selectFrame(id, slot = "A") {
     }
   }
   if (f.glb_url) requestGlbModel(f);
+  
   const sid = await ensureSession();
-  if (sid && slot === "A") {
+  // Ensure network sync logic runs ONLY if we have a valid server session
+  if (sid && sid !== "local-session" && slot === "A") {
     try {
       await api(`/api/sessions/${sid}/wishlist`, {
         method: "POST",
@@ -498,7 +631,6 @@ function drawDemoFace(w, h) {
 
   if (img && img.complete && img.naturalWidth) {
     const { dx, dy, dw, dh } = drawImageCover(img, w, h);
-    // Map image-normalized eye landmarks → canvas-normalized
     const lx = dx + def.left[0] * dw;
     const ly = dy + def.left[1] * dh;
     const rx = dx + def.right[0] * dw;
@@ -509,7 +641,6 @@ function drawDemoFace(w, h) {
     return;
   }
 
-  // Fallback cartoon only if photos failed to load
   const cx = w / 2,
     cy = h * 0.48;
   const rx = w * 0.22,
@@ -549,10 +680,14 @@ function drawGlbOverlay(frame) {
   return drawThreeFrame(frame, center.x, center.y, metrics.angle, overlayW, overlayH);
 }
 
-/** Delegate 2D overlay drawing to @beear/tryon lib, with optional GLB overlay first. */
 function drawGlasses() {
   if (!TryOn) return;
-  if (selected?.glb_url && drawGlbOverlay(selected)) return;
+  // Light procedural GLBs composite as dark blocks on the photo path — use crisp SVG/canvas
+  // overlay for them. Reserve WebGL GLB composite for heavy/photoreal Meshy meshes.
+  const preferGlb =
+    selected?.glb_url &&
+    (selected.heavy === true || /meshy/i.test(String(selected.glb || selected.id || "")));
+  if (preferGlb && drawGlbOverlay(selected)) return;
   TryOn.drawGlassesOverlay(ctx, face, selected, selectedB, compareMode, pdMm);
 }
 
@@ -619,7 +754,6 @@ function initMediaPipe() {
     faceMesh.onResults((results) => {
       const lm = results.multiFaceLandmarks && results.multiFaceLandmarks[0];
       if (!lm) return;
-      // outer eye corners
       face.left = [lm[33].x, lm[33].y];
       face.right = [lm[263].x, lm[263].y];
       face.source = "mediapipe";
@@ -637,6 +771,9 @@ function initMediaPipe() {
 }
 
 async function startCamera() {
+  // Sync the inline UI modal checkbox state with current runtime preference
+  const cb = document.getElementById("photo-consent-cb");
+  if (cb) cb.checked = photoConsent;
   consentEl.classList.remove("hidden");
 }
 
@@ -703,7 +840,7 @@ function saveGallery(items) {
   localStorage.setItem(galleryKey(), JSON.stringify(items.slice(0, 24)));
 }
 
-function snapshot() {
+async function snapshot() {
   const data = canvas.toDataURL("image/png");
   const item = {
     id: Date.now(),
@@ -712,9 +849,27 @@ function snapshot() {
     pdMm,
     data,
   };
+  
+  // Local-only save pathway runs regardless of sync permission
   const items = loadGallery();
   items.unshift(item);
   saveGallery(items);
+  
+  // Cloud processing backup path triggered strictly when permission is granted
+  if (photoConsent) {
+    const sid = await ensureSession();
+    if (sid && sid !== "local-session") {
+      try {
+        await api(`/api/sessions/${sid}/snapshot`, {
+          method: "POST",
+          body: JSON.stringify({ image: data }),
+        });
+      } catch (err) {
+        console.warn("Cloud infrastructure sync error / omitted pathway:", err);
+      }
+    }
+  }
+
   const a = document.createElement("a");
   a.download = `beear-${selected?.id || "shot"}-${item.id}.png`;
   a.href = data;
@@ -725,7 +880,7 @@ function snapshot() {
 function renderGallery() {
   const items = loadGallery();
   if (!items.length) {
-    galleryEl.innerHTML = '<p class="muted small">No snapshots yet</p>';
+    galleryEl.innerHTML = `<p class="muted small">${t("emptyGallery")}</p>`;
     return;
   }
   galleryEl.innerHTML = items
@@ -743,7 +898,7 @@ function renderGallery() {
   });
 }
 
-// UI wiring
+// UI element event binding configuration
 document.getElementById("btn-cam").onclick = startCamera;
 document.getElementById("btn-demo").onclick = startDemo;
 const btnDemoNext = document.getElementById("btn-demo-next");
@@ -751,9 +906,27 @@ if (btnDemoNext) btnDemoNext.onclick = nextDemoFace;
 document.getElementById("btn-snap").onclick = snapshot;
 document.getElementById("btn-lang").onclick = () => {
   lang = lang === "en" ? "vi" : "en";
+  persistLang();
   applyLang();
+  renderCatalog();
+  if (!galleryEl.classList.contains("hidden")) renderGallery();
   updateMeta();
 };
+
+// Interactive Contextual Toggle Button Logic
+const btnCloudEl = document.getElementById("btn-cloud");
+if (btnCloudEl) {
+  btnCloudEl.onclick = () => {
+    photoConsent = !photoConsent;
+    try {
+      localStorage.setItem("beear_photo_consent", photoConsent);
+    } catch (_) {}
+    if (!photoConsent) sessionId = null;
+    applyLang();
+    updateMeta();
+  };
+}
+
 document.getElementById("btn-compare").onclick = () => {
   compareMode = !compareMode;
   document.getElementById("btn-compare").classList.toggle("active", compareMode);
@@ -770,18 +943,38 @@ document.getElementById("pd").oninput = (e) => {
   document.getElementById("pd-val").textContent = String(pdMm);
   updateMeta();
 };
-document.getElementById("consent-ok").onclick = startCameraAfterConsent;
+
+// Update interaction execution pipeline on primary modal acknowledgement
+document.getElementById("consent-ok").onclick = () => {
+  const cb = document.getElementById("photo-consent-cb");
+  photoConsent = cb ? cb.checked : false;
+  localStorage.setItem("beear_photo_consent", photoConsent);
+  applyLang();
+  startCameraAfterConsent();
+};
+
 document.getElementById("consent-demo").onclick = startDemo;
 
+setStageLoad(t("starting"));
 applyLang();
-Promise.all([loadDemoImages(), loadCatalog().catch((e) => {
-  hintEl.textContent = "API error: " + e.message + " — is beear serve running?";
-})])
+Promise.all([
+  loadDemoImages(),
+  loadCatalog().catch((e) => {
+    const msg = isStaticDemo()
+      ? "Catalog error: " + e.message
+      : "API error: " + e.message + " — is beear serve running?";
+    hintEl.textContent = msg;
+    setStageLoad(msg);
+  }),
+])
   .then(() => {
     startDemo();
     loop();
+    if (!Object.values(threeState.loading).some(Boolean)) setStageLoad(null);
   })
-  .catch(() => {
+  .catch((e) => {
+    console.error(e);
     startDemo();
     loop();
+    setStageLoad(null);
   });

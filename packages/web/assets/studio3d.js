@@ -16,8 +16,103 @@ const yVal = document.getElementById("y-val");
 const zVal = document.getElementById("z-val");
 const btnAuto = document.getElementById("btn-auto");
 const btnSnap = document.getElementById("btn-snap");
+const btnLang = document.getElementById("btn-lang");
 const filterEl = document.getElementById("filter");
 const personSelect = document.getElementById("person-select");
+
+const I18N = {
+  en: {
+    tagline: "Real 3D characters · glasses GLB try-on",
+    back2d: "← 2D / Camera",
+    autoOn: "Auto-rotate ON",
+    autoOff: "Auto-rotate OFF",
+    snap: "Snapshot",
+    hint: "Drag to orbit · scroll to zoom · pick person + frames",
+    badge: "3D try-on · GLB glasses",
+    person: "Person",
+    character: "Character",
+    frames: "Frames (3D)",
+    filterGlasses: "Glasses",
+    filterAll: "All",
+    scale: "Fit scale",
+    yOffset: "Y offset",
+    zDepth: "Z (depth)",
+    loadingCatalog: "Loading catalog…",
+    starting: "Starting 3D studio…",
+    metaOn: "on",
+    metaLocked: "3D locked",
+  },
+  vi: {
+    tagline: "Nhân vật 3D · thử kính GLB",
+    back2d: "← 2D / Camera",
+    autoOn: "Tự xoay BẬT",
+    autoOff: "Tự xoay TẮT",
+    snap: "Chụp",
+    hint: "Kéo để xoay · cuộn để zoom · chọn người + kính",
+    badge: "Thử 3D · kính GLB",
+    person: "Người",
+    character: "Nhân vật",
+    frames: "Khung (3D)",
+    filterGlasses: "Kính",
+    filterAll: "Tất cả",
+    scale: "Tỷ lệ vừa",
+    yOffset: "Lệch Y",
+    zDepth: "Z (độ sâu)",
+    loadingCatalog: "Đang tải danh mục…",
+    starting: "Đang khởi động studio 3D…",
+    metaOn: "trên",
+    metaLocked: "3D khóa",
+  },
+};
+
+let lang = "en";
+try {
+  const saved = localStorage.getItem("beear_lang");
+  if (saved === "en" || saved === "vi") lang = saved;
+} catch (_) {}
+
+function t(k) {
+  return (I18N[lang] || I18N.en)[k] || k;
+}
+
+function persistLang() {
+  try {
+    localStorage.setItem("beear_lang", lang);
+  } catch (_) {}
+}
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  const tag = document.getElementById("tagline");
+  if (tag) tag.textContent = t("tagline");
+  const back = document.getElementById("btn-2d");
+  if (back) back.textContent = t("back2d");
+  if (btnLang) btnLang.textContent = lang === "en" ? "VI" : "EN";
+  if (btnSnap) btnSnap.textContent = t("snap");
+  if (btnAuto) btnAuto.textContent = (typeof state !== "undefined" && state.auto) ? t("autoOn") : t("autoOff");
+  const hint = document.getElementById("hint");
+  if (hint) hint.textContent = t("hint");
+  const badge = document.getElementById("badge");
+  if (badge) badge.textContent = t("badge");
+  const lp = document.getElementById("lbl-person");
+  if (lp) lp.textContent = t("person");
+  const lc = document.getElementById("lbl-character");
+  if (lc && lc.childNodes[0]) lc.childNodes[0].textContent = t("character") + " ";
+  const lf = document.getElementById("lbl-frames");
+  if (lf) lf.textContent = t("frames");
+  if (filterEl) {
+    for (const opt of filterEl.options) {
+      if (opt.value === "glasses") opt.textContent = t("filterGlasses");
+      else if (opt.value === "") opt.textContent = t("filterAll");
+    }
+  }
+  const ls = document.getElementById("lbl-scale");
+  if (ls && ls.childNodes[0]) ls.childNodes[0].textContent = t("scale") + " ";
+  const ly = document.getElementById("lbl-y");
+  if (ly && ly.childNodes[0]) ly.childNodes[0].textContent = t("yOffset") + " ";
+  const lz = document.getElementById("lbl-z");
+  if (lz && lz.childNodes[0]) lz.childNodes[0].textContent = t("zDepth") + " ";
+}
 
 const state = {
   frames: [],
@@ -400,7 +495,7 @@ function attachGlasses(model, frame) {
   }
   applyFit();
   const personName = state.activePerson?.name || "person";
-  metaEl.textContent = `${frame.name} on ${personName} · scale ${state.fitScale.toFixed(2)} · 3D locked`;
+  metaEl.textContent = `${frame.name} ${t("metaOn")} ${personName} · scale ${state.fitScale.toFixed(2)} · ${t("metaLocked")}`;
 }
 
 function applyFit() {
@@ -475,7 +570,7 @@ function selectFrame(id) {
 }
 
 async function loadCatalog() {
-  setStageLoad("Loading catalog…");
+  setStageLoad(t("loadingCatalog"));
   const data = await api("/api/catalog");
   state.frames = (data.frames || []).filter((f) => f.glb_url || f.glb || f.has_glb);
   if (!state.frames.length) state.frames = data.frames || [];
@@ -521,8 +616,19 @@ filterEl.addEventListener("change", renderCatalog);
 btnAuto.addEventListener("click", () => {
   state.auto = !state.auto;
   btnAuto.classList.toggle("active", state.auto);
-  btnAuto.textContent = state.auto ? "Auto-rotate ON" : "Auto-rotate OFF";
+  btnAuto.textContent = state.auto ? t("autoOn") : t("autoOff");
 });
+if (btnLang) {
+  btnLang.addEventListener("click", () => {
+    lang = lang === "en" ? "vi" : "en";
+    persistLang();
+    applyLang();
+    if (state.selected) {
+      const personName = state.activePerson?.name || "person";
+      metaEl.textContent = `${state.selected.name} ${t("metaOn")} ${personName} · scale ${state.fitScale.toFixed(2)} · ${t("metaLocked")}`;
+    }
+  });
+}
 btnSnap.addEventListener("click", () => {
   const a = document.createElement("a");
   a.download = `beear-3d-${state.activePerson?.id || "person"}-${state.selected?.id || "snap"}.png`;
@@ -546,8 +652,8 @@ async function main() {
   resize();
   ensureGlassesRoot();
   btnAuto.classList.add("active");
-  btnAuto.textContent = "Auto-rotate ON";
-  setStageLoad("Starting 3D studio…");
+  applyLang();
+  setStageLoad(t("starting"));
   await loadCatalog();
   // Default bust (tiny GLB) for fast Pages first paint; full-body Meshy still in dropdown
   const def =
