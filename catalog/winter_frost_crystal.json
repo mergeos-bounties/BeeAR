@@ -1,0 +1,15 @@
+{
+  "sku": "winter_frost_crystal",
+  "name": "Winter Frost Crystal",
+  "type": "frame",
+  "material": "acetate",
+  "color": "ice_blue",
+  "shape": "cat_eye",
+  "model_path": "models/cat_eye.glb",
+  "texture_path": "textures/ice_blue.png",
+  "fit": {
+    "width_mm": 136,
+    "bridge_mm": 17,
+    "temple_mm": 142
+  }
+}

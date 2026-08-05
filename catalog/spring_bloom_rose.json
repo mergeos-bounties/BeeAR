@@ -1,0 +1,15 @@
+{
+  "sku": "spring_bloom_rose",
+  "name": "Spring Bloom Rose",
+  "type": "frame",
+  "material": "acetate",
+  "color": "rose_pink",
+  "shape": "oval",
+  "model_path": "models/oval.glb",
+  "texture_path": "textures/rose_pink.png",
+  "fit": {
+    "width_mm": 134,
+    "bridge_mm": 19,
+    "temple_mm": 143
+  }
+}

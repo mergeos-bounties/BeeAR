@@ -1,0 +1,15 @@
+{
+  "sku": "autumn_harvest_crimson",
+  "name": "Autumn Harvest Crimson",
+  "type": "frame",
+  "material": "acetate",
+  "color": "crimson_brown",
+  "shape": "round",
+  "model_path": "models/round.glb",
+  "texture_path": "textures/crimson_brown.png",
+  "fit": {
+    "width_mm": 132,
+    "bridge_mm": 20,
+    "temple_mm": 140
+  }
+}

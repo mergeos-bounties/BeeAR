@@ -1,0 +1,15 @@
+{
+  "sku": "summer_solstice_amber",
+  "name": "Summer Solstice Amber",
+  "type": "frame",
+  "material": "acetate",
+  "color": "amber_gold",
+  "shape": "aviator",
+  "model_path": "models/aviator.glb",
+  "texture_path": "textures/amber_gold.png",
+  "fit": {
+    "width_mm": 140,
+    "bridge_mm": 18,
+    "temple_mm": 145
+  }
+}
