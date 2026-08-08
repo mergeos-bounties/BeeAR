@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" fill="none">
+  <!-- Holiday/Winter - Candy Cane themed wayfarer -->
+  <rect x="15" y="25" width="60" height="38" rx="8" stroke="#DC2626" stroke-width="4" fill="none"/>
+  <rect x="125" y="25" width="60" height="38" rx="8" stroke="#DC2626" stroke-width="4" fill="none"/>
+  <path d="M75 40 Q100 32 125 40" stroke="#DC2626" stroke-width="4" fill="none"/>
+  <path d="M75 50 Q100 58 125 50" stroke="#DC2626" stroke-width="4" fill="none"/>
+  <line x1="45" y1="63" x2="45" y2="90" stroke="#DC2626" stroke-width="4"/>
+  <line x1="155" y1="63" x2="155" y2="90" stroke="#DC2626" stroke-width="4"/>
+  <!-- Candy cane stripes -->
+  <line x1="25" y1="30" x2="65" y2="30" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
+  <line x1="135" y1="30" x2="175" y2="30" stroke="#ffffff" stroke-width="2" opacity="0.5"/>
+</svg>

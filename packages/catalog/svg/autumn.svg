@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" fill="none">
+  <!-- Autumn - Maple round frame -->
+  <circle cx="48" cy="50" r="28" stroke="#D97706" stroke-width="4" fill="none"/>
+  <circle cx="152" cy="50" r="28" stroke="#D97706" stroke-width="4" fill="none"/>
+  <path d="M76 44 Q100 38 124 44" stroke="#D97706" stroke-width="4" fill="none"/>
+  <path d="M76 60 Q100 66 124 60" stroke="#D97706" stroke-width="4" fill="none"/>
+  <line x1="48" y1="78" x2="48" y2="90" stroke="#D97706" stroke-width="4"/>
+  <line x1="152" y1="78" x2="152" y2="90" stroke="#D97706" stroke-width="4"/>
+  <!-- Maple leaf accent -->
+  <polygon points="170,14 173,20 180,20 175,25 177,32 170,28 163,32 165,25 160,20 167,20" fill="#D97706" opacity="0.5"/>
+</svg>
