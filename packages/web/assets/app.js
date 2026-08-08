@@ -140,6 +140,14 @@ const I18N = {
     cloudLocal: "🔒 Local Only",
     cloudServer: "☁️ Cloud Enabled",
     photoConsentLabel: "Allow face photo server upload & cloud features",
+    noSnaps: "No snapshots yet · click 📷 Snapshot to save one",
+    snapShare: "Copy share link",
+    snapDelete: "Delete",
+    snapShareTitle: "📸 Shared Snapshot",
+    snapShareAlt: "Shared snapshot",
+    snapFrame: "Frame",
+    snapShareCopied: "✅ Share link copied to clipboard",
+    snapShareFail: "Could not copy share link",
   },
   vi: {
     tagline: "Thử kính & phụ kiện ảo",
@@ -167,6 +175,14 @@ const I18N = {
     cloudLocal: "🔒 Chỉ lưu cục bộ",
     cloudServer: "☁️ Đã bật Cloud",
     photoConsentLabel: "Cho phép tải ảnh mặt lên server & dùng tính năng đám mây",
+    noSnaps: "Chưa có ảnh chụp · bấm 📷 Chụp để lưu",
+    snapShare: "Sao chép liên kết chia sẻ",
+    snapDelete: "Xóa",
+    snapShareTitle: "📸 Ảnh đã chia sẻ",
+    snapShareAlt: "Ảnh đã chia sẻ",
+    snapFrame: "Khung",
+    snapShareCopied: "✅ Đã sao chép liên kết",
+    snapShareFail: "Không thể sao chép liên kết",
   },
 };
 
@@ -796,6 +812,84 @@ function saveGallery(items) {
   localStorage.setItem(galleryKey(), JSON.stringify(items.slice(0, 24)));
 }
 
+/** Build a shareable link (stub) for a snapshot. Uses a data URL so it works
+ * fully offline with no server. Copying this link lets someone reopen the
+ * exact snapshot in a new tab. */
+function snapshotShareLink(item) {
+  if (!item || !item.data) return "";
+  const meta = {
+    src: item.data,
+    id: item.id,
+    frame: item.frame || "none",
+    frameB: item.frameB || null,
+    pdMm: item.pdMm || null,
+  };
+  return "#snapshot=" + encodeURIComponent(JSON.stringify(meta));
+}
+
+/** Try to open/copy the snapshot share link. Returns true if copy succeeded. */
+function shareSnapshot(item) {
+  const link = snapshotShareLink(item);
+  if (!link) return false;
+  // Try Clipboard API first (needs secure context or localhost).
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(location.origin + location.pathname + link);
+    return true;
+  }
+  // Fallback: use a temporary textarea for older browsers.
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = location.origin + location.pathname + link;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+/** If the page was opened with a #snapshot= link, restore that snapshot into a
+ * modal so the shared image is viewable fully offline. */
+function restoreSharedSnapshot() {
+  const m = /#snapshot=(.+)$/.exec(location.hash);
+  if (!m) return;
+  let meta;
+  try {
+    meta = JSON.parse(decodeURIComponent(m[1]));
+  } catch (_) {
+    return;
+  }
+  if (!meta || !meta.src) return;
+  const overlay = document.createElement("div");
+  overlay.className = "shared-overlay";
+  overlay.innerHTML =
+    '<div class="shared-card">' +
+    '<div class="shared-head"><strong id="shared-title">' + t("snapShareTitle") + '</strong>' +
+    '<button class="btn tiny" id="shared-close" type="button">×</button></div>' +
+    '<img id="shared-img" src="' + meta.src + '" alt="' + t("snapShareAlt") + '"/>' +
+    '<p class="muted small" id="shared-meta"></p>' +
+    "</div>";
+  document.body.appendChild(overlay);
+  const metaEl = overlay.querySelector("#shared-meta");
+  if (metaEl) {
+    const bits = [];
+    if (meta.frame && meta.frame !== "none") bits.push(t("snapFrame") + ": " + meta.frame);
+    if (meta.frameB) bits.push("B: " + meta.frameB);
+    if (meta.pdMm) bits.push("PD: " + meta.pdMm + " mm");
+    const d = new Date(meta.id);
+    if (meta.id && !isNaN(d.getTime())) bits.push(d.toLocaleString());
+    metaEl.textContent = bits.join(" · ");
+  }
+  overlay.querySelector("#shared-close").onclick = () => overlay.remove();
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+}
+
 async function snapshot() {
   const data = canvas.toDataURL("image/png");
   const item = {
@@ -836,13 +930,19 @@ async function snapshot() {
 function renderGallery() {
   const items = loadGallery();
   if (!items.length) {
-    galleryEl.innerHTML = '<p class="muted small">No snapshots yet</p>';
+    galleryEl.innerHTML = '<p class="muted small">' + t("noSnaps") + "</p>";
     return;
   }
   galleryEl.innerHTML = items
     .map(
       (it) =>
-        `<div class="shot"><img src="${it.data}" alt=""/><button data-id="${it.id}" class="btn tiny del">×</button></div>`,
+        `<div class="shot">` +
+        `<img src="${it.data}" alt=""/>` +
+        `<div class="shot-actions">` +
+        `<button data-share="${it.id}" class="btn tiny share" title="${t("snapShare")}">🔗</button>` +
+        `<button data-id="${it.id}" class="btn tiny del" title="${t("snapDelete")}">×</button>` +
+        `</div>` +
+        `</div>`,
     )
     .join("");
   galleryEl.querySelectorAll(".del").forEach((btn) => {
@@ -850,6 +950,23 @@ function renderGallery() {
       const id = Number(btn.getAttribute("data-id"));
       saveGallery(loadGallery().filter((x) => x.id !== id));
       renderGallery();
+    };
+  });
+  galleryEl.querySelectorAll(".share").forEach((btn) => {
+    btn.onclick = () => {
+      const id = Number(btn.getAttribute("data-share"));
+      const item = loadGallery().find((x) => x.id === id);
+      if (!item) return;
+      if (shareSnapshot(item)) {
+        hintEl.textContent = t("snapShareCopied");
+      } else {
+        hintEl.textContent = t("snapShareFail");
+      }
+      setTimeout(() => {
+        if (mode === "demo") hintEl.textContent = t("hintDemo");
+        else if (mode === "camera") hintEl.textContent = t("hintCam");
+        else hintEl.textContent = t("hintIdle");
+      }, 2500);
     };
   });
 }
@@ -889,6 +1006,9 @@ document.getElementById("btn-compare").onclick = () => {
 document.getElementById("btn-gallery").onclick = () => {
   galleryEl.classList.toggle("hidden");
   renderGallery();
+  // Show count badge text
+  const items = loadGallery();
+  document.getElementById("btn-gallery").textContent = t("gallery") + (items.length ? " (" + items.length + ")" : "");
 };
 document.getElementById("filter").onchange = (e) => loadCatalog(e.target.value);
 document.getElementById("pd").oninput = (e) => {
@@ -910,6 +1030,8 @@ document.getElementById("consent-demo").onclick = startDemo;
 
 setStageLoad("Starting BeeAR demo…");
 applyLang();
+// Restore a shared snapshot if the page was opened with #snapshot= link
+restoreSharedSnapshot();
 Promise.all([
   loadDemoImages(),
   loadCatalog().catch((e) => {
