@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" fill="none">
+  <!-- Summer - Sunset aviator -->
+  <path d="M20 55 Q20 30 45 22 Q65 18 80 28 Q90 35 95 40" stroke="#F97316" stroke-width="4" fill="none"/>
+  <path d="M180 55 Q180 30 155 22 Q135 18 120 28 Q110 35 105 40" stroke="#F97316" stroke-width="4" fill="none"/>
+  <path d="M95 40 Q100 35 105 40" stroke="#F97316" stroke-width="4" fill="none"/>
+  <path d="M95 62 Q100 65 105 62" stroke="#F97316" stroke-width="4" fill="none"/>
+  <line x1="35" y1="65" x2="35" y2="90" stroke="#F97316" stroke-width="4"/>
+  <line x1="165" y1="65" x2="165" y2="90" stroke="#F97316" stroke-width="4"/>
+  <!-- Sun ray accents -->
+  <line x1="100" y1="10" x2="100" y2="18" stroke="#FBBF24" stroke-width="2"/>
+  <line x1="140" y1="15" x2="136" y2="22" stroke="#FBBF24" stroke-width="2"/>
+  <line x1="60" y1="15" x2="64" y2="22" stroke="#FBBF24" stroke-width="2"/>
+</svg>

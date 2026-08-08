@@ -1,5 +1,5 @@
 {
-  "version": 54,
+  "version": 55,
   "frames": [
     {
       "id": "meshy_ellipse_frames",
@@ -1810,6 +1810,134 @@
       },
       "render_mode": "glb3d",
       "description": "Rose gold round frames \u2014 catalog SKU cycle 16q"
+    },
+    {
+      "id": "holiday_candy_cane",
+      "name": "Holiday Candy Cane",
+      "brand": "BeeAR Seasonal",
+      "category": "glasses",
+      "style": "wayfarer",
+      "color": "#DC2626",
+      "lens_tint": "rgba(220,38,38,0.15)",
+      "price_cents": 9900,
+      "svg": "holiday.svg",
+      "glb": "wayfarer-black.glb",
+      "fit": {
+        "width_mm": 140,
+        "bridge_mm": 18,
+        "temple_mm": 145
+      },
+      "studio_fit": {
+        "scale": 1.03,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.01,
+        "y": -0.005,
+        "pitch": 0.02,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": false,
+      "seasonal": "winter",
+      "description": "Festive candy-cane red wayfarer frames — holiday seasonal SKU"
+    },
+    {
+      "id": "spring_blossom",
+      "name": "Spring Blossom",
+      "brand": "BeeAR Seasonal",
+      "category": "glasses",
+      "style": "cat-eye",
+      "color": "#EC4899",
+      "lens_tint": "rgba(236,72,153,0.12)",
+      "price_cents": 10900,
+      "svg": "spring.svg",
+      "glb": "cateye-rose.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 16,
+        "temple_mm": 140
+      },
+      "studio_fit": {
+        "scale": 1.02,
+        "y": -0.01,
+        "z": 0.02
+      },
+      "ar_fit": {
+        "scale": 1.0,
+        "y": -0.004,
+        "pitch": 0.03,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": false,
+      "seasonal": "spring",
+      "description": "Pink blossom cat-eye frames — spring seasonal SKU"
+    },
+    {
+      "id": "summer_sunset",
+      "name": "Summer Sunset",
+      "brand": "BeeAR Seasonal",
+      "category": "glasses",
+      "style": "aviator",
+      "color": "#F97316",
+      "lens_tint": "rgba(249,115,22,0.18)",
+      "price_cents": 11900,
+      "svg": "summer.svg",
+      "glb": "aviator-gold.glb",
+      "fit": {
+        "width_mm": 142,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 1.05,
+        "y": -0.01,
+        "z": 0.025
+      },
+      "ar_fit": {
+        "scale": 1.02,
+        "y": 0,
+        "pitch": 0.05,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": false,
+      "seasonal": "summer",
+      "description": "Warm sunset orange aviator frames — summer seasonal SKU"
+    },
+    {
+      "id": "autumn_maple",
+      "name": "Autumn Maple",
+      "brand": "BeeAR Seasonal",
+      "category": "glasses",
+      "style": "round",
+      "color": "#D97706",
+      "lens_tint": "rgba(217,119,6,0.14)",
+      "price_cents": 10500,
+      "svg": "autumn.svg",
+      "glb": "round-tortoise.glb",
+      "fit": {
+        "width_mm": 136,
+        "bridge_mm": 18,
+        "temple_mm": 142
+      },
+      "studio_fit": {
+        "scale": 0.98,
+        "y": -0.007,
+        "z": 0.016
+      },
+      "ar_fit": {
+        "scale": 0.98,
+        "y": -0.002,
+        "pitch": 0.01,
+        "yaw": 0
+      },
+      "render_mode": "glb3d",
+      "featured": false,
+      "seasonal": "autumn",
+      "description": "Warm amber maple round frames — autumn seasonal SKU"
     }
   ],
   "person_models": [
