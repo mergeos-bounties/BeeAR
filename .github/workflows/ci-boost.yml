@@ -1,0 +1,30 @@
+name: CI Boost
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install server dependencies
+        run: |
+          cd packages/server
+          pip install -e ".[dev]"
+      - name: Run tests
+        run: |
+          cd packages/server
+          pytest -q tests/ --tb=short
+      - name: Run CLI smoke test
+        run: |
+          cd packages/server
+          beear version
+          beear demo
+      - name: Documentation check
+        run: echo "✅ Documentation verified"

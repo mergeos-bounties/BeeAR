@@ -365,3 +365,45 @@ See [mergeos](https://github.com/mergeos-bounties/mergeos) and [docs/BOUNTY.md](
 ## License
 
 [MIT](LICENSE)
+
+---
+
+## 🚀 Documentation & CI Enhancement
+
+### Extended Usage Examples
+
+```powershell
+# Full workflow: catalog → fit → compare → serve
+cd packages\server
+pip install -e ".[dev]"
+beear catalog search "aviator"
+beear tryon fit aviator_gold --pd 64
+beear tryon compare aviator_gold wayfarer_black --pd 64
+beear serve --port 8860
+```
+
+### API Quick Reference
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/catalog` | GET | Full frame catalog |
+| `/api/catalog/meta` | GET | Catalog metadata |
+| `/api/catalog/search` | GET | Search frames by query |
+| `/api/tryon/fit/{id}` | GET | PD fit for frame |
+| `/api/tryon/compare` | GET | Compare two frames |
+| `/catalog/glb/{file}` | GET | 3D GLB assets |
+| `/catalog/svg/{file}` | GET | 2D SVG assets |
+
+### Testing
+
+```powershell
+# Run all tests
+cd packages\server
+pytest -q tests/
+
+# Specific test modules
+pytest -q tests/test_api.py
+pytest -q tests/test_catalog.py
+pytest -q tests/test_search.py
+pytest -q tests/test_glb.py
+```
