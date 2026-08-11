@@ -1,29 +1,25 @@
 # Contributing to BeeAR
 
-Thank you for considering contributing!
+Thank you for your interest in contributing!
 
-## How to Contribute
-
+## Quick Start
 1. Fork the repository
-2. Create your feature branch: git checkout -b feature/amazing-feature
-3. Commit your changes: git commit -m 'Add amazing feature'
-4. Push to the branch: git push origin feature/amazing-feature
-5. Open a Pull Request
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/BeeAR.git`
+3. Install dependencies: `npm install`
+4. Create a branch: `git checkout -b feat/your-feature`
 
-## Good First Issues
-
-Look for issues labeled good first issue to get started.
-
-## Development Setup
-
-Clone the repo and follow the README instructions.
+## Development Guidelines
+- Write meaningful commit messages following [Conventional Commits](https://www.conventionalcommits.org/).
+- Add tests for new functionality.
+- Run `npm test` before pushing.
+- Keep PRs focused and small.
 
 ## Code Style
-
-Follow the existing code conventions and write clear commit messages.
+- ESLint + Prettier for consistent formatting.
+- TypeScript strict mode enabled.
+- Follow existing patterns in the codebase.
 
 ## Pull Request Process
-
-1. Ensure the PR description clearly describes the problem and solution
-2. Reference any related issues
-3. Wait for review from a maintainer
+1. Update documentation if applicable.
+2. Ensure CI passes.
+3. Request review.
