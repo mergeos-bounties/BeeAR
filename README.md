@@ -365,3 +365,14 @@ See [mergeos](https://github.com/mergeos-bounties/mergeos) and [docs/BOUNTY.md](
 ## License
 
 [MIT](LICENSE)
+
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration. 
+See [.github/workflows/ci.yml](.github/workflows/ci.yml) for the CI pipeline.
+
+## Documentation
+
+- [Contributing Guide](CONTRIBUTING.md)
+- [Security Policy](SECURITY.md)
